@@ -68,6 +68,8 @@ try:
                 print "File %s geupload naar Soundcloud: %s." % (filename, track.permalink_url)
 
                 # move file to uploaded directory
+                if not os.path.exists(UPLOADING_DIR):
+                    os.makedirs(UPLOADING_DIR)
                 new_filename = "%s-%s%s" % (os.path.splitext(filename)[0],datetimenow,os.path.splitext(filename)[1])
                 new_path_to_file = os.path.join(UPLOADING_DIR, new_filename)
                 shutil.move(path_to_file, new_path_to_file)
