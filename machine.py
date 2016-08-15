@@ -9,59 +9,47 @@ import os
 import signal
 import nxppy
 
-# Pin Definitons:
-# pwmPin = 12 # Broadcom pin 18 (P1 pin 12)
-# ledPin = 16 # Broadcom pin 23 (P1 pin 16)
-# but1Pin = 11 # Broadcom pin 17 (P1 pin 11)
-# but2Pin = 13
-# but3Pin = 15
-
-
-# Nieuwe pins voor met NXP bordje
-# ground = 39
-led1Pin = 32 # Broadcom pin 18 (P1 pin 12)
-led2Pin = 36 # Broadcom pin 23 (P1 pin 16)
-but1Pin = 31 # Broadcom pin 17 (P1 pin 11)
-but2Pin = 33
-but3Pin = 35
-but4Pin = False
-but5Pin = False
-homedir = "/home/pi/stormy/"
-musicdir = "/home/pi/Music/"
+# GROUNDPIN = 39
+LED1PIN = 32
+LED2PIN = 36
+BUT1PIN = 31
+BUT2PIN = 33
+BUT3PIN = 35
+BUT4PIN = False
+BUT5PIN = False
+HOMEDIR = "/home/pi/stormy/"
+MUSICDIR = "/home/pi/Music/"
 NFC_READER_PRESENT = False
 STOP_CHARACTER = "STOP"
-recording_process_id_file = os.path.join(homedir, "recprocess.pid")
+RECORDING_PROCESS_ID_FILE = os.path.join(HOMEDIR, "recprocess.pid")
 
 """
-TODO: Put everything on Github, possibly branched, and with hook
+TODO: Add hook to automatically update scripts from github
 TODO: set volume 100% alsamixer
-TODO: turn off spotify for faster loading?
-TODO: check if mpd server is ready (takes a while: ~2mins)
-TODO: load playlists from soundcloud!
 TODO: load this script at startup
-TODO: save mp3s
+TODO: save wavs as mp3s
 TODO: check if i can stop the static
-TODO: play sounds earlier/ faster
+TODO: play sounds  for buttons
 TODO: change sounds for buttons
-TODO: add more exceptions
-TODO: add some logging?
-TODO: change uploadscript to add files to right playlist
+TODO: add more exception handling
+TODO: add some logging instead of print statements
+TODO: change uploadscript to add files to the right playlist based on NFC
 """
 
 
 try:
     # Pin Setup:
     GPIO.setmode(GPIO.BOARD) # Broadcom pin-numbering scheme
-    GPIO.setup(led2Pin, GPIO.OUT)
-    GPIO.setup(led1Pin, GPIO.OUT)
+    GPIO.setup(LED2PIN, GPIO.OUT)
+    GPIO.setup(LED1PIN, GPIO.OUT)
 
-    GPIO.setup(but1Pin, GPIO.IN, pull_up_down=GPIO.PUD_UP) # Button pin set as input w/ pull-up
-    GPIO.setup(but2Pin, GPIO.IN, pull_up_down=GPIO.PUD_UP) # Button pin set as input w/ pull-up
-    GPIO.setup(but3Pin, GPIO.IN, pull_up_down=GPIO.PUD_UP) # Button pin set as input w/ pull-up
+    GPIO.setup(BUT1PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP) # Button pin set as input w/ pull-up
+    GPIO.setup(BUT2PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP) # Button pin set as input w/ pull-up
+    GPIO.setup(BUT3PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP) # Button pin set as input w/ pull-up
 
     # Initial state for LEDs:
-    GPIO.output(led2Pin, GPIO.LOW)
-    GPIO.output(led1Pin, GPIO.LOW)
+    GPIO.output(LED2PIN, GPIO.LOW)
+    GPIO.output(LED1PIN, GPIO.LOW)
 
     # Initiate NFC reader:
     mifare = nxppy.Mifare()
@@ -90,10 +78,11 @@ try:
                 output += data
             block += 1
         return output
-        
+
     def load_playlist(playlist="SoundCloud/Sets/Frank"):
         """
-        Change playlists with NFC tags?
+        Change playlists
+        TODO: Base it on NFC tags
         """
         # TODO: use control_mpc()
         proc = Popen(['mpc', '-h', 'localhost', '-p', '6600', 'clear', '-q'])
@@ -113,22 +102,22 @@ try:
             song = Popen(['mpc', 'add', line])
 
         # clear current playlist
-        #mpc clear 
-        
+        #mpc clear
+
         # add soundcloud playlist
         #mpc add soundcloud:set-...
         # nope, this gives errors, check this:
         # vim /var/log/mopidy/mopidy.log
         # and somehow find out how to add the right playlist
         # mpc ls SoundCloud/Sets/
-        
-    def nfc_callback(uid):        
+
+    def nfc_callback(uid):
         if uid == "0405346A643481":
             load_playlist("SoundCloud/Sets/Frank")
         else:
             load_playlist("SoundCloud/Sets/Test")
         print "changed playlist"
-        
+
     def check_playing():
         """
         Helper function to see whether some song is playing.
@@ -137,7 +126,7 @@ try:
         We check this info and return true when playing and false if not.
         """
         status = subprocess.check_output(['mpc', 'status']).decode("utf-8")
-        
+
         if status[:6] == "volume" or "[paused]" in status:
             # this is the output when the song is stopped
             print "Playing? No"
@@ -145,14 +134,14 @@ try:
         else:
             print "Playing? Yes"
             return True
-        
+
     def take_picture(name):
         """
         Take a picture with the first available webcam device.
         """
         # proc = Popen(['fswebcam', '-d', '/dev/video1', '-r' , '1280x720', '--no-banner', name])
         proc = Popen(['fswebcam', '-r' , '1280x720', '--no-banner', name])
-    
+
     def record_sound(name):
         """
         Do some recording
@@ -169,7 +158,7 @@ try:
             '-c1',
             '-r44100',
             '-V', 'mono',
-            '--process-id-file', recording_process_id_file,
+            '--process-id-file', RECORDING_PROCESS_ID_FILE,
             name
         ]
         proc = Popen(args)
@@ -178,101 +167,101 @@ try:
         """
         Helper function to see whether something is being recorded.
         """
-        if os.path.isfile(recording_process_id_file):
+        if os.path.isfile(RECORDING_PROCESS_ID_FILE):
             return True
             print "Recording? Yes"
         else:
             return False
             print "Recording? No"
-                    
+
     def stop_recording():
         """
         Kill the recording process.
         """
-        pidfile = os.path.join(homedir, recording_process_id_file)
+        pidfile = os.path.join(HOMEDIR, RECORDING_PROCESS_ID_FILE)
         file = open(pidfile)
         pid = int(file.readline().strip())
         os.kill(pid, signal.SIGINT)
-        
+
     def control_mpc(action):
         """
         Run mpc commands to control Mopidy Music server.
         """
         print "MPC %s" % action
         proc = Popen(['mpc', '-h', 'localhost', '-p', '6600', action, '-q'])
-        GPIO.output(led2Pin, GPIO.HIGH)
+        GPIO.output(LED2PIN, GPIO.HIGH)
         # proc.wait()
-        time.sleep(1)            
-        GPIO.output(led2Pin, GPIO.LOW)
+        time.sleep(1)
+        GPIO.output(LED2PIN, GPIO.LOW)
 
     def play_sound():
         """
         Play a button sound.
         """
         # buttonSound.play()
-        # proc = Popen(['aplay', os.path.join(homedir, "button.wav")])
-        
+        # proc = Popen(['aplay', os.path.join(HOMEDIR, "button.wav")])
+
         #TODO: make it possible again to play this sound while playing sounds in mopidy
         pass
 
 
     def button_rec():
         print "REC button"
-        
+
         if not check_recording():
             if check_playing():
                 control_mpc('stop')
-            GPIO.output(led1Pin, GPIO.HIGH)
+            GPIO.output(LED1PIN, GPIO.HIGH)
             dt = "%s" % (datetime.datetime.now())
             dtp = "%s.jpg" % (dt)
             dts = "%s.wav" % (dt)
-            picture_name = os.path.join(musicdir, dtp)
-            sound_name = os.path.join(musicdir, dts)
+            picture_name = os.path.join(MUSICDIR, dtp)
+            sound_name = os.path.join(MUSICDIR, dts)
             take_picture(picture_name)
             record_sound(sound_name)
         else:
             pass
-        
+
     def button_prev():
         print "PREV button"
         if check_playing():
             control_mpc('prev')
         else:
             pass
-        
+
     def button_play():
         print "PLAY button"
         if not check_playing():
             control_mpc('play')
         else:
             pass
-        
+
     def button_next():
         print "NEXT button"
         if check_playing():
             control_mpc('next')
         else:
-            pass        
-        
+            pass
+
     def button_stop():
         print "STOP button"
         if check_recording():
             stop_recording()
-            GPIO.output(led1Pin, GPIO.LOW)
-            
+            GPIO.output(LED1PIN, GPIO.LOW)
+
         if check_playing():
             control_mpc('stop')
         else:
             pass
-                        
+
     # def mpc_callback_btn1(channel=False):
     #     print "Button pressed (%s)" % channel
-    #     # if channel == but1Pin and not check_playing():
+    #     # if channel == BUT1PIN and not check_playing():
     #     if not check_playing():
     #         play_sound()
     #         control_mpc('play')
     #
-    #     # elif channel == but1Pin and check_playing():
+    #     # elif channel == BUT1PIN and check_playing():
     #     else:
     #         play_sound()
     #         control_mpc('pause')
@@ -281,7 +270,7 @@ try:
     # def mpc_callback_btn2(channel=False):
     #     print datetime.datetime.now()
     #     print "Button pressed (%s)" % channel
-    #     # if channel == but2Pin and check_playing():
+    #     # if channel == BUT2PIN and check_playing():
     #     if check_playing():
     #         print "Button 2"
     #         play_sound()
@@ -290,33 +279,33 @@ try:
     # def mpc_callback_btn3(channel=False):
     #     print datetime.datetime.now()
     #     print "Button pressed (%s)" % channel
-    #     # if channel == but3Pin and check_recording():
+    #     # if channel == BUT3PIN and check_recording():
     #     if check_recording():
     #         print "Button 3"
     #         # it is recording, so stop it
     #         stop_recording()
     #
-    #         GPIO.output(led1Pin, GPIO.LOW)
-    #         GPIO.output(led1Pin, GPIO.HIGH)
+    #         GPIO.output(LED1PIN, GPIO.LOW)
+    #         GPIO.output(LED1PIN, GPIO.HIGH)
     #         time.sleep(1)
-    #         GPIO.output(led1Pin, GPIO.LOW)
+    #         GPIO.output(LED1PIN, GPIO.LOW)
     #         play_sound()
     #
-    #     # elif channel == but3Pin and not check_recording():
+    #     # elif channel == BUT3PIN and not check_recording():
     #     else:
     #         print "Button 3"
     #         # not recording, so start :)
     #         # save picture and sound with same name
     #         play_sound()
-    #         GPIO.output(led1Pin, GPIO.HIGH)
+    #         GPIO.output(LED1PIN, GPIO.HIGH)
     #
     #         # TODO: add little delay?
     #         time.sleep(1)
     #         dt = "%s" % (datetime.datetime.now())
     #         dtp = "%s.jpg" % (dt)
     #         dts = "%s.wav" % (dt)
-    #         picture_name = os.path.join(musicdir, dtp)
-    #         sound_name = os.path.join(musicdir, dts)
+    #         picture_name = os.path.join(MUSICDIR, dtp)
+    #         sound_name = os.path.join(MUSICDIR, dts)
     #         take_picture(picture_name)
     #         record_sound(sound_name)
     #
@@ -337,18 +326,18 @@ try:
     # Load initial playlist
     load_playlist()
 
-    GPIO.add_event_detect(but1Pin, GPIO.FALLING, bouncetime=200)
-    GPIO.add_event_detect(but2Pin, GPIO.FALLING, bouncetime=200)
-    GPIO.add_event_detect(but3Pin, GPIO.FALLING, bouncetime=200)
-    
+    GPIO.add_event_detect(BUT1PIN, GPIO.FALLING, bouncetime=200)
+    GPIO.add_event_detect(BUT2PIN, GPIO.FALLING, bouncetime=200)
+    GPIO.add_event_detect(BUT3PIN, GPIO.FALLING, bouncetime=200)
+
     # Blink both leds when started
-    GPIO.output(led1Pin, GPIO.HIGH)        
-    GPIO.output(led2Pin, GPIO.HIGH)        
-    time.sleep(1)            
-    GPIO.output(led1Pin, GPIO.LOW)
-    GPIO.output(led2Pin, GPIO.LOW)
+    GPIO.output(LED1PIN, GPIO.HIGH)
+    GPIO.output(LED2PIN, GPIO.HIGH)
+    time.sleep(1)
+    GPIO.output(LED1PIN, GPIO.LOW)
+    GPIO.output(LED2PIN, GPIO.LOW)
     print("Here we go! Press CTRL+C to exit")
-    
+
     previous_uid = None
     while True:
         if NFC_READER_PRESENT == True:
@@ -376,11 +365,11 @@ try:
             except nxppy.SelectError:
                 pass
 
-        if GPIO.event_detected(but1Pin):
+        if GPIO.event_detected(BUT1PIN):
             button_play()
-        if GPIO.event_detected(but2Pin):
+        if GPIO.event_detected(BUT2PIN):
             button_stop()
-        if GPIO.event_detected(but3Pin):        
+        if GPIO.event_detected(BUT3PIN):
             button_rec()
         time.sleep(1)
 
