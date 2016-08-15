@@ -19,11 +19,12 @@ BUT2PIN = 33
 BUT3PIN = 35
 BUT4PIN = False
 BUT5PIN = False
-HOMEDIR = "/home/pi/stormy/"
-MUSICDIR = "/home/pi/Music/"
+HOME_DIR = "/home/pi/stormy/"
+MUSIC_DIR = "/home/pi/Music/"
+RECORDING_DIR = os.path.join(MUSIC_DIR, "/Local/")
 NFC_READER_PRESENT = False
 STOP_CHARACTER = "STOP"
-RECORDING_PROCESS_ID_FILE = os.path.join(HOMEDIR, "recprocess.pid")
+RECORDING_PROCESS_ID_FILE = os.path.join(HOME_DIR, "recprocess.pid")
 
 """
 TODO: Add hook to automatically update scripts from github
@@ -180,7 +181,7 @@ try:
         """
         Kill the recording process.
         """
-        pidfile = os.path.join(HOMEDIR, RECORDING_PROCESS_ID_FILE)
+        pidfile = os.path.join(HOME_DIR, RECORDING_PROCESS_ID_FILE)
         file = open(pidfile)
         pid = int(file.readline().strip())
         os.kill(pid, signal.SIGINT)
@@ -201,7 +202,7 @@ try:
         Play a button sound.
         """
         # buttonSound.play()
-        # proc = Popen(['aplay', os.path.join(HOMEDIR, "button.wav")])
+        # proc = Popen(['aplay', os.path.join(HOME_DIR, "button.wav")])
 
         #TODO: make it possible again to play this sound while playing sounds in mopidy
         pass
@@ -217,8 +218,8 @@ try:
             dt = "%s" % (datetime.datetime.now())
             dtp = "%s.jpg" % (dt)
             dts = "%s.wav" % (dt)
-            picture_name = os.path.join(MUSICDIR, dtp)
-            sound_name = os.path.join(MUSICDIR, dts)
+            picture_name = os.path.join(MUSIC_DIR, dtp)
+            sound_name = os.path.join(MUSIC_DIR, dts)
             take_picture(picture_name)
             record_sound(sound_name)
         else:
@@ -306,8 +307,8 @@ try:
     #         dt = "%s" % (datetime.datetime.now())
     #         dtp = "%s.jpg" % (dt)
     #         dts = "%s.wav" % (dt)
-    #         picture_name = os.path.join(MUSICDIR, dtp)
-    #         sound_name = os.path.join(MUSICDIR, dts)
+    #         picture_name = os.path.join(MUSIC_DIR, dtp)
+    #         sound_name = os.path.join(MUSIC_DIR, dts)
     #         take_picture(picture_name)
     #         record_sound(sound_name)
     #

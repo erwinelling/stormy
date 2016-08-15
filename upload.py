@@ -19,10 +19,11 @@ from requests.exceptions import HTTPError
 # make sure these dirs for recordings & uploading exist
 # make sure mopidy is owner: sudo chown mopidy:mopidy _uploaded/
 # TODO: create dirs on the fly?
-recording_dir = '/music/MusicBox/_recorded'
-uploading_dir = '/music/MusicBox/_uploaded'
+MUSIC_DIR = "/home/pi/Music/"
+RECORDING_DIR = os.path.join(MUSIC_DIR, "/Local/")
+UPLOADING_DIR = os.path.join(MUSIC_DIR, "/Soundcloud/")
 
-# os.chdir(recording_dir)
+# os.chdir(RECORDING_DIR)
 # client = soundcloud.Client(access_token='1-35204-229958105-3a372e24e3e04a')
 
 try:
@@ -39,16 +40,16 @@ try:
     # walk through all files in recording directory
     from os.path import join, getsize
     count = 0
-    for root, dirs, files in os.walk(recording_dir):
+    for root, dirs, files in os.walk(RECORDING_DIR):
         for filename in files:
-        
+
             # check whether it is a music file that can be uploaded to soundcloud
             # http://uploadandmanage.help.soundcloud.com/customer/portal/articles/2162441-uploading-requirements
             # AIFF, WAVE (WAV), FLAC, ALAC, OGG, MP2, MP3, AAC, AMR, and WMA
             # and ignore hidden files
             if filename.lower().endswith(('.aiff', '.wav', '.flac', '.alac', '.ogg', '.mp2', '.mp3', '.aac', '.amr', '.wma')) and not filename.startswith('.'):
                 path_to_file = os.path.join(root, filename)
-                
+
                 # upload to soundcloud
                 datetimenow = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M%S')
                 track = client.post('/tracks', track={
@@ -64,10 +65,10 @@ try:
                     # 'genre': 'Electronic',
                 })
                 print "File %s geupload naar Soundcloud: %s." % (filename, track.permalink_url)
-                
+
                 # move file to uploaded directory
                 new_filename = "%s-%s%s" % (os.path.splitext(filename)[0],datetimenow,os.path.splitext(filename)[1])
-                new_path_to_file = os.path.join(uploading_dir, new_filename)
+                new_path_to_file = os.path.join(UPLOADING_DIR, new_filename)
                 shutil.move(path_to_file, new_path_to_file)
                 count +=1
                 print "File %s verplaatst naar: %s." % (filename, new_path_to_file)
