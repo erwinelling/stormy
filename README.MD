@@ -158,5 +158,12 @@ sudo apt-get install git-core
 Do this https://help.github.com/articles/generating-an-ssh-key/
 
 ```
+cd /home/pi/
 git clone git@github.com:erwinelling/stormy.git
+```
+
+To update:
+```
+cd /home/pi/stormy
+git pull
 ```
