@@ -30,6 +30,7 @@ RECORDING_PROCESS_ID_FILE = os.path.join(HOME_DIR, "recprocess.pid")
 TODO: Find out why MPD server gives so many timeouts
 TODO: Make sure soundcloud is loaded on reboot
 TODO: Maybe switch to https://github.com/Mic92/python-mpd2
+TODO: Also replace other shell commands to pure python
 TODO: Add hook to automatically update scripts from github
 TODO: make sure the script works without internet connection
 TODO: set volume 100% alsamixer
