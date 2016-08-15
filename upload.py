@@ -38,11 +38,12 @@ try:
     )
 
     # walk through all files in recording directory
+    print "Checking contents of %s" % RECORDING_DIR
     from os.path import join, getsize
     count = 0
     for root, dirs, files in os.walk(RECORDING_DIR):
+        print files
         for filename in files:
-
             # check whether it is a music file that can be uploaded to soundcloud
             # http://uploadandmanage.help.soundcloud.com/customer/portal/articles/2162441-uploading-requirements
             # AIFF, WAVE (WAV), FLAC, ALAC, OGG, MP2, MP3, AAC, AMR, and WMA
