@@ -1,3 +1,5 @@
+#!/usr/bin/python
+# -*- coding: latin-1 -*-
 import RPi.GPIO as GPIO
 import time
 import datetime
