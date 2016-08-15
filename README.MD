@@ -199,3 +199,14 @@ ssh pi@stormy.local
 
 ## Add public keys
 https://www.raspberrypi.org/documentation/remote-access/ssh/passwordless.md
+
+## Add cronjob for Soundcloud upload
+```
+chmod a+x /home/pi/stormy/upload.py
+crontab -e
+```
+
+Add:
+```
+*/5 * * * * /usr/bin/python /home/pi/stormy/upload.py > /home/pi/stormy/upload.log
+```
