@@ -1,0 +1,10 @@
+[Unit]
+Description=Service voor de Jimmy's Cassette Speler/ Recorder
+After=multi-user.target
+
+[Service]
+Type=idle
+ExecStart=/usr/bin/python /home/pi/stormy/machine.py > /home/pi/stormy/machine.log 2>&1
+
+[Install]
+WantedBy=multi-user.target
