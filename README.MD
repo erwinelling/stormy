@@ -205,6 +205,7 @@ https://www.raspberrypi.org/documentation/remote-access/ssh/passwordless.md
 chmod a+x /home/pi/stormy/upload.py
 crontab -e
 ```
+Make sure to use crontab and not sudo, so the cronjob will run for user pi.
 
 Add:
 ```
