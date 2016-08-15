@@ -20,8 +20,8 @@ from requests.exceptions import HTTPError
 # make sure mopidy is owner: sudo chown mopidy:mopidy _uploaded/
 # TODO: create dirs on the fly?
 MUSIC_DIR = "/home/pi/Music/"
-RECORDING_DIR = os.path.join(MUSIC_DIR, "/Local/")
-UPLOADING_DIR = os.path.join(MUSIC_DIR, "/Soundcloud/")
+RECORDING_DIR = os.path.join(MUSIC_DIR, "Local/")
+UPLOADING_DIR = os.path.join(MUSIC_DIR, "Soundcloud/")
 
 # os.chdir(RECORDING_DIR)
 # client = soundcloud.Client(access_token='1-35204-229958105-3a372e24e3e04a')
