@@ -27,12 +27,16 @@ STOP_CHARACTER = "STOP"
 RECORDING_PROCESS_ID_FILE = os.path.join(HOME_DIR, "recprocess.pid")
 
 """
+TODO: Find out why MPD server gives so many timeouts
+TODO: Make sure soundcloud is loaded on reboot
+TODO: Maybe switch to https://github.com/Mic92/python-mpd2
 TODO: Add hook to automatically update scripts from github
+TODO: make sure the script works without internet connection
 TODO: set volume 100% alsamixer
-TODO: load this script at startup
+TODO: load this script at startup, see http://www.raspberrypi-spy.co.uk/2015/10/how-to-autorun-a-python-script-on-boot-using-systemd/
 TODO: save wavs as mp3s
 TODO: check if i can stop the static
-TODO: play sounds  for buttons
+TODO: play sounds testfor buttons
 TODO: change sounds for buttons
 TODO: add more exception handling
 TODO: add some logging instead of print statements
