@@ -150,3 +150,13 @@ To test
 ```
 explorenfc-basic -k
 ```
+## GIT
+```
+sudo apt-get install git-core
+```
+
+Do this https://help.github.com/articles/generating-an-ssh-key/
+
+```
+git clone git@github.com:erwinelling/stormy.git
+```
