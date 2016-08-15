@@ -167,3 +167,35 @@ To update:
 cd /home/pi/stormy
 git pull
 ```
+
+## Change hostname
+```
+sudo nano /etc/hosts
+```
+
+Add:
+```
+127.0.1.1       jimmys
+```
+
+```
+sudo nano /etc/hostname
+```
+
+Change content to:
+```
+jimmys
+```
+
+```
+sudo /etc/init.d/hostname.sh
+sudo reboot
+```
+
+From now on:
+```
+ssh pi@stormy.local
+```
+
+## Add public keys
+https://www.raspberrypi.org/documentation/remote-access/ssh/passwordless.md
