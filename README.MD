@@ -4,59 +4,64 @@
 
 1. Make a fresh install of Raspbian https://www.raspberrypi.org/downloads/raspbian/
 2. Start it up and ssh into it
-'''
+
+```
 ssh pi@raspberrypi.local
-'''
+```
+
 3. Update firmware
-'''
+
+```
 sudo rpi-update
-'''
+```
+
 4. Update and upgrade packages
-'''
+
+```
 sudo apt-get update
 sudo apt-get dist-upgrade
-'''
+```
 
 ## Install Mopidy
 
 1. Follow these instructions: http://mopidy.readthedocs.io/en/latest/installation/debian/#debian-install
 
-'''
+```
 wget -q -O - https://apt.mopidy.com/mopidy.gpg | sudo apt-key add -
 sudo wget -q -O /etc/apt/sources.list.d/mopidy.list https://apt.mopidy.com/jessie.list
 sudo apt-get update
 sudo apt-get install mopidy
-'''
+```
 
 2. Enable Mopidy as a service
-'''
+```
 sudo systemctl enable mopidy
-'''
+```
 
 To control or check the service manually:
-'''
+```
 sudo systemctl start mopidy
 sudo systemctl stop mopidy
 sudo systemctl restart mopidy
 sudo systemctl status mopidy
-'''
+```
 
 ## Install Mopidy extensions
-'''
+```
 sudo apt-get install mopidy-spotify
 sudo apt-get install mopidy-soundcloud
 sudo pip install Mopidy-Spotmop
 sudo pip install Mopidy-Moped
 sudo pip install Mopidy-WebSettings
-'''
+```
 
 ## Configure Mopidy
-'''
+```
 sudo nano /etc/mopidy/mopidy.conf
-'''
+```
 
 add:
-'''
+```
 
 [http]
 enabled = true
@@ -93,15 +98,15 @@ buffer_time =
 
 [stream]
 timeout = 10000
-'''
+```
 
 ## Install MPC
-'''
+```
 sudo apt-get install mpc
-'''
+```
 
 To control manually:
-'''
+```
 mpc play
 mpc pause
 mpc prev
@@ -112,19 +117,19 @@ mpc volume +10
 mpc volume -10  
 mpc seek +10%
 mpc ls “SoundCloud/Sets/Frank" | mpc add
-'''
+```
 
 ## Install Player/ Recorder dependencies
-'''
+```
 sudo apt-get install rpi.gpio
 sudo apt-get install fswebcam
 sudo pip install soundcloud
-'''
+```
 
 ## Change some Raspberry Pi settings
-'''
+```
 sudo raspi-config
-'''
+```
 - Expand Filesystem
 - Change password
 - Enable SPI under advanced options
@@ -136,12 +141,12 @@ Check https://www.youtube.com/watch?v=kbt4LFZptPk
 https://www.element14.com/community/docs/DOC-65447/l/explore-nfc-software-and-project?ICID=designcenter-devkitnfc-quick
 
 2.
-'''
+```
 sudo dpkg -i *.deb
 sudo pip install nxppy
-'''
+```
 
 To test
-'''
+```
 explorenfc-basic -k
-'''
+```
