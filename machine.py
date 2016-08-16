@@ -44,25 +44,51 @@ TODO: add some logging instead of print statements
 TODO: change uploadscript to add files to the right playlist based on NFC
 """
 
-
 try:
+    print("Here we go! Press CTRL+C to exit")
+
     # Pin Setup:
     GPIO.setmode(GPIO.BOARD) # Broadcom pin-numbering scheme
-    GPIO.setup(LED2PIN, GPIO.OUT)
-    GPIO.setup(LED1PIN, GPIO.OUT)
 
-    GPIO.setup(BUT1PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP) # Button pin set as input w/ pull-up
-    GPIO.setup(BUT2PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP) # Button pin set as input w/ pull-up
-    GPIO.setup(BUT3PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP) # Button pin set as input w/ pull-up
+    # Initiate LEDs:
+    if LED1PIN:
+        GPIO.setup(LED1PIN, GPIO.OUT)
+        GPIO.output(LED1PIN, GPIO.LOW)
+    if LED2PIN:
+        GPIO.setup(LED2PIN, GPIO.OUT)
+        GPIO.output(LED2PIN, GPIO.LOW)
 
-    # Initial state for LEDs:
-    GPIO.output(LED2PIN, GPIO.LOW)
+    # Initiate buttons:
+    if BUT1PIN:
+        GPIO.setup(BUT1PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP) # Button pin set as input w/ pull-up
+        GPIO.add_event_detect(BUT1PIN, GPIO.FALLING, bouncetime=200)
+    if BUT2PIN:
+        GPIO.setup(BUT2PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP) # Button pin set as input w/ pull-up
+        GPIO.add_event_detect(BUT2PIN, GPIO.FALLING, bouncetime=200)
+    if BUT3PIN:
+        GPIO.setup(BUT3PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP) # Button pin set as input w/ pull-up
+        GPIO.add_event_detect(BUT3PIN, GPIO.FALLING, bouncetime=200)
+    if BUT4PIN:
+        GPIO.setup(BUT4PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP) # Button pin set as input w/ pull-up
+        GPIO.add_event_detect(BUT4PIN, GPIO.FALLING, bouncetime=200)
+    if BUT5PIN:
+        GPIO.setup(BUT5PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP) # Button pin set as input w/ pull-up
+        GPIO.add_event_detect(BUT5PIN, GPIO.FALLING, bouncetime=200)
+
+    # Blink both leds when started:
+    GPIO.output(LED1PIN, GPIO.HIGH)
+    GPIO.output(LED2PIN, GPIO.HIGH)
+    time.sleep(1)
     GPIO.output(LED1PIN, GPIO.LOW)
+    GPIO.output(LED2PIN, GPIO.LOW)
 
     # Initiate NFC reader:
     mifare = nxppy.Mifare()
 
     def write_nfc_string(str):
+        """
+        Write a string to the current NFC chip.
+        """
         nr = 10
         for i in xrange(0, len(str), 4):
             uid = mifare.select()
@@ -73,6 +99,9 @@ try:
 
 
     def read_nfc_string():
+        """
+        Read a string from the current NFC chip.
+        """
         max_block = 1000  # if "STOP" is not found, when should we stop?
         block = 10
         output = ""
@@ -89,8 +118,11 @@ try:
 
     def load_playlist(playlist="SoundCloud/Sets/Frank"):
         """
-        Change playlists
+        Change playlist in Mopidy
         TODO: Base it on NFC tags
+
+        # mpc clear
+        # mpc ls SoundCloud/Sets/
         """
         # TODO: use control_mpc()
         proc = Popen(['mpc', '-h', 'localhost', '-p', '6600', 'clear', '-q'])
@@ -109,17 +141,10 @@ try:
             # print quotedline
             song = Popen(['mpc', 'add', line])
 
-        # clear current playlist
-        #mpc clear
-
-        # add soundcloud playlist
-        #mpc add soundcloud:set-...
-        # nope, this gives errors, check this:
-        # vim /var/log/mopidy/mopidy.log
-        # and somehow find out how to add the right playlist
-        # mpc ls SoundCloud/Sets/
-
     def nfc_callback(uid):
+        """
+        Function that decides what to do when an NFC chips is presented, based on the uid of the chip.
+        """
         if uid == "0405346A643481":
             load_playlist("SoundCloud/Sets/Frank")
         else:
@@ -152,8 +177,7 @@ try:
 
     def record_sound(name):
         """
-        Do some recording
-        Also take a picture
+        Do some audio recording
         e.g. arecord -D plughw:CARD=Device,DEV=0 -f S16_LE -c1 -r44100 -V mono tik2.wav
         """
 
@@ -176,11 +200,11 @@ try:
         Helper function to see whether something is being recorded.
         """
         if os.path.isfile(RECORDING_PROCESS_ID_FILE):
-            return True
             print "Recording? Yes"
+            return True
         else:
-            return False
             print "Recording? No"
+            return False
 
     def stop_recording():
         """
@@ -334,18 +358,7 @@ try:
     # Load initial playlist
     load_playlist()
 
-    GPIO.add_event_detect(BUT1PIN, GPIO.FALLING, bouncetime=200)
-    GPIO.add_event_detect(BUT2PIN, GPIO.FALLING, bouncetime=200)
-    GPIO.add_event_detect(BUT3PIN, GPIO.FALLING, bouncetime=200)
-
-    # Blink both leds when started
-    GPIO.output(LED1PIN, GPIO.HIGH)
-    GPIO.output(LED2PIN, GPIO.HIGH)
-    time.sleep(1)
-    GPIO.output(LED1PIN, GPIO.LOW)
-    GPIO.output(LED2PIN, GPIO.LOW)
-    print("Here we go! Press CTRL+C to exit")
-
+    # Check for input
     previous_uid = None
     while True:
         if NFC_READER_PRESENT == True:
@@ -379,6 +392,10 @@ try:
             button_stop()
         if GPIO.event_detected(BUT3PIN):
             button_rec()
+        if GPIO.event_detected(BUT4PIN):
+            pass
+        if GPIO.event_detected(BUT5PIN):
+            pass
         time.sleep(1)
 
 except KeyboardInterrupt: # If CTRL+C is pressed, exit cleanly:
