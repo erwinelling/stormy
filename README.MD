@@ -211,3 +211,18 @@ Add:
 ```
 */5 * * * * /usr/bin/python /home/pi/stormy/upload.py > /home/pi/stormy/upload.log
 ```
+
+# Run player as a service
+Give it the right permissions and enable our unit file as service
+```
+sudo chmod 644 /home/pi/stormy/machine.service
+sudo systemctl enable /home/pi/stormy/machine.service
+```
+
+To control or check the service manually:
+```
+sudo systemctl start machine
+sudo systemctl stop machine
+sudo systemctl restart machine
+sudo systemctl status machine
+```
