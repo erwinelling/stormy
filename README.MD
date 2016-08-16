@@ -213,6 +213,7 @@ Add:
 ```
 
 # Run player as a service
+As per http://www.raspberrypi-spy.co.uk/2015/10/how-to-autorun-a-python-script-on-boot-using-systemd/ and 
 Give it the right permissions and enable our unit file as service
 ```
 sudo chmod 644 /home/pi/stormy/machine.service
