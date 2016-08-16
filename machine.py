@@ -386,16 +386,22 @@ try:
             except nxppy.SelectError:
                 pass
 
-        if GPIO.event_detected(BUT1PIN):
-            button_play()
-        if GPIO.event_detected(BUT2PIN):
-            button_stop()
-        if GPIO.event_detected(BUT3PIN):
-            button_rec()
-        if GPIO.event_detected(BUT4PIN):
-            pass
-        if GPIO.event_detected(BUT5PIN):
-            pass
+        # TODO: Refactor nested if statements
+        if BUT1PIN:
+            if GPIO.event_detected(BUT1PIN):
+                button_play()
+        if BUT2PIN:
+            if GPIO.event_detected(BUT2PIN):
+                button_stop()
+        if BUT3PIN:
+            if GPIO.event_detected(BUT3PIN):
+                button_rec()
+        if BUT4PIN:
+            if GPIO.event_detected(BUT4PIN):
+                pass
+        if BUT5PIN:
+            if GPIO.event_detected(BUT5PIN):
+                pass
         time.sleep(1)
 
 except KeyboardInterrupt: # If CTRL+C is pressed, exit cleanly:
