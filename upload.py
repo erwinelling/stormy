@@ -72,7 +72,8 @@ try:
                     os.makedirs(UPLOADING_DIR)
                 new_filename = "%s-%s%s" % (os.path.splitext(filename)[0],datetimenow,os.path.splitext(filename)[1])
                 new_path_to_file = os.path.join(UPLOADING_DIR, new_filename)
-                shutil.move(path_to_file, new_path_to_file)
+                shutil.move(
+path_to_file, new_path_to_file)
                 count +=1
                 print "File %s verplaatst naar: %s." % (filename, new_path_to_file)
         print "%s file(s) geupload." % (count)

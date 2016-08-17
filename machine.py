@@ -27,6 +27,7 @@ STOP_CHARACTER = "STOP"
 RECORDING_PROCESS_ID_FILE = os.path.join(HOME_DIR, "recprocess.pid")
 
 """
+TODO: Put settings in separate file
 TODO: Find out why MPD server gives timeouts sometimes
 TODO: Make sure soundcloud is loaded on reboot
 TODO: Add logging: http://stackoverflow.com/questions/34588421/how-to-log-to-journald-systemd-via-python
@@ -48,7 +49,7 @@ try:
     print("Here we go! Press CTRL+C to exit")
 
     # Pin Setup:
-    GPIO.setmode(GPIO.BOARD) # Broadcom pin-numbering scheme
+    GPIO.setmode(GPIO.BOARD)  # Broadcom pin-numbering scheme
 
     # Initiate LEDs:
     if LED1PIN:
@@ -60,19 +61,24 @@ try:
 
     # Initiate buttons:
     if BUT1PIN:
-        GPIO.setup(BUT1PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP) # Button pin set as input w/ pull-up
+        # Button pin set as input w/ pull-up
+        GPIO.setup(BUT1PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.add_event_detect(BUT1PIN, GPIO.FALLING, bouncetime=200)
     if BUT2PIN:
-        GPIO.setup(BUT2PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP) # Button pin set as input w/ pull-up
+        # Button pin set as input w/ pull-up
+        GPIO.setup(BUT2PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.add_event_detect(BUT2PIN, GPIO.FALLING, bouncetime=200)
     if BUT3PIN:
-        GPIO.setup(BUT3PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP) # Button pin set as input w/ pull-up
+        # Button pin set as input w/ pull-up
+        GPIO.setup(BUT3PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.add_event_detect(BUT3PIN, GPIO.FALLING, bouncetime=200)
     if BUT4PIN:
-        GPIO.setup(BUT4PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP) # Button pin set as input w/ pull-up
+        # Button pin set as input w/ pull-up
+        GPIO.setup(BUT4PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.add_event_detect(BUT4PIN, GPIO.FALLING, bouncetime=200)
     if BUT5PIN:
-        GPIO.setup(BUT5PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP) # Button pin set as input w/ pull-up
+        # Button pin set as input w/ pull-up
+        GPIO.setup(BUT5PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.add_event_detect(BUT5PIN, GPIO.FALLING, bouncetime=200)
 
     # Blink both leds when started:
@@ -93,10 +99,9 @@ try:
         for i in xrange(0, len(str), 4):
             uid = mifare.select()
             # print "id: %s, %s" % (nr, str[i:(i+4)])
-            mifare.write_block(nr, str[i:(i+4)])
+            mifare.write_block(nr, str[i:(i + 4)])
             nr += 1
         mifare.write_block(nr, STOP_CHARACTER)
-
 
     def read_nfc_string():
         """
@@ -173,7 +178,7 @@ try:
         Take a picture with the first available webcam device.
         """
         # proc = Popen(['fswebcam', '-d', '/dev/video1', '-r' , '1280x720', '--no-banner', name])
-        proc = Popen(['fswebcam', '-r' , '1280x720', '--no-banner', name])
+        proc = Popen(['fswebcam', '-r', '1280x720', '--no-banner', name])
 
     def record_sound(name):
         """
@@ -233,9 +238,9 @@ try:
         # buttonSound.play()
         # proc = Popen(['aplay', os.path.join(HOME_DIR, "button.wav")])
 
-        #TODO: make it possible again to play this sound while playing sounds in mopidy
+        # TODO: make it possible again to play this sound while playing sounds
+        # in mopidy
         pass
-
 
     def button_rec():
         print "REC button"
@@ -354,7 +359,6 @@ try:
     #     prev_inp = inp
     #     time.sleep(0.05)
 
-
     # Load initial playlist
     load_playlist()
 
@@ -404,5 +408,5 @@ try:
                 pass
         time.sleep(1)
 
-except KeyboardInterrupt: # If CTRL+C is pressed, exit cleanly:
-    GPIO.cleanup() # cleanup all GPIO
+except KeyboardInterrupt:  # If CTRL+C is pressed, exit cleanly:
+    GPIO.cleanup()  # cleanup all GPIO
