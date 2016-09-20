@@ -19,6 +19,7 @@ BUT2PIN = 33
 BUT3PIN = 35
 BUT4PIN = False
 BUT5PIN = False
+BUT6PIN = False
 HOME_DIR = "/home/pi/stormy/"
 MUSIC_DIR = "/home/pi/Music/"
 RECORDING_DIR = os.path.join(MUSIC_DIR, "Local/")
@@ -27,22 +28,22 @@ STOP_CHARACTER = "STOP"
 RECORDING_PROCESS_ID_FILE = os.path.join(HOME_DIR, "recprocess.pid")
 
 """
+TODO: save NFC data
+TODO: implement pause button
+TODO: change uploadscript to add files to the right playlist based on NFC
+TODO: play sounds for buttons/ other kind of feedback (led?)
 TODO: Put settings in separate file
 TODO: Find out why MPD server gives timeouts sometimes
 TODO: Make sure soundcloud is loaded on reboot
-TODO: Add logging: http://stackoverflow.com/questions/34588421/how-to-log-to-journald-systemd-via-python
 TODO: Maybe switch to https://github.com/Mic92/python-mpd2
-TODO: Also replace other shell commands to pure python
-TODO: Add hook to automatically update scripts from github
+TODO: Replace all shell commands to pure python
 TODO: make sure the script works without internet connection
 TODO: set volume 100% alsamixer
-TODO: save wavs as mp3s
-TODO: check if i can stop the static
-TODO: play sounds testfor buttons
-TODO: change sounds for buttons
-TODO: add more exception handling
-TODO: add some logging instead of print statements
-TODO: change uploadscript to add files to the right playlist based on NFC
+TODO: save wavs as mp3s?
+TODO: check if i can stop the static noise
+TODO: add better exception handling
+TODO: Add logging: http://stackoverflow.com/questions/34588421/how-to-log-to-journald-systemd-via-python
+TODO: Add hook to automatically update scripts from github
 """
 
 try:
@@ -405,6 +406,9 @@ try:
                 pass
         if BUT5PIN:
             if GPIO.event_detected(BUT5PIN):
+                pass
+        if BUT6PIN:
+            if GPIO.event_detected(BUT6PIN):
                 pass
         time.sleep(1)
 
