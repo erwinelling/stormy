@@ -109,18 +109,6 @@ try:
     # Initiate NFC reader:
     mifare = nxppy.Mifare()
 
-    def write_nfc_string(str):
-        """
-        Write a string to the current NFC chip.
-        """
-        nr = 10
-        for i in xrange(0, len(str), 4):
-            uid = mifare.select()
-            # print "id: %s, %s" % (nr, str[i:(i+4)])
-            mifare.write_block(nr, str[i:(i + 4)])
-            nr += 1
-        mifare.write_block(nr, NFC_STOP_CHARACTER)
-
     def read_nfc_string():
         """
         Read a string from the current NFC chip.
