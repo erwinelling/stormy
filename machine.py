@@ -301,6 +301,13 @@ try:
         else:
             pass
 
+    def button_pause():
+        print "PAUSE button"
+        control_mpc('pause')
+        # Check what mpc status returns when paused?
+        # Possibly necessary to alter other button behaviour too?
+        # Possibly necessary to do mpc play when pause is used for a second time.
+
     # def mpc_callback_btn1(channel=False):
     #     print "Button pressed (%s)" % channel
     #     # if channel == BUT1PIN and not check_playing():
