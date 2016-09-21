@@ -30,9 +30,9 @@ NFC_CHIP_DATA_FILE = os.path.join(HOME_DIR, "nfcchip.dat")
 
 """
 TODO: make it easy to write to NFC chips
-TODO: implement pause button
 TODO: change uploadscript to add files to the right playlist based on NFC
-TODO: play sounds for buttons/ other kind of feedback (led?)
+
+TODO: Finish implementing pause button (check behaviour of pause funtion)
 TODO: Put settings in separate file
 TODO: Find out why MPD server gives timeouts sometimes
 TODO: Make sure soundcloud is loaded on reboot
@@ -82,6 +82,10 @@ try:
         # Button pin set as input w/ pull-up
         GPIO.setup(BUT5PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.add_event_detect(BUT5PIN, GPIO.FALLING, bouncetime=200)
+    if BUT6PIN:
+        # Button pin set as input w/ pull-up
+        GPIO.setup(BUT6PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+        GPIO.add_event_detect(BUT6PIN, GPIO.FALLING, bouncetime=200)
 
     # Blink both leds when started:
     GPIO.output(LED1PIN, GPIO.HIGH)
@@ -241,16 +245,19 @@ try:
         time.sleep(1)
         GPIO.output(LED2PIN, GPIO.LOW)
 
-    def play_sound():
+    def button_feedback():
         """
-        Play a button sound.
+        Give feedback on button press.
         """
         # buttonSound.play()
         # proc = Popen(['aplay', os.path.join(HOME_DIR, "button.wav")])
 
         # TODO: make it possible again to play this sound while playing sounds
         # in mopidy
-        pass
+
+        GPIO.output(LED1PIN, GPIO.HIGH)
+        time.sleep(0.5)
+        GPIO.output(LED1PIN, GPIO.LOW)
 
     def button_rec():
         print "REC button"
@@ -273,6 +280,7 @@ try:
         print "PREV button"
         if check_playing():
             control_mpc('prev')
+            button_feedback()
         else:
             pass
 
@@ -280,6 +288,7 @@ try:
         print "PLAY button"
         if not check_playing():
             control_mpc('play')
+            button_feedback()
         else:
             pass
 
@@ -287,6 +296,7 @@ try:
         print "NEXT button"
         if check_playing():
             control_mpc('next')
+            button_feedback()
         else:
             pass
 
@@ -298,12 +308,14 @@ try:
 
         if check_playing():
             control_mpc('stop')
+            button_feedback()
         else:
             pass
 
     def button_pause():
         print "PAUSE button"
         control_mpc('pause')
+        button_feedback()
         # Check what mpc status returns when paused?
         # Possibly necessary to alter other button behaviour too?
         # Possibly necessary to do mpc play when pause is used for a second time.
