@@ -26,9 +26,10 @@ RECORDING_DIR = os.path.join(MUSIC_DIR, "Local/")
 NFC_READER_PRESENT = False
 STOP_CHARACTER = "STOP"
 RECORDING_PROCESS_ID_FILE = os.path.join(HOME_DIR, "recprocess.pid")
+NFC_CHIP_DATA_FILE = os.path.join(HOME_DIR, "nfcchip.dat")
 
 """
-TODO: save NFC data
+TODO: make it easy to write to NFC chips
 TODO: implement pause button
 TODO: change uploadscript to add files to the right playlist based on NFC
 TODO: play sounds for buttons/ other kind of feedback (led?)
@@ -150,11 +151,19 @@ try:
     def nfc_callback(uid):
         """
         Function that decides what to do when an NFC chips is presented, based on the uid of the chip.
+
         """
         if uid == "0405346A643481":
             load_playlist("SoundCloud/Sets/Frank")
         else:
             load_playlist("SoundCloud/Sets/Test")
+
+        # write playlist info to file
+        nfc_data = read_nfc_string()
+        f = open(NFC_CHIP_DATA_FILE, 'w')
+        f.write(nfc_data)
+        f.close()
+
         print "changed playlist"
 
     def check_playing():
