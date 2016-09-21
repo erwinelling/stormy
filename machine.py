@@ -11,6 +11,7 @@ import os
 import signal
 import nxppy
 import ConfigParser
+from shutil import copyfile
 
 # read config file
 config = ConfigParser.ConfigParser()
@@ -38,9 +39,6 @@ NFC_CHIP_DATA_FILE_NAME = config.get("machine", "NFC_CHIP_DATA_FILE_NAME")
 NFC_CHIP_DATA_FILE = os.path.join(HOME_DIR, NFC_CHIP_DATA_FILE_NAME)
 
 """
-TODO: make it easy to write to NFC chips
-TODO: change uploadscript to add files to the right playlist based on NFC
-
 TODO: Finish implementing pause button (check behaviour of pause funtion)
 
 # Debugging
@@ -170,6 +168,18 @@ try:
 
         print "changed playlist"
 
+    def save_soundcloud_set_datafile(name):
+        """
+        Copy data file content to sound specific data file.
+        If no data file was there, write file for Soundcloud Test set.
+        """
+        if os.path.isfile(NFC_CHIP_DATA_FILE):
+            copyfile(NFC_CHIP_DATA_FILE, name)
+        else:
+            f = open(NFC_CHIP_DATA_FILE, 'w')
+            f.write("SoundCloud/Sets/Test")
+            f.close()
+
     def check_playing():
         """
         Helper function to see whether some song is playing.
@@ -269,10 +279,13 @@ try:
             dt = "%s" % (datetime.datetime.now())
             dtp = "%s.jpg" % (dt)
             dts = "%s.wav" % (dt)
-            picture_name = os.path.join(MUSIC_DIR, dtp)
-            sound_name = os.path.join(MUSIC_DIR, dts)
-            take_picture(picture_name)
-            record_sound(sound_name)
+            dtset = "%s.setname" % (dt)
+            picture_file = os.path.join(MUSIC_DIR, dtp)
+            sound_file = os.path.join(MUSIC_DIR, dts)
+            soundcloud_set_file = os.path.join(MUSIC_DIR, dtset)
+            take_picture(picture_file)
+            record_sound(sound_file)
+            save_soundcloud_set_datafile(soundcloud_set_file)
         else:
             pass
 

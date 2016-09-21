@@ -6,6 +6,10 @@ config.read('stormy.cfg')
 
 NFC_STOP_CHARACTER = config.get("machine", "NFC_STOP_CHARACTER")
 
+"""
+TODO: Kiezen uit bestaande Soundcloud Sets ipv zelf intypen?
+"""
+
 def write_nfc_string(str):
     """
     Write a string to the current NFC chip.
