@@ -19,9 +19,22 @@ from requests.exceptions import HTTPError
 # make sure these dirs for recordings & uploading exist
 # make sure mopidy is owner: sudo chown mopidy:mopidy _uploaded/
 # TODO: create dirs on the fly?
-MUSIC_DIR = "/home/pi/Music/"
-RECORDING_DIR = os.path.join(MUSIC_DIR, "Local/")
-UPLOADING_DIR = os.path.join(MUSIC_DIR, "Soundcloud/")
+
+# MUSIC_DIR = "/home/pi/Music/"
+# RECORDING_DIR = os.path.join(MUSIC_DIR, "Local/")
+# UPLOADING_DIR = os.path.join(MUSIC_DIR, "Soundcloud/")
+
+# read config file
+config = ConfigParser.ConfigParser()
+config.read('stormy.cfg')
+
+MUSIC_DIR = config.get("machine", "MUSIC_DIR")
+RECORDING_DIR_NAME = config.get("machine", "RECORDING_DIR_NAME")
+RECORDING_DIR = os.path.join(MUSIC_DIR, RECORDING_DIR_NAME)
+NFC_CHIP_DATA_FILE_NAME = config.get("machine", "NFC_CHIP_DATA_FILE_NAME")
+NFC_CHIP_DATA_FILE = os.path.join(HOME_DIR, NFC_CHIP_DATA_FILE_NAME)
+UPLOADING_DIR_NAME = config.get("upload", "UPLOADING_DIR_NAME")
+UPLOADING_DIR = os.path.join(MUSIC_DIR, UPLOADING_DIR_NAME)
 
 # os.chdir(RECORDING_DIR)
 # client = soundcloud.Client(access_token='1-35204-229958105-3a372e24e3e04a')

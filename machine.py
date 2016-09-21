@@ -10,41 +10,53 @@ from pygame.mixer import Sound
 import os
 import signal
 import nxppy
+import ConfigParser
 
-# GROUNDPIN = 39
-LED1PIN = 32
-LED2PIN = 36
-BUT1PIN = 31
-BUT2PIN = 33
-BUT3PIN = 35
-BUT4PIN = False
-BUT5PIN = False
-BUT6PIN = False
-HOME_DIR = "/home/pi/stormy/"
-MUSIC_DIR = "/home/pi/Music/"
-RECORDING_DIR = os.path.join(MUSIC_DIR, "Local/")
-NFC_READER_PRESENT = False
-STOP_CHARACTER = "STOP"
-RECORDING_PROCESS_ID_FILE = os.path.join(HOME_DIR, "recprocess.pid")
-NFC_CHIP_DATA_FILE = os.path.join(HOME_DIR, "nfcchip.dat")
+# read config file
+config = ConfigParser.ConfigParser()
+config.read('stormy.cfg')
+
+GROUNDPIN = config.get("machine", "GROUNDPIN")
+LED1PIN = config.get("machine", "LED1PIN")
+LED2PIN = config.get("machine", "LED2PIN")
+BUT1PIN = config.get("machine", "BUT1PIN")
+BUT2PIN = config.get("machine", "BUT2PIN")
+BUT3PIN = config.get("machine", "BUT3PIN")
+BUT4PIN = config.get("machine", "BUT4PIN")
+BUT5PIN = config.get("machine", "BUT5PIN")
+BUT6PIN = config.get("machine", "BUT6PIN")
+HOME_DIR = config.get("machine", "HOME_DIR")
+MUSIC_DIR = config.get("machine", "MUSIC_DIR")
+NFC_READER_PRESENT = config.get("machine", "NFC_READER_PRESENT")
+NFC_STOP_CHARACTER = config.get("machine", "NFC_STOP_CHARACTER")
+
+RECORDING_DIR_NAME = config.get("machine", "RECORDING_DIR_NAME")
+RECORDING_DIR = os.path.join(MUSIC_DIR, RECORDING_DIR_NAME)
+RECORDING_PROCESS_ID_FILE_NAME = config.get("machine", "RECORDING_PROCESS_ID_FILE_NAME")
+RECORDING_PROCESS_ID_FILE = os.path.join(HOME_DIR, RECORDING_PROCESS_ID_FILE_NAME)
+NFC_CHIP_DATA_FILE_NAME = config.get("machine", "NFC_CHIP_DATA_FILE_NAME")
+NFC_CHIP_DATA_FILE = os.path.join(HOME_DIR, NFC_CHIP_DATA_FILE_NAME)
 
 """
 TODO: make it easy to write to NFC chips
 TODO: change uploadscript to add files to the right playlist based on NFC
 
 TODO: Finish implementing pause button (check behaviour of pause funtion)
-TODO: Put settings in separate file
+
+# Debugging
+TODO: check if i can stop the static noise
+TODO: make sure the script works without internet connection
 TODO: Find out why MPD server gives timeouts sometimes
 TODO: Make sure soundcloud is loaded on reboot
-TODO: Maybe switch to https://github.com/Mic92/python-mpd2
-TODO: Replace all shell commands to pure python
-TODO: make sure the script works without internet connection
 TODO: set volume 100% alsamixer
-TODO: save wavs as mp3s?
-TODO: check if i can stop the static noise
 TODO: add better exception handling
 TODO: Add logging: http://stackoverflow.com/questions/34588421/how-to-log-to-journald-systemd-via-python
+
+# Nice to haves
 TODO: Add hook to automatically update scripts from github
+TODO: Maybe switch to https://github.com/Mic92/python-mpd2
+TODO: save wavs as mp3s?
+TODO: Replace all shell commands to pure python
 """
 
 try:
@@ -107,7 +119,7 @@ try:
             # print "id: %s, %s" % (nr, str[i:(i+4)])
             mifare.write_block(nr, str[i:(i + 4)])
             nr += 1
-        mifare.write_block(nr, STOP_CHARACTER)
+        mifare.write_block(nr, NFC_STOP_CHARACTER)
 
     def read_nfc_string():
         """
@@ -120,7 +132,7 @@ try:
         count = 0
         while stop is False:
             data = mifare.read_block(block)
-            if data == STOP_CHARACTER or block > max_block:
+            if data == NFC_STOP_CHARACTER or block > max_block:
                 stop = True
             else:
                 output += data
