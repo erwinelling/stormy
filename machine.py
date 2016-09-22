@@ -165,6 +165,7 @@ try:
             load_playlist("SoundCloud/Sets/Test")
 
         # write playlist info to file
+        print "writing date to %s" % (NFC_CHIP_DATA_FILE)
         nfc_data = read_nfc_string()
         f = open(NFC_CHIP_DATA_FILE, 'w')
         f.write(nfc_data)
