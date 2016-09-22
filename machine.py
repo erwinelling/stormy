@@ -63,12 +63,22 @@ try:
     # Pin Setup:
     GPIO.setmode(GPIO.BOARD)  # Broadcom pin-numbering scheme
 
-    # Initiate LEDs:
+    # Initiate and blink LEDs:
     if LED1PIN:
         GPIO.setup(LED1PIN, GPIO.OUT)
         GPIO.output(LED1PIN, GPIO.LOW)
+
+        GPIO.output(LED1PIN, GPIO.HIGH)
+        time.sleep(1)
+        GPIO.output(LED1PIN, GPIO.LOW)
+
+
     if LED2PIN:
         GPIO.setup(LED2PIN, GPIO.OUT)
+        GPIO.output(LED2PIN, GPIO.LOW)
+
+        GPIO.output(LED2PIN, GPIO.HIGH)
+        time.sleep(1)
         GPIO.output(LED2PIN, GPIO.LOW)
 
     # Initiate buttons:
@@ -96,13 +106,6 @@ try:
         # Button pin set as input w/ pull-up
         GPIO.setup(BUT6PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
         GPIO.add_event_detect(BUT6PIN, GPIO.FALLING, bouncetime=200)
-
-    # Blink both leds when started:
-    GPIO.output(LED1PIN, GPIO.HIGH)
-    GPIO.output(LED2PIN, GPIO.HIGH)
-    time.sleep(1)
-    GPIO.output(LED1PIN, GPIO.LOW)
-    GPIO.output(LED2PIN, GPIO.LOW)
 
     # Initiate NFC reader:
     mifare = nxppy.Mifare()
@@ -142,6 +145,7 @@ try:
             '-p', '6600',
             'ls', playlist,
         ]
+        print "loading playlist %s" % (playlist)
         p1 = subprocess.Popen(args, stdout=subprocess.PIPE)
         output, error = p1.communicate()
         # lines = subprocess.check_output(args, shell=True)
@@ -265,9 +269,10 @@ try:
         # TODO: make it possible again to play this sound while playing sounds
         # in mopidy
 
-        GPIO.output(LED1PIN, GPIO.HIGH)
-        time.sleep(0.5)
-        GPIO.output(LED1PIN, GPIO.LOW)
+        if LED1PIN:
+            GPIO.output(LED1PIN, GPIO.HIGH)
+            time.sleep(0.5)
+            GPIO.output(LED1PIN, GPIO.LOW)
 
     def button_rec():
         print "REC button"
@@ -412,6 +417,7 @@ try:
                 uid = mifare.select()
                 print uid
                 if uid and uid != previous_uid:
+                    print "new NFC detected (%s)" % (uid)
                     previous_uid = uid
                     nfc_callback(uid)
                     # x = 0
