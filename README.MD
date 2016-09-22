@@ -94,6 +94,7 @@ config_file = /etc/mopidy/mopidy.conf
 [soundcloud]
 auth_token =  1-35204-229958105-3a372e24e3e04a
 explore_songs = 25
+enabled = true
 
 [audio]
 mixer = software
@@ -202,7 +203,7 @@ sudo nano /etc/hostname
 Change content to:
 
 ```
-jimmys
+stormy
 ```
 
 ```
