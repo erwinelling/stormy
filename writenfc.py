@@ -7,6 +7,8 @@ config.read('stormy.cfg')
 
 NFC_STOP_CHARACTER = config.get("machine", "NFC_STOP_CHARACTER")
 
+mifare = nxppy.Mifare()
+
 """
 TODO: Kiezen uit bestaande Soundcloud Sets ipv zelf intypen?
 """

@@ -7,6 +7,8 @@ config.read('stormy.cfg')
 
 NFC_STOP_CHARACTER = config.get("machine", "NFC_STOP_CHARACTER")
 
+mifare = nxppy.Mifare()
+
 def read_nfc_string():
     """
     Read a string from the current NFC chip.
