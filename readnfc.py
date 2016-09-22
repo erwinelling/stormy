@@ -1,3 +1,4 @@
+import ConfigParser
 import nxppy
 
 # read config file
