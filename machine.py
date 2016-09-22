@@ -28,7 +28,7 @@ BUT5PIN = int(config.get("machine", "BUT5PIN"))
 BUT6PIN = int(config.get("machine", "BUT6PIN"))
 HOME_DIR = config.get("machine", "HOME_DIR")
 MUSIC_DIR = config.get("machine", "MUSIC_DIR")
-NFC_READER_PRESENT = config.get("machine", "NFC_READER_PRESENT")
+NFC_READER_PRESENT = bool(config.get("machine", "NFC_READER_PRESENT"))
 NFC_STOP_CHARACTER = config.get("machine", "NFC_STOP_CHARACTER")
 
 RECORDING_DIR_NAME = config.get("machine", "RECORDING_DIR_NAME")
@@ -414,6 +414,7 @@ try:
     previous_uid = None
     while True:
         if NFC_READER_PRESENT == True:
+            print "nfc True"
             try:
                 uid = mifare.select()
                 print uid
