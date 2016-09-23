@@ -48,6 +48,12 @@ sudo systemctl restart mopidy
 sudo systemctl status mopidy
 ```
 
+Check the logs:
+
+```
+cat /var/log/mopidy/mopidy.log
+```
+
 ## Install Mopidy extensions
 
 ```
@@ -99,7 +105,7 @@ enabled = true
 [audio]
 mixer = software
 mixer_volume = 80
-output = alsasink
+output = alsasink device=hw:1,0
 buffer_time =
 
 [stream]
@@ -253,3 +259,28 @@ sudo systemctl stop machine
 sudo systemctl restart machine
 sudo systemctl status machine
 ```
+
+To check logs:
+
+```
+cat /var/log/mopidy/mopidy.log
+```
+
+# Setting up audio
+
+As per http://www.alsa-project.org/main/index.php/Setting_the_default_device
+
+Find your desired card with:
+
+```
+cat /proc/asound/cards
+```
+
+and then create /etc/asound.conf with following:
+
+```
+   defaults.pcm.card 1
+   defaults.ctl.card 1
+```
+
+Replace "1" with number of your card determined above.

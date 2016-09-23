@@ -39,26 +39,30 @@ NFC_CHIP_DATA_FILE_NAME = config.get("machine", "NFC_CHIP_DATA_FILE_NAME")
 NFC_CHIP_DATA_FILE = os.path.join(HOME_DIR, NFC_CHIP_DATA_FILE_NAME)
 
 """
-TODO: Finish implementing pause button (check behaviour of pause funtion)
-
 # Debugging
-TODO: check if i can stop the static noise
-TODO: make sure the script works without internet connection
-TODO: Find out why MPD server gives timeouts sometimes
+TODO: Make alsa audio work in mpd
 TODO: Make sure soundcloud is loaded on reboot
-TODO: set volume 100% alsamixer
+TODO: Add buttons and test
+TODO: Finish implementing pause button (check behaviour of pause funtion)
+TODO: check if i can stop the static noise
+TODO: Test recording
+TODO: Find out why MPD server gives timeouts sometimes when using MPC (different with python?)
+TODO: Maybe switch to https://github.com/Mic92/python-mpd2
+TODO: make sure the script works without internet connection too
+TODO: Test with local audio
 TODO: add better exception handling
 TODO: Add logging: http://stackoverflow.com/questions/34588421/how-to-log-to-journald-systemd-via-python
 
 # Nice to haves
 TODO: Add hook to automatically update scripts from github
-TODO: Maybe switch to https://github.com/Mic92/python-mpd2
 TODO: save wavs as mp3s?
-TODO: Replace all shell commands to pure python
+TODO: Replace all other shell commands to pure python too
 """
 
 try:
     print("Here we go! Press CTRL+C to exit")
+    time.sleep(10)
+    proc = Popen(['sudo', 'systemctl', 'restart', 'mopidy'])
 
     # Pin Setup:
     GPIO.setmode(GPIO.BOARD)  # Broadcom pin-numbering scheme
@@ -417,7 +421,6 @@ try:
             print "nfc True"
             try:
                 uid = mifare.select()
-                print uid
                 if uid and uid != previous_uid:
                     print "new NFC detected (%s)" % (uid)
                     previous_uid = uid
