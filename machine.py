@@ -15,7 +15,7 @@ from shutil import copyfile
 
 # read config file
 config = ConfigParser.ConfigParser()
-config.read('stormy.cfg')
+config.read('/home/pi/stormy/stormy.cfg')
 
 GROUNDPIN = int(config.get("machine", "GROUNDPIN"))
 LED1PIN = int(config.get("machine", "LED1PIN"))
@@ -40,7 +40,6 @@ NFC_CHIP_DATA_FILE = os.path.join(HOME_DIR, NFC_CHIP_DATA_FILE_NAME)
 
 """
 # Debugging
-TODO: Make alsa audio work in mpd
 TODO: Make sure soundcloud is loaded on reboot
 TODO: Add buttons and test
 TODO: Finish implementing pause button (check behaviour of pause funtion)
@@ -60,11 +59,6 @@ TODO: Replace all other shell commands to pure python too
 """
 
 try:
-    print("Here we go! Press CTRL+C to exit")
-    time.sleep(10)
-    proc = Popen(['sudo', 'systemctl', 'restart', 'mopidy'])
-    time.sleep(5)
-
     # Pin Setup:
     GPIO.setmode(GPIO.BOARD)  # Broadcom pin-numbering scheme
 
@@ -73,17 +67,8 @@ try:
         GPIO.setup(LED1PIN, GPIO.OUT)
         GPIO.output(LED1PIN, GPIO.LOW)
 
-        GPIO.output(LED1PIN, GPIO.HIGH)
-        time.sleep(1)
-        GPIO.output(LED1PIN, GPIO.LOW)
-
-
     if LED2PIN:
         GPIO.setup(LED2PIN, GPIO.OUT)
-        GPIO.output(LED2PIN, GPIO.LOW)
-
-        GPIO.output(LED2PIN, GPIO.HIGH)
-        time.sleep(1)
         GPIO.output(LED2PIN, GPIO.LOW)
 
     # Initiate buttons:
@@ -260,10 +245,13 @@ try:
         """
         print "MPC %s" % action
         proc = Popen(['mpc', '-h', 'localhost', '-p', '6600', action, '-q'])
-        GPIO.output(LED2PIN, GPIO.HIGH)
-        # proc.wait()
-        time.sleep(1)
-        GPIO.output(LED2PIN, GPIO.LOW)
+
+    def blink(number, sleep):
+        for i in range(0,number):
+            GPIO.output(LED1PIN, GPIO.HIGH)
+            time.sleep(sleep)
+            GPIO.output(LED1PIN, GPIO.LOW)
+            time.sleep(sleep)
 
     def button_feedback():
         """
@@ -276,9 +264,7 @@ try:
         # in mopidy
 
         if LED1PIN:
-            GPIO.output(LED1PIN, GPIO.HIGH)
-            time.sleep(0.5)
-            GPIO.output(LED1PIN, GPIO.LOW)
+            blink(1,0.5)
 
     def button_rec():
         print "REC button"
@@ -411,6 +397,17 @@ try:
     #         print count
     #     prev_inp = inp
     #     time.sleep(0.05)
+
+
+    print("Starting. Press CTRL+C to exit")
+    print("Waiting 10 seconds to restart Mopidy.")
+    time.sleep(10)
+    print("Restarting Mopidy and waiting 5 seconds.")
+    proc = Popen(['sudo', 'systemctl', 'restart', 'mopidy'])
+    time.sleep(5)
+    print("OK, here we go!")
+    if LED1PIN:
+        blink(3,0.5)
 
     # Load initial playlist
     load_playlist()
