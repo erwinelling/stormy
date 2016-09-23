@@ -419,7 +419,6 @@ try:
     previous_uid = None
     while True:
         if NFC_READER_PRESENT == True:
-            print "nfc True"
             try:
                 uid = mifare.select()
                 if uid and uid != previous_uid:
