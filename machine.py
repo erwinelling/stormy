@@ -12,6 +12,7 @@ import signal
 import nxppy
 import ConfigParser
 from shutil import copyfile
+import logging
 
 # read config file
 config = ConfigParser.ConfigParser()
@@ -37,6 +38,24 @@ RECORDING_PROCESS_ID_FILE_NAME = config.get("machine", "RECORDING_PROCESS_ID_FIL
 RECORDING_PROCESS_ID_FILE = os.path.join(HOME_DIR, RECORDING_PROCESS_ID_FILE_NAME)
 NFC_CHIP_DATA_FILE_NAME = config.get("machine", "NFC_CHIP_DATA_FILE_NAME")
 NFC_CHIP_DATA_FILE = os.path.join(HOME_DIR, NFC_CHIP_DATA_FILE_NAME)
+
+LOG_FILE = os.path.join(HOME_DIR, "machine.log")
+
+# setup logging
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
+
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+
+fh = logging.FileHandler(LOG_FILE)
+fh.setLevel(logging.DEBUG)
+fh.setFormatter(formatter)
+logger.addHandler(fh)
+
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+ch.setFormatter(formatter)
+logger.addHandler(ch)
 
 """
 # Debugging
@@ -135,7 +154,7 @@ try:
             '-p', '6600',
             'ls', playlist,
         ]
-        print "loading playlist %s" % (playlist)
+        logger.debug("loading playlist %s, playlist)
         p1 = subprocess.Popen(args, stdout=subprocess.PIPE)
         output, error = p1.communicate()
         # lines = subprocess.check_output(args, shell=True)
@@ -155,13 +174,13 @@ try:
             load_playlist("SoundCloud/Sets/Test")
 
         # write playlist info to file
-        print "writing date to %s" % (NFC_CHIP_DATA_FILE)
+        logger.debug("writing date to %s", NFC_CHIP_DATA_FILE)
         nfc_data = read_nfc_string()
         f = open(NFC_CHIP_DATA_FILE, 'w')
         f.write(nfc_data)
         f.close()
 
-        print "changed playlist"
+        logger.debug("changed playlist")
 
     def save_soundcloud_set_datafile(name):
         """
@@ -186,10 +205,10 @@ try:
 
         if status[:6] == "volume" or "[paused]" in status:
             # this is the output when the song is stopped
-            print "Playing? No"
+            logger.debug("Playing? No")
             return False
         else:
-            print "Playing? Yes"
+            logger.debug("Playing? Yes")
             return True
 
     def take_picture(name):
@@ -224,10 +243,10 @@ try:
         Helper function to see whether something is being recorded.
         """
         if os.path.isfile(RECORDING_PROCESS_ID_FILE):
-            print "Recording? Yes"
+            logger.debug("Recording? Yes")
             return True
         else:
-            print "Recording? No"
+            logger.debug("Recording? No")
             return False
 
     def stop_recording():
@@ -243,7 +262,7 @@ try:
         """
         Run mpc commands to control Mopidy Music server.
         """
-        print "MPC %s" % action
+        logger.debug("MPC %s", action)
         proc = Popen(['mpc', '-h', 'localhost', '-p', '6600', action, '-q'])
 
     def blink(number, sleep):
@@ -267,7 +286,7 @@ try:
             blink(1,0.5)
 
     def button_rec():
-        print "REC button"
+        logger.debug("REC button")
 
         if not check_recording():
             if check_playing():
@@ -287,7 +306,7 @@ try:
             pass
 
     def button_prev():
-        print "PREV button"
+        logger.debug("PREV button")
         if check_playing():
             control_mpc('prev')
             button_feedback()
@@ -295,7 +314,7 @@ try:
             pass
 
     def button_play():
-        print "PLAY button"
+        logger.debug("PLAY button")
         if not check_playing():
             control_mpc('play')
             button_feedback()
@@ -303,7 +322,7 @@ try:
             pass
 
     def button_next():
-        print "NEXT button"
+        logger.debug("NEXT button")
         if check_playing():
             control_mpc('next')
             button_feedback()
@@ -311,7 +330,7 @@ try:
             pass
 
     def button_stop():
-        print "STOP button"
+        logger.debug("STOP button")
         if check_recording():
             stop_recording()
             GPIO.output(LED1PIN, GPIO.LOW)
@@ -323,7 +342,7 @@ try:
             pass
 
     def button_pause():
-        print "PAUSE button"
+        logger.debug("PAUSE button")
         control_mpc('pause')
         button_feedback()
         # Check what mpc status returns when paused?
@@ -399,13 +418,13 @@ try:
     #     time.sleep(0.05)
 
 
-    print("Starting. Press CTRL+C to exit")
-    print("Waiting 10 seconds to restart Mopidy.")
+    logger.debug("Starting. Press CTRL+C to exit")
+    logger.debug(("Waiting 10 seconds to restart Mopidy.")
     time.sleep(10)
-    print("Restarting Mopidy and waiting 5 seconds.")
+    logger.debug(("Restarting Mopidy and waiting 5 seconds.")
     proc = Popen(['sudo', 'systemctl', 'restart', 'mopidy'])
     time.sleep(5)
-    print("OK, here we go!")
+    logger.debug(("OK, here we go!")
     if LED1PIN:
         blink(3,0.5)
 
@@ -419,7 +438,7 @@ try:
             try:
                 uid = mifare.select()
                 if uid and uid != previous_uid:
-                    print "new NFC detected (%s)" % (uid)
+                    logger.debug("new NFC detected (%s)", uid)
                     previous_uid = uid
                     nfc_callback(uid)
                     # x = 0
