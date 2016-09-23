@@ -284,3 +284,13 @@ and then create /etc/asound.conf with following:
 ```
 
 Replace "1" with number of your card determined above.
+
+# logs
+Check the logs:
+
+```
+cat /var/log/mopidy/mopidy.log
+```
+
+# Disable Pulseaudio
+https://wiki.archlinux.org/index.php/PulseAudio/Examples#Disabling_pulseaudio_daemon_altogether
