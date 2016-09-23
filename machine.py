@@ -154,7 +154,7 @@ try:
             '-p', '6600',
             'ls', playlist,
         ]
-        logger.debug("loading playlist %s, playlist)
+        logger.debug("loading playlist %s", playlist)
         p1 = subprocess.Popen(args, stdout=subprocess.PIPE)
         output, error = p1.communicate()
         # lines = subprocess.check_output(args, shell=True)
