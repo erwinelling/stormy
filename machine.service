@@ -4,6 +4,7 @@ After=multi-user.target
 
 [Service]
 Type=idle
+User=pi
 ExecStart=/usr/bin/python /home/pi/stormy/machine.py > /home/pi/stormy/machine.log 2>&1
 
 [Install]
