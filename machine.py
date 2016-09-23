@@ -419,12 +419,12 @@ try:
 
 
     logger.debug("Starting. Press CTRL+C to exit")
-    logger.debug(("Waiting 10 seconds to restart Mopidy.")
+    logger.debug("Waiting 10 seconds to restart Mopidy.")
     time.sleep(10)
-    logger.debug(("Restarting Mopidy and waiting 5 seconds.")
+    logger.debug("Restarting Mopidy and waiting 5 seconds.")
     proc = Popen(['sudo', 'systemctl', 'restart', 'mopidy'])
     time.sleep(5)
-    logger.debug(("OK, here we go!")
+    logger.debug("OK, here we go!")
     if LED1PIN:
         blink(3,0.5)
 
