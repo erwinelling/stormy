@@ -75,6 +75,7 @@ TODO: Add logging: http://stackoverflow.com/questions/34588421/how-to-log-to-jou
 TODO: Add hook to automatically update scripts from github
 TODO: save wavs as mp3s?
 TODO: Replace all other shell commands to pure python too
+TODO: Use sound for button feedback?
 """
 
 try:
@@ -140,12 +141,10 @@ try:
     def load_playlist(playlist="SoundCloud/Sets/Frank"):
         """
         Change playlist in Mopidy
-        TODO: Base it on NFC tags
 
         # mpc clear
         # mpc ls SoundCloud/Sets/
         """
-        # TODO: use control_mpc()
         proc = Popen(['mpc', '-h', 'localhost', '-p', '6600', 'clear', '-q'])
 
         args = [
@@ -163,6 +162,10 @@ try:
             # print quotedline
             song = Popen(['mpc', 'add', line])
 
+        # for debugging purposes, start playing it when there are no buttons
+        if not BUT1PIN:
+            control_mpc('play')
+
     def nfc_callback(uid):
         """
         Function that decides what to do when an NFC chips is presented, based on the uid of the chip.
@@ -174,8 +177,8 @@ try:
             load_playlist("SoundCloud/Sets/Test")
 
         # write playlist info to file
-        logger.debug("writing date to %s", NFC_CHIP_DATA_FILE)
         nfc_data = read_nfc_string()
+        logger.debug("writing '%s' to %s", nfc_data, NFC_CHIP_DATA_FILE)
         f = open(NFC_CHIP_DATA_FILE, 'w')
         f.write(nfc_data)
         f.close()
@@ -223,9 +226,6 @@ try:
         Do some audio recording
         e.g. arecord -D plughw:CARD=Device,DEV=0 -f S16_LE -c1 -r44100 -V mono tik2.wav
         """
-
-        # TODO: remove static sound
-        # TODO: test piping into lame mp3 encoding
         args = [
             'arecord',
             '-D', 'plughw:CARD=Device,DEV=0',
@@ -278,9 +278,6 @@ try:
         """
         # buttonSound.play()
         # proc = Popen(['aplay', os.path.join(HOME_DIR, "button.wav")])
-
-        # TODO: make it possible again to play this sound while playing sounds
-        # in mopidy
 
         if LED1PIN:
             blink(1,0.5)
@@ -459,25 +456,19 @@ try:
             except nxppy.SelectError:
                 pass
 
-        # TODO: Refactor nested if statements
-        if BUT1PIN:
-            if GPIO.event_detected(BUT1PIN):
+        if BUT1PIN and GPIO.event_detected(BUT1PIN):
                 button_play()
-        if BUT2PIN:
-            if GPIO.event_detected(BUT2PIN):
+        if BUT2PIN and GPIO.event_detected(BUT2PIN):
                 button_stop()
-        if BUT3PIN:
-            if GPIO.event_detected(BUT3PIN):
+        if BUT3PIN and GPIO.event_detected(BUT3PIN):
                 button_rec()
-        if BUT4PIN:
-            if GPIO.event_detected(BUT4PIN):
+        if BUT4PIN and GPIO.event_detected(BUT4PIN):
                 pass
-        if BUT5PIN:
-            if GPIO.event_detected(BUT5PIN):
+        if BUT5PIN and GPIO.event_detected(BUT5PIN):
                 pass
-        if BUT6PIN:
-            if GPIO.event_detected(BUT6PIN):
+        if BUT6PIN and GPIO.event_detected(BUT6PIN):
                 pass
+
         time.sleep(1)
 
 except KeyboardInterrupt:  # If CTRL+C is pressed, exit cleanly:
