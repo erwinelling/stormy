@@ -63,6 +63,7 @@ try:
     print("Here we go! Press CTRL+C to exit")
     time.sleep(10)
     proc = Popen(['sudo', 'systemctl', 'restart', 'mopidy'])
+    time.sleep(5)
 
     # Pin Setup:
     GPIO.setmode(GPIO.BOARD)  # Broadcom pin-numbering scheme
