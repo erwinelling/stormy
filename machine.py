@@ -134,7 +134,7 @@ try:
             else:
                 output += data
             block += 1
-        return output
+        return output.rstrip()
 
     def nfc_callback(uid):
         """

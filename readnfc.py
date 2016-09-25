@@ -35,7 +35,7 @@ while True:
             print uid
             previous_uid = uid
             nfc_string = read_nfc_string()
-            print nfc_string
+            print "\"%s\"" % (nfc_string)
     except nxppy.SelectError:
         pass
     except nxppy.ReadError:
