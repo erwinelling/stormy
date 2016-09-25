@@ -415,12 +415,14 @@ try:
     #     time.sleep(0.05)
 
 
+    # Startup
+    # Restart Mopidy because somehow Soundcloud is mostly not working when the service has started on bot
     logger.debug("Starting. Press CTRL+C to exit")
-    logger.debug("Waiting 30 seconds to restart Mopidy.")
-    time.sleep(30)
-    logger.debug("Restarting Mopidy and waiting 60 seconds.")
+    logger.debug("Waiting 20 seconds to restart Mopidy.")
+    time.sleep(20)
+    logger.debug("Restarting Mopidy and waiting 10 seconds.")
     proc = Popen(['sudo', 'systemctl', 'restart', 'mopidy'])
-    time.sleep(60)
+    time.sleep(10)
     logger.debug("OK, here we go!")
     if LED1PIN:
         blink(3,0.5)
@@ -438,21 +440,6 @@ try:
                     logger.debug("NFC detected (%s)", uid)
                     previous_uid = uid
                     nfc_callback(uid)
-                    # x = 0
-                    # bytesRead = []
-                    # while True:
-                    #         try:
-                    #                 blockBytes = mifare.read_block(x)
-                    #                 bytesRead.append(blockBytes)
-                    #                 x += 4
-                    #         except nxppy.ReadError:
-                    #                 print("Length: {0}".format(x))
-                    #                 break
-                    # if bytesRead:
-                    #         ba = bytearray(''.join(bytesRead))
-                    #         f = open(uid, 'w')
-                    #         f.write(ba);
-                    #         break
             except nxppy.SelectError:
                 pass
             except nxppy.ReadError:
@@ -477,3 +464,5 @@ try:
 
 except KeyboardInterrupt:  # If CTRL+C is pressed, exit cleanly:
     GPIO.cleanup()  # cleanup all GPIO
+except Exception, e:
+    logging.error(e, exc_info=True)

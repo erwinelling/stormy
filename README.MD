@@ -307,8 +307,8 @@ sudo systemctl restart mopidy
 sudo systemctl stop mopidy
 sudo systemctl stop machine
 sudo nano /etc/mopidy/mopidy.conf
-tail -25 /var/log/mopidy/mopidy.log
+tail -f /var/log/mopidy/mopidy.log
 
 output = alsasink device=hw:1,0
 
-tail -25 /home/pi/stormy/machine.log
+tail -f /home/pi/stormy/machine.log
