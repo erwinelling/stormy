@@ -243,6 +243,24 @@ Add:
 */5 * * * * /usr/bin/python /home/pi/stormy/upload.py > /home/pi/stormy/upload.log
 ```
 
+## Add logs for cron:
+
+```
+sudo nano /etc/rsyslog.conf
+```
+
+and uncomment the line
+
+```
+# cron.*                          /var/log/cron.log
+```
+
+After that, you need to restart rsyslog via
+
+```
+$ sudo /etc/init.d/rsyslog restart
+```
+
 # Run player as a service
 
 As per <http://www.raspberrypi-spy.co.uk/2015/10/how-to-autorun-a-python-script-on-boot-using-systemd/> and Give it the right permissions and enable our unit file as service

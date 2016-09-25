@@ -94,7 +94,7 @@ try:
                     'description': u'Opgenomen met Jimmy Story Sucker. Geupload op %s.' % (datetimenow),
                     'track_type': 'spoken',
                     # 'artwork_data': open('artwork.jpg', 'rb'),
-                    'purchase_url': "http://biechtstoel.uptous.nl",
+                    'purchase_url': "http://wijzijnjimmys.nl/verhalen/",
                     'license': "cc-by-nc",
                     # 'tag_list': "tag1 \"hip hop\" geo:lat=32.444 geo:lon=55.33"
                     # 'genre': 'Electronic',
@@ -106,8 +106,7 @@ try:
                     os.makedirs(UPLOADING_DIR)
                 new_filename = "%s-%s%s" % (os.path.splitext(filename)[0],datetimenow,os.path.splitext(filename)[1])
                 new_path_to_file = os.path.join(UPLOADING_DIR, new_filename)
-                shutil.move(
-path_to_file, new_path_to_file)
+                shutil.move(path_to_file, new_path_to_file)
                 count +=1
                 logger.debug("File %s verplaatst naar: %s.",filename, new_path_to_file)
         logger.debug("%s file(s) geupload.", count)

@@ -62,18 +62,20 @@ logger.addHandler(ch)
 TODO: Change to USB soundcard
 TODO: Make sure soundcloud is loaded on reboot
 TODO: Add buttons and test
-TODO: Finish implementing pause button (check behaviour of pause funtion)
+TODO: Finish implementing pause button (check behaviour of pause function)
+TODO: Test cronjob uploader (tail -f /var/log/cron.log)
 
 TODO: Test recording
 TODO: check if i can stop the static noise
 
-TODO: Find out why MPD server gives timeouts sometimes when using MPC (different with python?)
-TODO: make sure the script works without internet connection too
+TODO: Save wavs as mp3s?
 TODO: Test with local audio
+TODO: Make sure the script works without internet connection too
+
+TODO: Find out why MPD server gives timeouts sometimes when using MPC (different with python?)
 
 # Nice to haves
 TODO: Maybe switch to https://github.com/Mic92/python-mpd2
-TODO: save wavs as mp3s?
 TODO: Replace all other shell commands to pure python too
 TODO: Use sound for button feedback?
 TODO: Add hook to automatically update scripts from github
@@ -235,7 +237,7 @@ try:
         # write playlist info to file
         logger.debug("writing '%s' to %s", playlist, NFC_CHIP_DATA_FILE)
         f = open(NFC_CHIP_DATA_FILE, 'w')
-        f.write(nfc_data)
+        f.write(playlist)
         f.close()
 
         logger.debug("changed playlist")
