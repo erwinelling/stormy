@@ -494,7 +494,7 @@ try:
                     previous_uid = uid
                     nfc_callback(uid)
             except nxppy.SelectError:
-                logger.error("NXP SelectError")
+                # No card found
                 pass
             except nxppy.ReadError:
                 logger.error("NXP ReadError (%s): Probably no valid data on chip", uid)
