@@ -59,17 +59,20 @@ logger.addHandler(ch)
 
 """
 # Debugging
+TODO: Change to USB soundcard
 TODO: Make sure soundcloud is loaded on reboot
 TODO: Add buttons and test
 TODO: Finish implementing pause button (check behaviour of pause funtion)
-TODO: check if i can stop the static noise
+
 TODO: Test recording
+TODO: check if i can stop the static noise
+
 TODO: Find out why MPD server gives timeouts sometimes when using MPC (different with python?)
-TODO: Maybe switch to https://github.com/Mic92/python-mpd2
 TODO: make sure the script works without internet connection too
 TODO: Test with local audio
 
 # Nice to haves
+TODO: Maybe switch to https://github.com/Mic92/python-mpd2
 TODO: save wavs as mp3s?
 TODO: Replace all other shell commands to pure python too
 TODO: Use sound for button feedback?
@@ -118,42 +121,7 @@ try:
     # Initiate NFC reader:
     mifare = nxppy.Mifare()
 
-    def read_nfc_string():
-        """
-        Read a string from the current NFC chip.
-        """
-        max_block = 1000  # if "STOP" is not found, when should we stop?
-        block = 10
-        output = ""
-        stop = False
-        count = 0
-        while stop is False:
-            data = mifare.read_block(block)
-            if data == NFC_STOP_CHARACTER or block > max_block:
-                stop = True
-            else:
-                output += data
-            block += 1
-        return output.rstrip()
 
-    def nfc_callback(uid):
-        """
-        Function that decides what to do when an NFC chips is presented, based on the uid of the chip.
-
-        """
-        if uid == "0405346A643481":
-            load_playlist("SoundCloud/Sets/Frank")
-        else:
-            load_playlist("SoundCloud/Sets/Test")
-
-        # write playlist info to file
-        nfc_data = read_nfc_string()
-        logger.debug("writing '%s' to %s", nfc_data, NFC_CHIP_DATA_FILE)
-        f = open(NFC_CHIP_DATA_FILE, 'w')
-        f.write(nfc_data)
-        f.close()
-
-        logger.debug("changed playlist")
 
     def save_soundcloud_set_datafile(name):
         """
@@ -264,6 +232,15 @@ try:
             # TODO rewrite control_mpc to make this possible:
             song = Popen(['mpc', 'add', line])
 
+        # write playlist info to file
+        logger.debug("writing '%s' to %s", playlist, NFC_CHIP_DATA_FILE)
+        f = open(NFC_CHIP_DATA_FILE, 'w')
+        f.write(nfc_data)
+        f.close()
+
+        logger.debug("changed playlist")
+
+
         # for debugging purposes, start playing it when there are no buttons
         if not BUT1PIN:
             control_mpc('play')
@@ -363,6 +340,48 @@ try:
             button_feedback()
         else:
             pass
+
+    def read_nfc_string():
+        """
+        Read a string from the current NFC chip.
+        """
+        max_block = 1000  # if "STOP" is not found, when should we stop?
+        block = 10
+        output = ""
+        stop = False
+        count = 0
+        while stop is False:
+            data = mifare.read_block(block)
+            if data == NFC_STOP_CHARACTER or block > max_block:
+                stop = True
+            else:
+                output += data
+            block += 1
+        return output.rstrip()
+
+    def nfc_callback(uid):
+        """
+        Function that decides what to do when an NFC chips is presented, based on the uid of the chip.
+
+        """
+        nfc_data = read_nfc_string()
+        logger.debug("Read \"%s\"", nfc_data)
+
+        if nfc_data == "STOP":
+            button_stop()
+            return True
+        if nfc_data == "PLAY":
+            button_play()
+            return True
+        if nfc_data == "REC":
+            button_rec()
+            return True
+        if nfc_data[0:16] == "SoundCloud/Sets/":
+            load_playlist(nfc_data)
+        else:
+            load_playlist("SoundCloud/Sets/Misc")
+
+        return True
 
     # def mpc_callback_btn1(channel=False):
     #     print "Button pressed (%s)" % channel
