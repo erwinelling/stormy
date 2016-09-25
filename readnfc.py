@@ -25,7 +25,7 @@ def read_nfc_string():
         else:
             output += data
         block += 1
-    return output
+    return output.rstrip()
 
 previous_uid = None
 while True:
