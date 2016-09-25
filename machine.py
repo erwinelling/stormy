@@ -275,7 +275,8 @@ try:
         if not check_recording():
             if check_playing():
                 control_mpc('stop')
-            GPIO.output(LED1PIN, GPIO.HIGH)
+            if LED1PIN:
+                GPIO.output(LED1PIN, GPIO.HIGH)
             dt = "%s" % (datetime.datetime.now())
             dtp = "%s.jpg" % (dt)
             dts = "%s.wav" % (dt)
@@ -325,7 +326,8 @@ try:
         logger.debug("STOP button")
         if check_recording():
             stop_recording()
-            GPIO.output(LED1PIN, GPIO.LOW)
+            if LED1PIN:
+                GPIO.output(LED1PIN, GPIO.LOW)
 
         if check_playing():
             control_mpc('stop')
@@ -369,7 +371,7 @@ try:
         nfc_data = read_nfc_string()
         logger.debug("Read \"%s\"", nfc_data)
 
-        if nfc_data == "STOP":
+        if nfc_data == "EIND":
             button_stop()
             return True
         if nfc_data == "PLAY":
