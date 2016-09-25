@@ -247,6 +247,7 @@ try:
         control_mpc('stop')
         control_mpc('clear')
 
+        # TODO rewrite control_mpc to make this possible:
         args = [
             'mpc',
             '-h', 'localhost',
@@ -255,10 +256,12 @@ try:
         ]
         p1 = subprocess.Popen(args, stdout=subprocess.PIPE)
         output, error = p1.communicate()
+        # TODO: Check for errors here, i.e. "error: Not found" when SoundCloud not loaded
         # lines = subprocess.check_output(args, shell=True)
         for line in output.split(os.linesep):
             # quotedline = '"%s"' % line
             # print quotedline
+            # TODO rewrite control_mpc to make this possible:
             song = Popen(['mpc', 'add', line])
 
         # for debugging purposes, start playing it when there are no buttons
