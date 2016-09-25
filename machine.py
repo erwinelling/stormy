@@ -64,16 +64,13 @@ logger.addHandler(ch)
 TODO: Change to USB soundcard
 TODO: Check playback settings
 TODO: Check Mic settings for recording as good as possible
+TODO: Find out why MPD server gives timeouts sometimes when using MPC (different with python?) (is it a sound card thing?)
 
 TODO: Add buttons and test
 TODO: Finish implementing pause button (check behaviour of pause function)
 
-TODO: Make sure soundcloud is loaded on reboot
-
 TODO: Test with local audio
 TODO: Make sure the script works without internet connection too
-
-TODO: Find out why MPD server gives timeouts sometimes when using MPC (different with python?)
 
 # Nice to haves
 TODO: Save wavs as mp3s?
@@ -125,7 +122,7 @@ try:
     # Initiate NFC reader:
     mifare = nxppy.Mifare()
 
-    def check_file_path_exists(filepath)
+    def check_file_path_exists(filepath):
         if not os.path.exists(os.path.dirname(filepath)):
             try:
                 os.makedirs(os.path.dirname(filepath))
