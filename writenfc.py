@@ -12,7 +12,6 @@ NFC_STOP_CHARACTER = config.get("machine", "NFC_STOP_CHARACTER")
 mifare = nxppy.Mifare()
 
 """
-TODO: Kiezen uit bestaande Soundcloud Sets ipv zelf intypen?
 """
 
 def write_nfc_string(str):
@@ -39,12 +38,18 @@ output, error = p1.communicate()
 
 print "Available SoundCloud/Sets:"
 i = 0
-for line in output.split(os.linesep):
-    print "%s: %s (%s)" % (i, line, output.split(os.linesep)[i])
+for line in output.split(os.linesep)[0:-1]:
+    print "%s: %s" % (i, line)
     i=i+1
+    print "x: Something else"
 
-set_name = raw_input('Wat is de naam van de SoundCloud Set?')
+chosen_set = raw_input('Which set number (or x)?')
 
+if chosen_set == "x":
+    set_name = chosen_set
+else:
+    chosen_set_int = int(chosen_set)
+    set_name = output.split(os.linesep)[chosen_set_int]
 
 previous_uid = None
 while True:
@@ -54,6 +59,6 @@ while True:
         if uid and uid != previous_uid:
             previous_uid = uid
             write_nfc_string(set_name)
-            print "%s naar de nfc chip geschreven" % (set_name)
+            print "%s saved on NFC chip" % (set_name)
     except nxppy.SelectError:
         pass
