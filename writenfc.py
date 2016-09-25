@@ -26,21 +26,21 @@ def write_nfc_string(str):
         nr += 1
     mifare.write_block(nr, NFC_STOP_CHARACTER)
 
-    args = [
-        'mpc',
-        '-h', 'localhost',
-        '-p', '6600',
-        'ls', 'SoundCloud/Sets/',
-    ]
+args = [
+    'mpc',
+    '-h', 'localhost',
+    '-p', '6600',
+    'ls', 'SoundCloud/Sets/',
+]
 
-    p1 = subprocess.Popen(args, stdout=subprocess.PIPE)
-    output, error = p1.communicate()
+p1 = subprocess.Popen(args, stdout=subprocess.PIPE)
+output, error = p1.communicate()
 
-    print "Available SoundCloud/Sets:"
-    i = 0
-    for line in output.split(os.linesep):
-        print "%s: %s (%s)" % (i, line, output.split(os.linesep)[i])
-        i=i+1
+print "Available SoundCloud/Sets:"
+i = 0
+for line in output.split(os.linesep):
+    print "%s: %s (%s)" % (i, line, output.split(os.linesep)[i])
+    i=i+1
 
 set_name = raw_input('Wat is de naam van de SoundCloud Set?')
 
