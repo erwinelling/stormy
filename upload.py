@@ -7,6 +7,7 @@ import sys
 import shutil
 from requests.exceptions import HTTPError
 import logging
+import ConfigParser
 #
 # try:
 # from safeutil import move, copyfile
