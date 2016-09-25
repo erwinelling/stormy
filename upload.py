@@ -30,6 +30,7 @@ import ConfigParser
 config = ConfigParser.ConfigParser()
 config.read('stormy.cfg')
 
+HOME_DIR = config.get("machine", "HOME_DIR")
 MUSIC_DIR = config.get("machine", "MUSIC_DIR")
 RECORDING_DIR_NAME = config.get("machine", "RECORDING_DIR_NAME")
 RECORDING_DIR = os.path.join(MUSIC_DIR, RECORDING_DIR_NAME)
