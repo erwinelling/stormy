@@ -70,17 +70,17 @@ TODO: make sure the script works without internet connection too
 TODO: Test with local audio
 
 # Nice to haves
-TODO: Add hook to automatically update scripts from github
 TODO: save wavs as mp3s?
 TODO: Replace all other shell commands to pure python too
 TODO: Use sound for button feedback?
+TODO: Add hook to automatically update scripts from github
 """
 
 try:
     # Pin Setup:
     GPIO.setmode(GPIO.BOARD)  # Broadcom pin-numbering scheme
 
-    # Initiate and blink LEDs:
+    # Initiate LEDs:
     if LED1PIN:
         GPIO.setup(LED1PIN, GPIO.OUT)
         GPIO.output(LED1PIN, GPIO.LOW)
