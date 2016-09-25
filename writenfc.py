@@ -44,10 +44,10 @@ for line in output.split(os.linesep)[0:-1]:
     i=i+1
 print "x: Something else"
 
-chosen_set = raw_input('Which set number (or x)?')
+chosen_set = raw_input('Which set number (or x)? ')
 
 if chosen_set == "x":
-    set_name = chosen_set
+    set_name = raw_input('Something else, but what? ')
 else:
     chosen_set_int = int(chosen_set)
     set_name = output.split(os.linesep)[chosen_set_int]
