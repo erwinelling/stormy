@@ -4,7 +4,6 @@ import RPi.GPIO as GPIO
 import time
 import datetime
 import subprocess
-from subprocess import Popen
 import pygame.mixer
 from pygame.mixer import Sound
 import os
@@ -31,6 +30,9 @@ HOME_DIR = config.get("machine", "HOME_DIR")
 MUSIC_DIR = config.get("machine", "MUSIC_DIR")
 NFC_READER_PRESENT = bool(config.get("machine", "NFC_READER_PRESENT"))
 NFC_STOP_CHARACTER = config.get("machine", "NFC_STOP_CHARACTER")
+SOUND_CARD = config.get("machine", "SOUND_CARD")
+SOUND_CARD_NO = config.get("machine", "SOUND_CARD_NO")
+SOUND_CARD_MIC_NAME = config.get("machine", "SOUND_CARD_MIC_NAME")
 
 RECORDING_DIR_NAME = config.get("machine", "RECORDING_DIR_NAME")
 RECORDING_DIR = os.path.join(MUSIC_DIR, RECORDING_DIR_NAME)
@@ -134,7 +136,7 @@ try:
             copyfile(NFC_CHIP_DATA_FILE, name)
         else:
             f = open(NFC_CHIP_DATA_FILE, 'w')
-            f.write("SoundCloud/Sets/Test")
+            f.write("SoundCloud/Sets/Misc")
             f.close()
 
     def check_playing():
@@ -158,17 +160,28 @@ try:
         """
         Take a picture with the first available webcam device.
         """
-        # proc = Popen(['fswebcam', '-d', '/dev/video1', '-r' , '1280x720', '--no-banner', name])
-        proc = Popen(['fswebcam', '-r', '1280x720', '--no-banner', name])
+        # proc = subprocess.Popen(['fswebcam', '-d', '/dev/video1', '-r' , '1280x720', '--no-banner', name])
+        proc = subprocess.Popen(['fswebcam', '-r', '1280x720', '--no-banner', name])
 
     def record_sound(name):
         """
         Do some audio recording
-        e.g. arecord -D plughw:CARD=Device,DEV=0 -f S16_LE -c1 -r44100 -V mono tik2.wav
+        e.g. arecord -D plughw:CARD=Device,DEV=0 -f S16_LE -c1 -r44100 -V mono test.wav
         """
+        # Turn on Mic
+        args = [
+            'amixer',
+            '-c', SOUND_CARD_NO,
+            'set',
+            SOUND_CARD_MIC_NAME,
+            'cap',
+            '13'
+        ]
+        subprocess.Popen(args)
+
         args = [
             'arecord',
-            '-D', 'plughw:CARD=Device,DEV=0',
+            '-D', SOUND_CARD,
             '-f', 'S16_LE',
             '-c1',
             '-r44100',
@@ -176,7 +189,7 @@ try:
             '--process-id-file', RECORDING_PROCESS_ID_FILE,
             name
         ]
-        proc = Popen(args)
+        proc = subprocess.Popen(args)
 
     def check_recording():
         """
@@ -203,7 +216,7 @@ try:
         Run mpc commands to control Mopidy Music server.
         """
         logger.debug("MPC %s", action)
-        proc = Popen(['mpc', '-h', 'localhost', '-p', '6600', action, '-q'])
+        proc = subprocess.Popen(['mpc', '-h', 'localhost', '-p', '6600', action, '-q'])
 
     def load_playlist(playlist="SoundCloud/Sets/Frank"):
         """
@@ -232,7 +245,7 @@ try:
             # quotedline = '"%s"' % line
             # print quotedline
             # TODO rewrite control_mpc to make this possible:
-            song = Popen(['mpc', 'add', line])
+            song = subprocess.Popen(['mpc', 'add', line])
 
         # write playlist info to file
         logger.debug("writing '%s' to %s", playlist, NFC_CHIP_DATA_FILE)
@@ -263,7 +276,7 @@ try:
         Give feedback on button press.
         """
         # buttonSound.play()
-        # proc = Popen(['aplay', os.path.join(HOME_DIR, "button.wav")])
+        # proc = subprocess.Popen(['aplay', os.path.join(HOME_DIR, "button.wav")])
 
         blink(1,0.5)
 
@@ -462,7 +475,7 @@ try:
     logger.debug("Waiting 20 seconds to restart Mopidy.")
     time.sleep(20)
     logger.debug("Restarting Mopidy and waiting 10 seconds.")
-    proc = Popen(['sudo', 'systemctl', 'restart', 'mopidy'])
+    proc = subprocess.Popen(['sudo', 'systemctl', 'restart', 'mopidy'])
     time.sleep(10)
     logger.debug("OK, here we go!")
     blink(3,0.5)
