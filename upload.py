@@ -6,6 +6,7 @@ import datetime
 import sys
 import shutil
 from requests.exceptions import HTTPError
+import logging
 #
 # try:
 # from safeutil import move, copyfile
@@ -36,6 +37,25 @@ NFC_CHIP_DATA_FILE = os.path.join(HOME_DIR, NFC_CHIP_DATA_FILE_NAME)
 UPLOADING_DIR_NAME = config.get("upload", "UPLOADING_DIR_NAME")
 UPLOADING_DIR = os.path.join(MUSIC_DIR, UPLOADING_DIR_NAME)
 
+
+# setup logging
+LOG_FILE = os.path.join(HOME_DIR, "upload.log")
+
+logger = logging.getLogger()
+logger.setLevel(logging.DEBUG)
+
+formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
+
+fh = logging.FileHandler(LOG_FILE)
+fh.setLevel(logging.DEBUG)
+fh.setFormatter(formatter)
+logger.addHandler(fh)
+
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+ch.setFormatter(formatter)
+logger.addHandler(ch)
+
 # os.chdir(RECORDING_DIR)
 # client = soundcloud.Client(access_token='1-35204-229958105-3a372e24e3e04a')
 
@@ -51,11 +71,10 @@ try:
     )
 
     # walk through all files in recording directory
-    print "Checking contents of %s" % RECORDING_DIR
+    logger.debug("Checking contents of %s", RECORDING_DIR)
     from os.path import join, getsize
     count = 0
     for root, dirs, files in os.walk(RECORDING_DIR):
-        print files
         for filename in files:
             # check whether it is a music file that can be uploaded to soundcloud
             # http://uploadandmanage.help.soundcloud.com/customer/portal/articles/2162441-uploading-requirements
@@ -78,7 +97,7 @@ try:
                     # 'tag_list': "tag1 \"hip hop\" geo:lat=32.444 geo:lon=55.33"
                     # 'genre': 'Electronic',
                 })
-                print "File %s geupload naar Soundcloud: %s." % (filename, track.permalink_url)
+                logger.debug("File %s geupload naar Soundcloud: %s.", filename, track.permalink_url)
 
                 # move file to uploaded directory
                 if not os.path.exists(UPLOADING_DIR):
@@ -88,15 +107,15 @@ try:
                 shutil.move(
 path_to_file, new_path_to_file)
                 count +=1
-                print "File %s verplaatst naar: %s." % (filename, new_path_to_file)
-        print "%s file(s) geupload." % (count)
+                logger.debug("File %s verplaatst naar: %s.",filename, new_path_to_file)
+        logger.debug("%s file(s) geupload.", count)
 except HTTPError:
-    # TODO: Better error handling
-    # TODO: Some logging?
-    print("Geen verbinding met Soundcloud mogelijk")
+    logger.error("Geen verbinding met Soundcloud mogelijk")
+    pass
+except Exception, e:
+    logging.error(e, exc_info=True)
     pass
 
-print("Einde")
 # Het is ook mogelijk om een playlist te maken, bijv. met 1 onderwerp
 
 # # try to get a track
@@ -119,3 +138,4 @@ print("Einde")
 #   'genre': 'Electronic',
 #   'artwork_data': open('artwork.jpg', 'rb')
 # })
+logger.debug("Einde")

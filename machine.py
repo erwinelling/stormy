@@ -14,7 +14,7 @@ import ConfigParser
 from shutil import copyfile
 import logging
 
-# read config file
+# read config file and set config
 config = ConfigParser.ConfigParser()
 config.read('/home/pi/stormy/stormy.cfg')
 
@@ -39,9 +39,9 @@ RECORDING_PROCESS_ID_FILE = os.path.join(HOME_DIR, RECORDING_PROCESS_ID_FILE_NAM
 NFC_CHIP_DATA_FILE_NAME = config.get("machine", "NFC_CHIP_DATA_FILE_NAME")
 NFC_CHIP_DATA_FILE = os.path.join(HOME_DIR, NFC_CHIP_DATA_FILE_NAME)
 
+# setup logging
 LOG_FILE = os.path.join(HOME_DIR, "machine.log")
 
-# setup logging
 logger = logging.getLogger()
 logger.setLevel(logging.DEBUG)
 
@@ -68,8 +68,6 @@ TODO: Find out why MPD server gives timeouts sometimes when using MPC (different
 TODO: Maybe switch to https://github.com/Mic92/python-mpd2
 TODO: make sure the script works without internet connection too
 TODO: Test with local audio
-TODO: add better exception handling
-TODO: Add logging: http://stackoverflow.com/questions/34588421/how-to-log-to-journald-systemd-via-python
 
 # Nice to haves
 TODO: Add hook to automatically update scripts from github
@@ -137,34 +135,6 @@ try:
                 output += data
             block += 1
         return output
-
-    def load_playlist(playlist="SoundCloud/Sets/Frank"):
-        """
-        Change playlist in Mopidy
-
-        # mpc clear
-        # mpc ls SoundCloud/Sets/
-        """
-        proc = Popen(['mpc', '-h', 'localhost', '-p', '6600', 'clear', '-q'])
-
-        args = [
-            'mpc',
-            '-h', 'localhost',
-            '-p', '6600',
-            'ls', playlist,
-        ]
-        logger.debug("loading playlist %s", playlist)
-        p1 = subprocess.Popen(args, stdout=subprocess.PIPE)
-        output, error = p1.communicate()
-        # lines = subprocess.check_output(args, shell=True)
-        for line in output.split(os.linesep):
-            # quotedline = '"%s"' % line
-            # print quotedline
-            song = Popen(['mpc', 'add', line])
-
-        # for debugging purposes, start playing it when there are no buttons
-        if not BUT1PIN:
-            control_mpc('play')
 
     def nfc_callback(uid):
         """
@@ -265,12 +235,46 @@ try:
         logger.debug("MPC %s", action)
         proc = Popen(['mpc', '-h', 'localhost', '-p', '6600', action, '-q'])
 
+    def load_playlist(playlist="SoundCloud/Sets/Frank"):
+        """
+        Change playlist in Mopidy
+
+        # mpc clear
+        # mpc ls SoundCloud/Sets/
+        """
+        logger.debug("loading playlist %s", playlist)
+
+        control_mpc('stop')
+        control_mpc('clear')
+
+        args = [
+            'mpc',
+            '-h', 'localhost',
+            '-p', '6600',
+            'ls', playlist,
+        ]
+        p1 = subprocess.Popen(args, stdout=subprocess.PIPE)
+        output, error = p1.communicate()
+        # lines = subprocess.check_output(args, shell=True)
+        for line in output.split(os.linesep):
+            # quotedline = '"%s"' % line
+            # print quotedline
+            song = Popen(['mpc', 'add', line])
+
+        # for debugging purposes, start playing it when there are no buttons
+        if not BUT1PIN:
+            control_mpc('play')
+
     def blink(number, sleep):
-        for i in range(0,number):
-            GPIO.output(LED1PIN, GPIO.HIGH)
-            time.sleep(sleep)
-            GPIO.output(LED1PIN, GPIO.LOW)
-            time.sleep(sleep)
+        """
+        Blink led 1
+        """
+        if LED1PIN:
+            for i in range(0,number):
+                GPIO.output(LED1PIN, GPIO.HIGH)
+                time.sleep(sleep)
+                GPIO.output(LED1PIN, GPIO.LOW)
+                time.sleep(sleep)
 
     def button_feedback():
         """
@@ -279,10 +283,11 @@ try:
         # buttonSound.play()
         # proc = Popen(['aplay', os.path.join(HOME_DIR, "button.wav")])
 
-        if LED1PIN:
-            blink(1,0.5)
+        blink(1,0.5)
 
     def button_rec():
+        """
+        """
         logger.debug("REC button")
 
         if not check_recording():
@@ -303,6 +308,8 @@ try:
             pass
 
     def button_prev():
+        """
+        """
         logger.debug("PREV button")
         if check_playing():
             control_mpc('prev')
@@ -311,6 +318,8 @@ try:
             pass
 
     def button_play():
+        """
+        """
         logger.debug("PLAY button")
         if not check_playing():
             control_mpc('play')
@@ -319,6 +328,8 @@ try:
             pass
 
     def button_next():
+        """
+        """
         logger.debug("NEXT button")
         if check_playing():
             control_mpc('next')
@@ -327,6 +338,8 @@ try:
             pass
 
     def button_stop():
+        """
+        """
         logger.debug("STOP button")
         if check_recording():
             stop_recording()
@@ -339,6 +352,8 @@ try:
             pass
 
     def button_pause():
+        """
+        """
         logger.debug("PAUSE button")
         if check_playing():
             control_mpc('pause')
@@ -424,13 +439,12 @@ try:
     proc = Popen(['sudo', 'systemctl', 'restart', 'mopidy'])
     time.sleep(10)
     logger.debug("OK, here we go!")
-    if LED1PIN:
-        blink(3,0.5)
+    blink(3,0.5)
 
     # Load initial playlist
     load_playlist()
 
-    # Check for input
+    # Check for input from buttons and NFC reader
     previous_uid = None
     while True:
         if NFC_READER_PRESENT == True:
@@ -441,10 +455,10 @@ try:
                     previous_uid = uid
                     nfc_callback(uid)
             except nxppy.SelectError:
+                logger.error("NXP SelectError")
                 pass
             except nxppy.ReadError:
-                logger.error("ReadError (%s)", uid)
-                print "ReadError"
+                logger.error("NXP ReadError (%s): Probably no valid data on chip", uid)
                 pass
 
         if BUT1PIN and GPIO.event_detected(BUT1PIN):
@@ -460,6 +474,7 @@ try:
         if BUT6PIN and GPIO.event_detected(BUT6PIN):
                 pass
 
+        # wait a second before checking again
         time.sleep(1)
 
 except KeyboardInterrupt:  # If CTRL+C is pressed, exit cleanly:
