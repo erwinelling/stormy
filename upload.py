@@ -80,31 +80,37 @@ try:
             # and ignore hidden files
             if filename.lower().endswith(('.aiff', '.wav', '.flac', '.alac', '.ogg', '.mp2', '.mp3', '.aac', '.amr', '.wma')) and not filename.startswith('.'):
                 path_to_file = os.path.join(root, filename)
+                not_uploaded_file = os.path.splitext(path_to_file)[0]+".notuploaded"
+                if os.path.isfile(not_uploaded_file):
 
-                # upload to soundcloud
-                datetimenow = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M%S')
-                track = client.post('/tracks', track={
-                    # TODO: Set more track data, get input somewhere
-                    'title': unicode(os.path.splitext(filename)[0]),
-                    'asset_data': open(path_to_file, 'rb'),
-                    'description': u'Opgenomen met Jimmy Story Sucker. Geupload op %s.' % (datetimenow),
-                    'track_type': 'spoken',
-                    # 'artwork_data': open('artwork.jpg', 'rb'),
-                    'purchase_url': "http://wijzijnjimmys.nl/verhalen/",
-                    'license': "cc-by-nc",
-                    # 'tag_list': "tag1 \"hip hop\" geo:lat=32.444 geo:lon=55.33"
-                    # 'genre': 'Electronic',
-                })
-                logger.debug("File %s geupload naar Soundcloud: %s.", filename, track.permalink_url)
+                    # upload to soundcloud
+                    datetimenow = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M%S')
+                    track = client.post('/tracks', track={
+                        # TODO: Set more track data, get input somewhere
+                        'title': unicode(os.path.splitext(filename)[0]),
+                        'asset_data': open(path_to_file, 'rb'),
+                        'description': u'Opgenomen met Jimmy Story Sucker. Geupload op %s.' % (datetimenow),
+                        'track_type': 'spoken',
+                        # 'artwork_data': open('artwork.jpg', 'rb'),
+                        'purchase_url': "http://wijzijnjimmys.nl/verhalen/",
+                        'license': "cc-by-nc",
+                        # 'tag_list': "tag1 \"hip hop\" geo:lat=32.444 geo:lon=55.33"
+                        # 'genre': 'Electronic',
+                    })
+                    logger.debug("File %s geupload naar Soundcloud: %s.", filename, track.permalink_url)
 
-                # move file to uploaded directory
-                if not os.path.exists(UPLOADING_DIR):
-                    os.makedirs(UPLOADING_DIR)
-                new_filename = "%s-%s%s" % (os.path.splitext(filename)[0],datetimenow,os.path.splitext(filename)[1])
-                new_path_to_file = os.path.join(UPLOADING_DIR, new_filename)
-                shutil.move(path_to_file, new_path_to_file)
+                    # move file to uploaded directory
+                    # if not os.path.exists(UPLOADING_DIR):
+                    #     os.makedirs(UPLOADING_DIR)
+                    # new_filename = "%s-%s%s" % (os.path.splitext(filename)[0],datetimenow,os.path.splitext(filename)[1])
+                    # new_path_to_file = os.path.join(UPLOADING_DIR, new_filename)
+                    # shutil.move(path_to_file, new_path_to_file)
+
+                # remove .notuploaded file
+                os.remove(not_uploaded_file)
+
                 count +=1
-                logger.debug("File %s verplaatst naar: %s.",filename, new_path_to_file)
+                # logger.debug("File %s verplaatst naar: %s.",filename, new_path_to_file)
         logger.debug("%s file(s) geupload.", count)
 except HTTPError:
     logger.error("Geen verbinding met Soundcloud mogelijk")
