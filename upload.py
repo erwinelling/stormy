@@ -106,8 +106,8 @@ try:
                     # new_path_to_file = os.path.join(UPLOADING_DIR, new_filename)
                     # shutil.move(path_to_file, new_path_to_file)
 
-                # remove .notuploaded file
-                os.remove(not_uploaded_file)
+                    # remove .notuploaded file
+                    os.remove(not_uploaded_file)
 
                 count +=1
                 # logger.debug("File %s verplaatst naar: %s.",filename, new_path_to_file)
