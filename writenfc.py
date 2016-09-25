@@ -1,6 +1,7 @@
 import ConfigParser
 import nxppy
 import subprocess
+import os
 
 # read config file
 config = ConfigParser.ConfigParser()
