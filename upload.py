@@ -22,10 +22,6 @@ import ConfigParser
 # make sure mopidy is owner: sudo chown mopidy:mopidy _uploaded/
 # TODO: create dirs on the fly?
 
-# MUSIC_DIR = "/home/pi/Music/"
-# RECORDING_DIR = os.path.join(MUSIC_DIR, "Local/")
-# UPLOADING_DIR = os.path.join(MUSIC_DIR, "Soundcloud/")
-
 # read config file
 config = ConfigParser.ConfigParser()
 config.read('/home/pi/stormy/stormy.cfg')

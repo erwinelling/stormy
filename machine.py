@@ -65,21 +65,18 @@ TODO: Change to USB soundcard
 TODO: Check playback settings
 TODO: Check Mic settings for recording as good as possible
 
-TODO: Make sure soundcloud is loaded on reboot
 TODO: Add buttons and test
 TODO: Finish implementing pause button (check behaviour of pause function)
-TODO: Test cronjob uploader (tail -f /var/log/cron.log)
 
-TODO: Test recording
-TODO: check if i can stop the static noise
+TODO: Make sure soundcloud is loaded on reboot
 
-TODO: Save wavs as mp3s?
 TODO: Test with local audio
 TODO: Make sure the script works without internet connection too
 
 TODO: Find out why MPD server gives timeouts sometimes when using MPC (different with python?)
 
 # Nice to haves
+TODO: Save wavs as mp3s?
 TODO: Maybe switch to https://github.com/Mic92/python-mpd2
 TODO: Replace all other shell commands to pure python too
 TODO: Use sound for button feedback?
@@ -129,6 +126,9 @@ try:
     mifare = nxppy.Mifare()
 
 
+    def save_upload_datafile(name):
+        f = open(name, 'w')
+        f.close()
 
     def save_soundcloud_set_datafile(name):
         """
@@ -295,16 +295,22 @@ try:
                 control_mpc('stop')
             if LED1PIN:
                 GPIO.output(LED1PIN, GPIO.HIGH)
+
+            # This part could be way clearer/ better :)
             dt = "%s" % (datetime.datetime.now())
             dtp = "%s.jpg" % (dt)
             dts = "%s.wav" % (dt)
             dtset = "%s.setname" % (dt)
-            picture_file = os.path.join(MUSIC_DIR, dtp)
-            sound_file = os.path.join(MUSIC_DIR, dts)
-            soundcloud_set_file = os.path.join(MUSIC_DIR, dtset)
+            dtupload = "%s.notuploaded" % (dtp)
+            picture_file = os.path.join(RECORDING_DIR, dtp)
+            sound_file = os.path.join(RECORDING_DIR, dts)
+            soundcloud_set_file = os.path.join(RECORDING_DIR, dtset)
+            dtupload_file = os.path.join(RECORDING_DIR, dtupload)
+
             take_picture(picture_file)
             record_sound(sound_file)
             save_soundcloud_set_datafile(soundcloud_set_file)
+            save_upload_datafile(dtupload_file)
         else:
             pass
 
@@ -482,6 +488,7 @@ try:
     logger.debug("Restarting Mopidy and waiting 10 seconds.")
     proc = subprocess.Popen(['sudo', 'systemctl', 'restart', 'mopidy'])
     time.sleep(10)
+    proc = subprocess.Popen(['sudo', 'mopidyctl', 'local', 'scan'])
     logger.debug("OK, here we go!")
     blink(3,0.5)
 

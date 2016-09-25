@@ -73,6 +73,24 @@ sudo nano /etc/mopidy/mopidy.conf
 add:
 
 ```
+[local]
+enabled = true
+library = json
+media_dir = $XDG_MUSIC_DIR
+scan_timeout = 1000
+scan_flush_threshold = 100
+scan_follow_symlinks = false
+excluded_file_extensions =
+  .directory
+  .html
+  .jpeg
+  .jpg
+  .log
+  .nfo
+  .png
+  .txt
+  .setname
+  .notuploaded
 
 [http]
 enabled = true
@@ -331,3 +349,4 @@ tail -f /var/log/mopidy/mopidy.log
 output = alsasink device=hw:1,0
 
 tail -f /home/pi/stormy/machine.log
+tail -f /home/pi/stormy/upload.log
