@@ -310,7 +310,7 @@ try:
             dtp = "%s.jpg" % (dt)
             dts = "%s.wav" % (dt)
             dtset = "%s.setname" % (dt)
-            dtupload = "%s.notuploaded" % (dtp)
+            dtupload = "%s.notuploaded" % (dt)
             picture_file = os.path.join(RECORDING_DIR, dtp)
             sound_file = os.path.join(RECORDING_DIR, dts)
             soundcloud_set_file = os.path.join(RECORDING_DIR, dtset)
