@@ -38,3 +38,6 @@ while True:
             print nfc_string
     except nxppy.SelectError:
         pass
+    except nxppy.ReadError:
+        print "ReadError"
+        pass

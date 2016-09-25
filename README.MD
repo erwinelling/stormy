@@ -150,6 +150,7 @@ sudo raspi-config
 - Expand Filesystem
 - Change password
 - Enable SPI under advanced options
+- Setup internationalisation options (Language and Timezone)
 
 ## Install dependencies for NXP NFC reader
 
@@ -267,6 +268,8 @@ cat /var/log/mopidy/mopidy.log
 ```
 
 # Setting up audio
+USB DEVICE DOES NOT WORK PROPERLY YET
+
 
 As per http://www.alsa-project.org/main/index.php/Setting_the_default_device
 
@@ -285,7 +288,7 @@ and then create /etc/asound.conf with following:
 
 Replace "1" with number of your card determined above.
 
-# logs
+# Logs
 Check the logs:
 
 ```
@@ -294,3 +297,18 @@ cat /var/log/mopidy/mopidy.log
 
 # Disable Pulseaudio
 https://wiki.archlinux.org/index.php/PulseAudio/Examples#Disabling_pulseaudio_daemon_altogether
+
+
+
+
+### Often used to debug:
+
+sudo systemctl restart mopidy
+sudo systemctl stop mopidy
+sudo systemctl stop machine
+sudo nano /etc/mopidy/mopidy.conf
+tail -25 /var/log/mopidy/mopidy.log
+
+output = alsasink device=hw:1,0
+
+tail -25 /home/pi/stormy/machine.log
