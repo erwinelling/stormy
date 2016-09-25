@@ -2,6 +2,7 @@ import ConfigParser
 import nxppy
 import subprocess
 import os
+import time
 
 # read config file
 config = ConfigParser.ConfigParser()
@@ -41,7 +42,7 @@ i = 0
 for line in output.split(os.linesep)[0:-1]:
     print "%s: %s" % (i, line)
     i=i+1
-    print "x: Something else"
+print "x: Something else"
 
 chosen_set = raw_input('Which set number (or x)?')
 
@@ -55,10 +56,12 @@ previous_uid = None
 while True:
     try:
         uid = mifare.select()
-        print uid
+        print "Hold NFC chip close to reader"
         if uid and uid != previous_uid:
+            print uid
             previous_uid = uid
             write_nfc_string(set_name)
-            print "%s saved on NFC chip" % (set_name)
+            print "\"%s\" saved on NFC chip" % (set_name)
     except nxppy.SelectError:
         pass
+    time.sleep(1)
