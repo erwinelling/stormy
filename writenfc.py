@@ -23,7 +23,9 @@ def write_nfc_string(str):
     for i in xrange(0, len(str), 4):
         uid = mifare.select()
         # print "id: %s, %s" % (nr, str[i:(i+4)])
-        mifare.write_block(nr, str[i:(i + 4)])
+        stukje_string = str[i:(i + 4)]
+        print stukje_string
+        mifare.write_block(nr, stukje_string)
         nr += 1
     mifare.write_block(nr, NFC_STOP_CHARACTER)
 
