@@ -323,6 +323,7 @@ https://wiki.archlinux.org/index.php/PulseAudio/Examples#Disabling_pulseaudio_da
 
 sudo systemctl restart mopidy
 sudo systemctl stop mopidy
+sudo systemctl restart machine
 sudo systemctl stop machine
 sudo nano /etc/mopidy/mopidy.conf
 tail -f /var/log/mopidy/mopidy.log
