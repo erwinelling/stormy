@@ -55,8 +55,8 @@ else:
 previous_uid = None
 while True:
     try:
-        uid = mifare.select()
         print "Hold NFC chip close to reader"
+        uid = mifare.select()
         if uid and uid != previous_uid:
             print uid
             previous_uid = uid
