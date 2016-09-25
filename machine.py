@@ -62,6 +62,9 @@ logger.addHandler(ch)
 """
 # Debugging
 TODO: Change to USB soundcard
+TODO: Check playback settings
+TODO: Check Mic settings for recording as good as possible
+
 TODO: Make sure soundcloud is loaded on reboot
 TODO: Add buttons and test
 TODO: Finish implementing pause button (check behaviour of pause function)
@@ -168,6 +171,7 @@ try:
         Do some audio recording
         e.g. arecord -D plughw:CARD=Device,DEV=0 -f S16_LE -c1 -r44100 -V mono test.wav
         """
+        logger.debug("Recording %s started.", name)
         # Turn on Mic
         args = [
             'amixer',
@@ -209,6 +213,7 @@ try:
         pidfile = os.path.join(HOME_DIR, RECORDING_PROCESS_ID_FILE)
         file = open(pidfile)
         pid = int(file.readline().strip())
+        logger.debug("Stopping recording by killing PID %s", str(pid))
         os.kill(pid, signal.SIGINT)
 
     def control_mpc(action):
@@ -472,8 +477,8 @@ try:
     # Startup
     # Restart Mopidy because somehow Soundcloud is mostly not working when the service has started on bot
     logger.debug("Starting. Press CTRL+C to exit")
-    logger.debug("Waiting 20 seconds to restart Mopidy.")
-    time.sleep(20)
+    logger.debug("Waiting 30 seconds to restart Mopidy.")
+    time.sleep(30)
     logger.debug("Restarting Mopidy and waiting 10 seconds.")
     proc = subprocess.Popen(['sudo', 'systemctl', 'restart', 'mopidy'])
     time.sleep(10)
