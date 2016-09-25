@@ -435,7 +435,7 @@ try:
             try:
                 uid = mifare.select()
                 if uid and uid != previous_uid:
-                    logger.debug("new NFC detected (%s)", uid)
+                    logger.debug("NFC detected (%s)", uid)
                     previous_uid = uid
                     nfc_callback(uid)
                     # x = 0
@@ -454,6 +454,10 @@ try:
                     #         f.write(ba);
                     #         break
             except nxppy.SelectError:
+                pass
+            except nxppy.ReadError:
+                logger.error("ReadError (%s)", uid)
+                print "ReadError"
                 pass
 
         if BUT1PIN and GPIO.event_detected(BUT1PIN):

@@ -31,8 +31,8 @@ previous_uid = None
 while True:
     try:
         uid = mifare.select()
-        print uid
         if uid and uid != previous_uid:
+            print uid
             previous_uid = uid
             nfc_string = read_nfc_string()
             print nfc_string
