@@ -125,8 +125,16 @@ try:
     # Initiate NFC reader:
     mifare = nxppy.Mifare()
 
+    def check_file_path_exists(filepath)
+        if not os.path.exists(os.path.dirname(filepath)):
+            try:
+                os.makedirs(os.path.dirname(filepath))
+            except OSError as exc: # Guard against race condition
+                if exc.errno != errno.EEXIST:
+                    raise
 
     def save_upload_datafile(name):
+        check_file_path_exists(name)
         f = open(name, 'w')
         f.close()
 
@@ -136,8 +144,10 @@ try:
         If no data file was there, write file for Soundcloud Test set.
         """
         if os.path.isfile(NFC_CHIP_DATA_FILE):
+            check_file_path_exists(name)
             copyfile(NFC_CHIP_DATA_FILE, name)
         else:
+            check_file_path_exists(NFC_CHIP_DATA_FILE)
             f = open(NFC_CHIP_DATA_FILE, 'w')
             f.write("SoundCloud/Sets/Misc")
             f.close()
@@ -254,6 +264,8 @@ try:
 
         # write playlist info to file
         logger.debug("writing '%s' to %s", playlist, NFC_CHIP_DATA_FILE)
+
+        check_file_path_exists(NFC_CHIP_DATA_FILE)
         f = open(NFC_CHIP_DATA_FILE, 'w')
         f.write(playlist)
         f.close()
