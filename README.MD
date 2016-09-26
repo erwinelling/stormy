@@ -10,9 +10,11 @@ TODO: Add buttons and test
 TODO: Finish implementing pause button (check behaviour of pause function)
 
 TODO: Test with local audio
+TODO: Update local files more often?
+TODO: More info for local files in interface?
 TODO: Make sure the script works without internet connection too
 
-TODO: Upload to right set
+TODO: Upload to right set on SoundCloud?
 
 # TODO / Nice to have
 TODO: Save wavs as mp3s?

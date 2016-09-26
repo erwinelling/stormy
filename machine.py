@@ -150,6 +150,7 @@ try:
         Take a picture with the first available webcam device.
         """
         # proc = subprocess.Popen(['fswebcam', '-d', '/dev/video1', '-r' , '1280x720', '--no-banner', name])
+        logger.debug("Taking picture: %s", name)
         proc = subprocess.Popen(['fswebcam', '-r', '1280x720', '--no-banner', name])
 
     def record_sound(name):
