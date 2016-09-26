@@ -1,5 +1,28 @@
 # Jimmy's Story Engine/ Cassette Recorder and Player (project stormy)
 
+# TODO / Debugging
+TODO: Change to USB soundcard
+TODO: Check playback settings
+TODO: Check Mic settings for recording as good as possible
+TODO: Find out why MPD server gives timeouts sometimes when using MPC (different with python?) (is it a sound card thing?)
+
+TODO: Add buttons and test
+TODO: Finish implementing pause button (check behaviour of pause function)
+
+TODO: Test with local audio
+TODO: Make sure the script works without internet connection too
+
+TODO: Upload to right set
+
+# TODO / Nice to have
+TODO: Save wavs as mp3s?
+TODO: Maybe switch to https://github.com/Mic92/python-mpd2
+TODO: Replace all other shell commands to pure python too
+TODO: Use sound for button feedback?
+TODO: Add hook to automatically update scripts from github
+
+# How to make this work
+
 ## Install Raspbian
 
 1. Make a fresh install of Raspbian <https://www.raspberrypi.org/downloads/raspbian/>
@@ -279,7 +302,7 @@ After that, you need to restart rsyslog via
 $ sudo /etc/init.d/rsyslog restart
 ```
 
-# Run player as a service
+## Run player as a service
 
 As per <http://www.raspberrypi-spy.co.uk/2015/10/how-to-autorun-a-python-script-on-boot-using-systemd/> and Give it the right permissions and enable our unit file as service
 
@@ -303,7 +326,7 @@ To check logs:
 cat /var/log/mopidy/mopidy.log
 ```
 
-# Setting up audio
+## Setting up audio
 USB DEVICE DOES NOT WORK PROPERLY YET
 
 
@@ -324,25 +347,23 @@ and then create /etc/asound.conf with following:
 
 Replace "1" with number of your card determined above.
 
-# Logs
+## Logs
 Check the logs:
 
 ```
 cat /var/log/mopidy/mopidy.log
 ```
 
-# Disable Pulseaudio
+## Disable Pulseaudio
 https://wiki.archlinux.org/index.php/PulseAudio/Examples#Disabling_pulseaudio_daemon_altogether
 
-
-
-
-### Often used to debug:
+# Often used to debug:
 
 sudo systemctl restart mopidy
 sudo systemctl stop mopidy
 sudo systemctl restart machine
 sudo systemctl stop machine
+sudo systemctl status machine
 sudo nano /etc/mopidy/mopidy.conf
 tail -f /var/log/mopidy/mopidy.log
 

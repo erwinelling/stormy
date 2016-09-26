@@ -59,27 +59,6 @@ ch.setLevel(logging.DEBUG)
 ch.setFormatter(formatter)
 logger.addHandler(ch)
 
-"""
-# Debugging
-TODO: Change to USB soundcard
-TODO: Check playback settings
-TODO: Check Mic settings for recording as good as possible
-TODO: Find out why MPD server gives timeouts sometimes when using MPC (different with python?) (is it a sound card thing?)
-
-TODO: Add buttons and test
-TODO: Finish implementing pause button (check behaviour of pause function)
-
-TODO: Test with local audio
-TODO: Make sure the script works without internet connection too
-
-# Nice to haves
-TODO: Save wavs as mp3s?
-TODO: Maybe switch to https://github.com/Mic92/python-mpd2
-TODO: Replace all other shell commands to pure python too
-TODO: Use sound for button feedback?
-TODO: Add hook to automatically update scripts from github
-"""
-
 try:
     # Pin Setup:
     GPIO.setmode(GPIO.BOARD)  # Broadcom pin-numbering scheme
