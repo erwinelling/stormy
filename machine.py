@@ -164,6 +164,16 @@ try:
             logger.debug("Playing? Yes")
             return True
 
+    def check_paused():
+        status = subprocess.check_output(['mpc', 'status']).decode("utf-8")
+
+        if "[paused]" in status:
+            logger.debug("Paused? Yes")
+            return True
+        else:
+            logger.debug("Paused? No")
+            return False
+
     def take_picture(filepath):
         """
         Take a picture with the first available webcam device.
@@ -438,7 +448,10 @@ try:
         logger.debug("PAUSE button")
         if check_playing():
             button_feedback()
-            control_mpc('pause')
+            if check_paused():
+                control_mpc("play")
+            else:
+                control_mpc('pause')
         else:
             pass
 
