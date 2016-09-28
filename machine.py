@@ -19,7 +19,6 @@ config.read('/home/pi/stormy/stormy.cfg')
 
 GROUNDPIN = int(config.get("machine", "GROUNDPIN"))
 LED1PIN = int(config.get("machine", "LED1PIN"))
-LED2PIN = int(config.get("machine", "LED2PIN"))
 BUT1PIN = int(config.get("machine", "BUT1PIN"))
 BUT2PIN = int(config.get("machine", "BUT2PIN"))
 BUT3PIN = int(config.get("machine", "BUT3PIN"))
@@ -69,10 +68,6 @@ try:
     if LED1PIN:
         GPIO.setup(LED1PIN, GPIO.OUT)
         GPIO.output(LED1PIN, GPIO.LOW)
-
-    if LED2PIN:
-        GPIO.setup(LED2PIN, GPIO.OUT)
-        GPIO.output(LED2PIN, GPIO.LOW)
 
     # Initiate buttons:
     if BUT1PIN:
@@ -242,7 +237,8 @@ try:
         control_mpc('stop')
         control_mpc('clear')
 
-        # TODO rewrite control_mpc to make this possible:
+        # TODO check what the path to local playlist is; so this works without internet connection
+        # TODO rewrite control_mpc to make it work with more than 1 argument
         args = [
             'mpc',
             '-h', 'localhost',
@@ -256,7 +252,7 @@ try:
         for line in output.split(os.linesep):
             # quotedline = '"%s"' % line
             # print quotedline
-            # TODO rewrite control_mpc to make this possible:
+            # TODO rewrite control_mpc to make it work with more than 1 argument
             song = subprocess.Popen(['mpc', 'add', line])
 
         # write playlist info to file
@@ -268,7 +264,6 @@ try:
         f.close()
 
         logger.debug("changed playlist")
-
 
         # for debugging purposes, start playing it when there are no buttons
         if not BUT1PIN:
@@ -420,7 +415,7 @@ try:
         if nfc_data[0:16] == SOUNDCLOUD_SET_PATH:
             load_playlist(nfc_data)
         else:
-            load_playlist(SOUNDCLOUD_DEFAULT_SET)
+            load_playlist()
 
         return True
 
