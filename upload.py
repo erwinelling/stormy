@@ -20,7 +20,6 @@ import ConfigParser
 # set directories to search/ move uploaded files to
 # make sure these dirs for recordings & uploading exist
 # make sure mopidy is owner: sudo chown mopidy:mopidy _uploaded/
-# TODO: create dirs on the fly?
 
 # read config file
 config = ConfigParser.ConfigParser()
@@ -89,7 +88,7 @@ try:
                         # TODO: Set more track data, get input somewhere
                         'title': unicode(os.path.splitext(filename)[0]),
                         'asset_data': open(path_to_file, 'rb'),
-                        'description': u'Opgenomen met Jimmy Story Sucker. Geupload op %s.' % (datetimenow),
+                        'description': u'Dit is een van de Jimmy\'s Verhalen. Geupload op %s.' % (datetimenow),
                         'track_type': 'spoken',
                         # 'artwork_data': open('artwork.jpg', 'rb'),
                         'purchase_url': "http://wijzijnjimmys.nl/verhalen/",
@@ -98,6 +97,11 @@ try:
                         # 'genre': 'Electronic',
                     })
                     logger.debug("File %s geupload naar Soundcloud: %s.", filename, track.permalink_url)
+
+                    # TODO: Add Question/ Theme to description
+                    # TODO: Add Track to right Set
+                    # TODO: Add more info?
+                    # TODO: Check whether this works without account info/ password
 
                     # move file to uploaded directory
                     # if not os.path.exists(UPLOADING_DIR):
