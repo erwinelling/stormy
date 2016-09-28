@@ -324,9 +324,16 @@ try:
             upload_file = os.path.join(RECORDING_DIR, soundcloud_set_name, upload_file_name)
 
             # Save the files
+            logger.debug("%s", soundcloud_set_file)
             save_soundcloud_set_datafile(soundcloud_set_file)
+
+            logger.debug("%s", picture_file)
             take_picture(picture_file)
+
+            logger.debug("%s", sound_file)
             record_sound(sound_file)
+
+            logger.debug("%s", upload_file)
             save_upload_datafile(upload_file)
         else:
             pass
