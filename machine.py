@@ -496,7 +496,7 @@ try:
     # Restart Mopidy because somehow Soundcloud is mostly not working when the service has started on bot
     logger.debug("Starting. Press CTRL+C to exit")
     logger.debug("Waiting 30 seconds to restart Mopidy.")
-    time.sleep(30)
+    # time.sleep(30)
     logger.debug("Restarting Mopidy and waiting 10 seconds.")
     proc = subprocess.Popen(['sudo', 'systemctl', 'restart', 'mopidy'])
     time.sleep(10)
