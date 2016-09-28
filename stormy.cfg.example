@@ -21,7 +21,7 @@ SOUNDCLOUD_DEFAULT_SET = SoundCloud/Sets/Misc
 SOUNDCLOUD_SET_PATH = SoundCloud/Sets/
 
 [upload]
-client_id= 2afa000b9c16670dd62c83700567487f
-client_secret= dbf7e4b8b8140f142b62c8e93b4d0ab8
-username= erwin@uptous.nl
-password= ell82SOU
+client_id=
+client_secret=
+username=
+password=
