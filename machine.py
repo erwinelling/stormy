@@ -230,6 +230,9 @@ try:
         logger.debug("MPC %s", action)
         proc = subprocess.Popen(['mpc', '-h', 'localhost', '-p', '6600', action, '-q'])
 
+    def mpc_update_local_files():
+        proc = subprocess.Popen(['sudo', 'mopidyctl', 'local', 'scan'])
+
     def load_playlist(playlist=SOUNDCLOUD_DEFAULT_SET):
         """
         Change playlist in Mopidy
@@ -376,6 +379,7 @@ try:
         logger.debug("STOP button")
         if check_recording():
             stop_recording()
+            mpc_update_local_files()
             if LED1PIN:
                 GPIO.output(LED1PIN, GPIO.LOW)
 
@@ -514,7 +518,7 @@ try:
     logger.debug("Restarting Mopidy and waiting 3 seconds.")
     proc = subprocess.Popen(['sudo', 'systemctl', 'restart', 'mopidy'])
     time.sleep(3)
-    proc = subprocess.Popen(['sudo', 'mopidyctl', 'local', 'scan'])
+    mpc_update_local_files()
     logger.debug("OK, here we go!")
     blink(3,0.5)
 
