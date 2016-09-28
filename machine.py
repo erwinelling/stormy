@@ -137,10 +137,13 @@ try:
             current_soundcloud_set = SOUNDCLOUD_DEFAULT_SET
             pass
 
+        logger.debug("Current SoundCloud Set is %s", current_soundcloud_set)
         return current_soundcloud_set
 
     def get_current_soundcloud_set_name():
-        return get_current_soundcloud_set().replace(SOUNDCLOUD_SET_PATH, "")
+        current_soundcloud_set_name = get_current_soundcloud_set().replace(SOUNDCLOUD_SET_PATH, "")
+        logger.debug("Current SoundCloud Set Name is %s", current_soundcloud_set_name)
+        return current_soundcloud_set_name
 
     def check_playing():
         """
@@ -215,7 +218,7 @@ try:
         f = open(pidfile)
         pid = int(f.readline().strip())
         f.close()
-        logger.debug("Stopping recording by killing PID %s", str(pid))
+        logger.debug("Stopping recording process by killing PID %s", str(pid))
         os.kill(pid, signal.SIGINT)
 
     def control_mpc(action):
@@ -238,6 +241,9 @@ try:
         control_mpc('clear')
 
         # TODO check what the path to local playlist is; so this works without internet connection
+        # LOCAL PLAYLIST
+
+
         # TODO rewrite control_mpc to make it work with more than 1 argument
         args = [
             'mpc',
@@ -521,17 +527,17 @@ try:
                 pass
 
         if BUT1PIN and GPIO.event_detected(BUT1PIN):
-                button_play()
-        if BUT2PIN and GPIO.event_detected(BUT2PIN):
-                button_stop()
-        if BUT3PIN and GPIO.event_detected(BUT3PIN):
                 button_rec()
+        if BUT2PIN and GPIO.event_detected(BUT2PIN):
+                button_prev()
+        if BUT3PIN and GPIO.event_detected(BUT3PIN):
+                button_next()
         if BUT4PIN and GPIO.event_detected(BUT4PIN):
-                pass
+                button_stop()
         if BUT5PIN and GPIO.event_detected(BUT5PIN):
-                pass
+                button_play()
         if BUT6PIN and GPIO.event_detected(BUT6PIN):
-                pass
+                button_pause()
 
         # wait a second before checking again
         time.sleep(1)
