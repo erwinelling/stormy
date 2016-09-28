@@ -100,9 +100,13 @@ try:
     def check_file_path_exists(filepath):
         if not os.path.exists(os.path.dirname(filepath)):
             try:
-                os.makedirs(os.path.dirname(filepath))
+                original_umask = os.umask(0)
+                os.makedirs(os.path.dirname(filepath), 0777)
             except:
                 raise
+            finally:
+                os.umask(original_umask)
+
 
     def save_upload_datafile(filepath):
         check_file_path_exists(filepath)
