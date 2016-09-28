@@ -332,8 +332,9 @@ try:
         """
         logger.debug("PREV button")
         if check_playing():
-            control_mpc('prev')
             button_feedback()
+            control_mpc('prev')
+
         else:
             pass
 
@@ -342,8 +343,8 @@ try:
         """
         logger.debug("PLAY button")
         if not check_playing():
-            control_mpc('play')
             button_feedback()
+            control_mpc('play')
         else:
             pass
 
@@ -352,8 +353,8 @@ try:
         """
         logger.debug("NEXT button")
         if check_playing():
-            control_mpc('next')
             button_feedback()
+            control_mpc('next')
         else:
             pass
 
@@ -367,8 +368,8 @@ try:
                 GPIO.output(LED1PIN, GPIO.LOW)
 
         if check_playing():
-            control_mpc('stop')
             button_feedback()
+            control_mpc('stop')
         else:
             pass
 
@@ -377,8 +378,8 @@ try:
         """
         logger.debug("PAUSE button")
         if check_playing():
-            control_mpc('pause')
             button_feedback()
+            control_mpc('pause')
         else:
             pass
 
