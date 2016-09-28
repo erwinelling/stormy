@@ -15,6 +15,7 @@ TODO: More info for local files in interface?
 TODO: Make sure the script works without internet connection too
 
 TODO: Upload to right set on SoundCloud?
+TODO: Save and upload more relevant info to SoundCloud? (Length, image, location, wifi name, ip, ...; Possibly add standard info on a new location through command line tool?)
 
 # TODO / Nice to have
 TODO: Save wavs as mp3s?
