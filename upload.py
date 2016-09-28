@@ -31,9 +31,6 @@ RECORDING_DIR_NAME = config.get("machine", "RECORDING_DIR_NAME")
 RECORDING_DIR = os.path.join(MUSIC_DIR, RECORDING_DIR_NAME)
 NFC_CHIP_DATA_FILE_NAME = config.get("machine", "NFC_CHIP_DATA_FILE_NAME")
 NFC_CHIP_DATA_FILE = os.path.join(HOME_DIR, NFC_CHIP_DATA_FILE_NAME)
-UPLOADING_DIR_NAME = config.get("upload", "UPLOADING_DIR_NAME")
-UPLOADING_DIR = os.path.join(MUSIC_DIR, UPLOADING_DIR_NAME)
-
 
 # setup logging
 LOG_FILE = os.path.join(HOME_DIR, "upload.log")
@@ -59,12 +56,11 @@ logger.addHandler(ch)
 try:
     #create Soundcloud Client
     client = soundcloud.Client(
-    # TODO: maybe get this from mopipidy settings
     # TODO: try to get this to work with just a secret key
-        client_id='2afa000b9c16670dd62c83700567487f',
-        client_secret='dbf7e4b8b8140f142b62c8e93b4d0ab8',
-        username='erwin@uptous.nl',
-        password='ell82SOU',
+        client_id = config.get("upload", "client_id"),
+        client_secret = config.get("upload", "client_secret"),
+        username = config.get("upload", "username"),
+        password = config.get("upload", "password"),
     )
 
     # walk through all files in recording directory
@@ -96,28 +92,25 @@ try:
                         # 'tag_list': "tag1 \"hip hop\" geo:lat=32.444 geo:lon=55.33"
                         # 'genre': 'Electronic',
                     })
-                    logger.debug("File %s geupload naar Soundcloud: %s.", filename, track.permalink_url)
-
                     # TODO: Add Question/ Theme to description
-                    # TODO: Add Track to right Set
                     # TODO: Add more info?
-                    # TODO: Check whether this works without account info/ password
 
-                    # move file to uploaded directory
-                    # if not os.path.exists(UPLOADING_DIR):
-                    #     os.makedirs(UPLOADING_DIR)
-                    # new_filename = "%s-%s%s" % (os.path.splitext(filename)[0],datetimenow,os.path.splitext(filename)[1])
-                    # new_path_to_file = os.path.join(UPLOADING_DIR, new_filename)
-                    # shutil.move(path_to_file, new_path_to_file)
+                    logger.debug("Uploaded %s to Soundcloud: %s.", filename, track.permalink_url)
+
+                    # TODO: Add Track to right Set
+
+                    # !!!
+
 
                     # remove .notuploaded file
                     os.remove(not_uploaded_file)
 
+                    # TODO: Make this a sync. Try to download (latest) files that are on soundcloud but not here??
                 count +=1
                 # logger.debug("File %s verplaatst naar: %s.",filename, new_path_to_file)
-        logger.debug("%s file(s) geupload.", count)
+        logger.debug("Uploaded %s file(s)", count)
 except HTTPError:
-    logger.error("Geen verbinding met Soundcloud mogelijk")
+    logger.error("No connection to SoundCloud")
     pass
 except Exception, e:
     logging.error(e, exc_info=True)
