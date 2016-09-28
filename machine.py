@@ -17,7 +17,6 @@ import logging
 config = ConfigParser.ConfigParser()
 config.read('/home/pi/stormy/stormy.cfg')
 
-GROUNDPIN = int(config.get("machine", "GROUNDPIN"))
 LED1PIN = int(config.get("machine", "LED1PIN"))
 BUT1PIN = int(config.get("machine", "BUT1PIN"))
 BUT2PIN = int(config.get("machine", "BUT2PIN"))
@@ -106,22 +105,22 @@ try:
                 if exc.errno != errno.EEXIST:
                     raise
 
-    def save_upload_datafile(name):
-        check_file_path_exists(name)
-        f = open(name, 'w')
+    def save_upload_datafile(filepath):
+        check_file_path_exists(filepath)
+        f = open(filepath, 'w')
         f.close()
 
-    def save_soundcloud_set_datafile(name):
+    def save_soundcloud_set_datafile(filepath):
         """
         Copy data file content to sound specific data file.
         If no data file was there, write file for Soundcloud Test set.
         """
         if os.path.isfile(NFC_CHIP_DATA_FILE):
-            check_file_path_exists(name)
-            copyfile(NFC_CHIP_DATA_FILE, name)
+            check_file_path_exists(filepath)
+            copyfile(NFC_CHIP_DATA_FILE, filepath)
         else:
             check_file_path_exists(NFC_CHIP_DATA_FILE)
-            f = open(NFC_CHIP_DATA_FILE, 'w')
+            f = open(filepath, 'w')
             f.write(SOUNDCLOUD_DEFAULT_SET)
             f.close()
 
@@ -162,20 +161,20 @@ try:
             logger.debug("Playing? Yes")
             return True
 
-    def take_picture(name):
+    def take_picture(filepath):
         """
         Take a picture with the first available webcam device.
         """
         # proc = subprocess.Popen(['fswebcam', '-d', '/dev/video1', '-r' , '1280x720', '--no-banner', name])
-        logger.debug("Taking picture: %s", name)
-        proc = subprocess.Popen(['fswebcam', '-r', '1280x720', '--no-banner', name])
+        logger.debug("Taking picture: %s", filepath)
+        proc = subprocess.Popen(['fswebcam', '-r', '1280x720', '--no-banner', filepath])
 
-    def record_sound(name):
+    def record_sound(filepath):
         """
         Do some audio recording
         e.g. arecord -D plughw:CARD=Device,DEV=0 -f S16_LE -c1 -r44100 -V mono test.wav
         """
-        logger.debug("Recording %s started.", name)
+        logger.debug("Recording %s started.", filepath)
         # Turn on Mic
         args = [
             'amixer',
@@ -195,7 +194,7 @@ try:
             '-r44100',
             '-V', 'mono',
             '--process-id-file', RECORDING_PROCESS_ID_FILE,
-            name
+            filepath
         ]
         proc = subprocess.Popen(args)
 
