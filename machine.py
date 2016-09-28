@@ -128,7 +128,7 @@ try:
             f.close()
 
 
-    def get_current_soundcloud_set():
+    def get_soundcloud_set():
         """
         """
         try:
@@ -139,12 +139,15 @@ try:
             current_soundcloud_set = SOUNDCLOUD_DEFAULT_SET
             pass
 
-        logger.debug("Current SoundCloud Set is %s", current_soundcloud_set)
+        logger.debug("SoundCloud Set is %s", current_soundcloud_set)
         return current_soundcloud_set
 
-    def get_current_soundcloud_set_name():
-        current_soundcloud_set_name = get_current_soundcloud_set().replace(SOUNDCLOUD_SET_PATH, "")
-        logger.debug("Current SoundCloud Set Name is %s", current_soundcloud_set_name)
+    def get_soundcloud_set_name(soundcloud_set_path=""):
+        if not soundcloud_set_path:
+            current_soundcloud_set_name = get_soundcloud_set().replace(SOUNDCLOUD_SET_PATH, "")
+        else:
+            current_soundcloud_set_name = soundcloud_set_path.replace(SOUNDCLOUD_SET_PATH, "")
+        logger.debug("SoundCloud Set Name is %s", current_soundcloud_set_name)
         return current_soundcloud_set_name
 
     def check_playing():
@@ -250,16 +253,13 @@ try:
         # mpc clear
         # mpc ls SoundCloud/Sets/
         """
-        logger.debug("loading playlist %s", playlist)
+        local_playlist = os.path.join(RECORDING_DIR, get_soundcloud_set_name(playlist))
+        logger.debug("loading SoundCloud playlist %s (Local version:)", playlist, local_playlist)
 
         control_mpc('stop')
         control_mpc('clear')
 
-        # TODO check what the path to local playlist is; so this works without internet connection
-        # LOCAL PLAYLIST
-
-
-        # TODO rewrite control_mpc to make it work with more than 1 argument
+        # TODO rewrite control_mpc to make it work with more than 1 argument (*args? or append to list)
         args = [
             'mpc',
             '-h', 'localhost',
@@ -373,7 +373,7 @@ try:
             upload_file_name = "%s.notuploaded" % (current_datetime)
 
             # Set the file paths
-            soundcloud_set_name = get_current_soundcloud_set_name()
+            soundcloud_set_name = get_soundcloud_set_name()
             logger.debug("%s", RECORDING_DIR)
             soundcloud_set_file = os.path.join(RECORDING_DIR, soundcloud_set_name, soundcloud_set_file_name)
             picture_file = os.path.join(RECORDING_DIR, soundcloud_set_name, picture_file_name)
