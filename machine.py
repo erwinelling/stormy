@@ -33,6 +33,8 @@ NFC_STOP_CHARACTER = config.get("machine", "NFC_STOP_CHARACTER")
 SOUND_CARD = config.get("machine", "SOUND_CARD")
 SOUND_CARD_NO = config.get("machine", "SOUND_CARD_NO")
 SOUND_CARD_MIC_NAME = config.get("machine", "SOUND_CARD_MIC_NAME")
+SOUNDCLOUD_DEFAULT_SET = config.get("machine", "SOUNDCLOUD_DEFAULT_SET")
+SOUNDCLOUD_SET_PATH = config.get("machine", "SOUNDCLOUD_SET_PATH")
 
 RECORDING_DIR_NAME = config.get("machine", "RECORDING_DIR_NAME")
 RECORDING_DIR = os.path.join(MUSIC_DIR, RECORDING_DIR_NAME)
@@ -125,8 +127,25 @@ try:
         else:
             check_file_path_exists(NFC_CHIP_DATA_FILE)
             f = open(NFC_CHIP_DATA_FILE, 'w')
-            f.write("SoundCloud/Sets/Misc")
+            f.write(SOUNDCLOUD_DEFAULT_SET)
             f.close()
+
+
+    def get_current_soundcloud_set():
+        """
+        """
+        try:
+            f = open(NFC_CHIP_DATA_FILE)
+            current_soundcloud_set = f.readline().strip()
+            f.close()
+        except:
+            current_soundcloud_set = SOUNDCLOUD_DEFAULT_SET
+            pass
+
+        return current_soundcloud_set
+
+    def get_current_soundcloud_set_name():
+        return get_current_soundcloud_set().replace(SOUNDCLOUD_SET_PATH, "")
 
     def check_playing():
         """
@@ -198,8 +217,9 @@ try:
         Kill the recording process.
         """
         pidfile = os.path.join(HOME_DIR, RECORDING_PROCESS_ID_FILE)
-        file = open(pidfile)
-        pid = int(file.readline().strip())
+        f = open(pidfile)
+        pid = int(f.readline().strip())
+        f.close()
         logger.debug("Stopping recording by killing PID %s", str(pid))
         os.kill(pid, signal.SIGINT)
 
@@ -210,7 +230,7 @@ try:
         logger.debug("MPC %s", action)
         proc = subprocess.Popen(['mpc', '-h', 'localhost', '-p', '6600', action, '-q'])
 
-    def load_playlist(playlist="SoundCloud/Sets/Frank"):
+    def load_playlist(playlist=SOUNDCLOUD_DEFAULT_SET):
         """
         Change playlist in Mopidy
 
@@ -285,21 +305,25 @@ try:
             if LED1PIN:
                 GPIO.output(LED1PIN, GPIO.HIGH)
 
-            # This part could be way clearer/ better :)
-            dt = "%s" % (datetime.datetime.now())
-            dtp = "%s.jpg" % (dt)
-            dts = "%s.wav" % (dt)
-            dtset = "%s.setname" % (dt)
-            dtupload = "%s.notuploaded" % (dt)
-            picture_file = os.path.join(RECORDING_DIR, dtp)
-            sound_file = os.path.join(RECORDING_DIR, dts)
-            soundcloud_set_file = os.path.join(RECORDING_DIR, dtset)
-            dtupload_file = os.path.join(RECORDING_DIR, dtupload)
+            # Set the filenames
+            current_datetime = "%s" % (datetime.datetime.now())
+            soundcloud_set_file_name = "%s.setname" % (current_datetime)
+            picture_file_name = "%s.jpg" % (current_datetime)
+            sound_file_name = "%s.wav" % (current_datetime)
+            upload_file_name = "%s.notuploaded" % (current_datetime)
 
+            # Set the file paths
+            soundcloud_set_name = get_current_soundcloud_set_name()
+            soundcloud_set_file = os.path.join(RECORDING_DIR, soundcloud_set_name, soundcloud_set_file_name)
+            picture_file = os.path.join(RECORDING_DIR, soundcloud_set_name, picture_file_name)
+            sound_file = os.path.join(RECORDING_DIR, soundcloud_set_name, sound_file_name)
+            upload_file = os.path.join(RECORDING_DIR, soundcloud_set_name, upload_file_name)
+
+            # Save the files
+            save_soundcloud_set_datafile(soundcloud_set_file)
             take_picture(picture_file)
             record_sound(sound_file)
-            save_soundcloud_set_datafile(soundcloud_set_file)
-            save_upload_datafile(dtupload_file)
+            save_upload_datafile(upload_file)
         else:
             pass
 
@@ -393,10 +417,10 @@ try:
         if nfc_data == "REC":
             button_rec()
             return True
-        if nfc_data[0:16] == "SoundCloud/Sets/":
+        if nfc_data[0:16] == SOUNDCLOUD_SET_PATH:
             load_playlist(nfc_data)
         else:
-            load_playlist("SoundCloud/Sets/Misc")
+            load_playlist(SOUNDCLOUD_DEFAULT_SET)
 
         return True
 
