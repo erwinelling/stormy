@@ -283,6 +283,7 @@ try:
                 time.sleep(sleep)
                 GPIO.output(LED1PIN, GPIO.LOW)
                 time.sleep(sleep)
+                logger.debug("Blink")
 
     def button_feedback():
         """
@@ -290,7 +291,7 @@ try:
         """
         # buttonSound.play()
         # proc = subprocess.Popen(['aplay', os.path.join(HOME_DIR, "button.wav")])
-
+        logger.debug("Button feedback")
         blink(1,0.5)
 
     def button_rec():
