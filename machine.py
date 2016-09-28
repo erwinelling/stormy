@@ -280,7 +280,7 @@ try:
         if not BUT1PIN:
             control_mpc('play')
 
-    def blink(number, sleep):
+    def blink(number, sleep=0.5):
         """
         Blink led 1
         """
@@ -292,6 +292,49 @@ try:
                 time.sleep(sleep)
                 logger.debug("Blink")
 
+    def read_nfc_string():
+        """
+        Read a string from the current NFC chip.
+        """
+        max_block = 1000  # if "STOP" is not found, when should we stop?
+        block = 10
+        output = ""
+        stop = False
+        count = 0
+        while stop is False:
+            data = mifare.read_block(block)
+            if data == NFC_STOP_CHARACTER or block > max_block:
+                stop = True
+            else:
+                output += data
+            block += 1
+        return output.rstrip()
+
+    def nfc_callback(uid):
+        """
+        Function that decides what to do when an NFC chips is presented, based on the uid of the chip.
+
+        """
+        nfc_data = read_nfc_string()
+        logger.debug("Read \"%s\"", nfc_data)
+        blink(2)
+
+        if nfc_data == "EIND":
+            button_stop()
+            return True
+        if nfc_data == "PLAY":
+            button_play()
+            return True
+        if nfc_data == "REC":
+            button_rec()
+            return True
+        if nfc_data[0:16] == SOUNDCLOUD_SET_PATH:
+            load_playlist(nfc_data)
+        else:
+            load_playlist()
+
+        return True
+
     def button_feedback():
         """
         Give feedback on button press.
@@ -299,7 +342,7 @@ try:
         # buttonSound.play()
         # proc = subprocess.Popen(['aplay', os.path.join(HOME_DIR, "button.wav")])
         logger.debug("Button feedback")
-        blink(1,0.5)
+        blink(1)
 
     def button_rec():
         """
@@ -399,117 +442,6 @@ try:
         else:
             pass
 
-    def read_nfc_string():
-        """
-        Read a string from the current NFC chip.
-        """
-        max_block = 1000  # if "STOP" is not found, when should we stop?
-        block = 10
-        output = ""
-        stop = False
-        count = 0
-        while stop is False:
-            data = mifare.read_block(block)
-            if data == NFC_STOP_CHARACTER or block > max_block:
-                stop = True
-            else:
-                output += data
-            block += 1
-        return output.rstrip()
-
-    def nfc_callback(uid):
-        """
-        Function that decides what to do when an NFC chips is presented, based on the uid of the chip.
-
-        """
-        nfc_data = read_nfc_string()
-        logger.debug("Read \"%s\"", nfc_data)
-
-        if nfc_data == "EIND":
-            button_stop()
-            return True
-        if nfc_data == "PLAY":
-            button_play()
-            return True
-        if nfc_data == "REC":
-            button_rec()
-            return True
-        if nfc_data[0:16] == SOUNDCLOUD_SET_PATH:
-            load_playlist(nfc_data)
-        else:
-            load_playlist()
-
-        return True
-
-    # def mpc_callback_btn1(channel=False):
-    #     print "Button pressed (%s)" % channel
-    #     # if channel == BUT1PIN and not check_playing():
-    #     if not check_playing():
-    #         play_sound()
-    #         control_mpc('play')
-    #
-    #     # elif channel == BUT1PIN and check_playing():
-    #     else:
-    #         play_sound()
-    #         control_mpc('pause')
-    #         # control_mpc('stop')
-    #
-    # def mpc_callback_btn2(channel=False):
-    #     print datetime.datetime.now()
-    #     print "Button pressed (%s)" % channel
-    #     # if channel == BUT2PIN and check_playing():
-    #     if check_playing():
-    #         print "Button 2"
-    #         play_sound()
-    #         control_mpc('next')
-    #
-    # def mpc_callback_btn3(channel=False):
-    #     print datetime.datetime.now()
-    #     print "Button pressed (%s)" % channel
-    #     # if channel == BUT3PIN and check_recording():
-    #     if check_recording():
-    #         print "Button 3"
-    #         # it is recording, so stop it
-    #         stop_recording()
-    #
-    #         GPIO.output(LED1PIN, GPIO.LOW)
-    #         GPIO.output(LED1PIN, GPIO.HIGH)
-    #         time.sleep(1)
-    #         GPIO.output(LED1PIN, GPIO.LOW)
-    #         play_sound()
-    #
-    #     # elif channel == BUT3PIN and not check_recording():
-    #     else:
-    #         print "Button 3"
-    #         # not recording, so start :)
-    #         # save picture and sound with same name
-    #         play_sound()
-    #         GPIO.output(LED1PIN, GPIO.HIGH)
-    #
-    #         # TODO: add little delay?
-    #         time.sleep(1)
-    #         dt = "%s" % (datetime.datetime.now())
-    #         dtp = "%s.jpg" % (dt)
-    #         dts = "%s.wav" % (dt)
-    #         picture_name = os.path.join(MUSIC_DIR, dtp)
-    #         sound_name = os.path.join(MUSIC_DIR, dts)
-    #         take_picture(picture_name)
-    #         record_sound(sound_name)
-    #
-    # count = 0
-    # prev_inp = 1
-    # def button_check(buttonpin):
-    #     global prev_inp
-    #     global count
-    #
-    #     if ((not prev_inp) and inp):
-    #         count = count + 1
-    #         print "Button pressed (%s)" % buttonpin
-    #         print count
-    #     prev_inp = inp
-    #     time.sleep(0.05)
-
-
     # Startup
     # Restart Mopidy because somehow Soundcloud is mostly not working when the service has started on bot
     logger.debug("Starting. Press CTRL+C to exit")
@@ -520,7 +452,7 @@ try:
     time.sleep(3)
     mpc_update_local_files()
     logger.debug("OK, here we go!")
-    blink(3,0.5)
+    blink(3)
 
     # Load initial playlist
     load_playlist()
