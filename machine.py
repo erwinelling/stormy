@@ -318,6 +318,7 @@ try:
 
             # Set the file paths
             soundcloud_set_name = get_current_soundcloud_set_name()
+            logger.debug("%s", RECORDING_DIR)
             soundcloud_set_file = os.path.join(RECORDING_DIR, soundcloud_set_name, soundcloud_set_file_name)
             picture_file = os.path.join(RECORDING_DIR, soundcloud_set_name, picture_file_name)
             sound_file = os.path.join(RECORDING_DIR, soundcloud_set_name, sound_file_name)
