@@ -1,18 +1,20 @@
 # Jimmy's Story Engine/ Cassette Recorder and Player (project stormy)
 
 # TODO / Debugging
+TODO: Test changes & make sure the scripts work  without internet connection
 TODO: Change NFC chips content to id=<soundcloud_id>&vfs=<folder_on_virtual_filesystem>
-TODO: Change writenfc script to wirte the right data based on soundcloud api? (and vfs dirs?)
-TODO: backup wav duplicate after mp3 download
+TODO: Test writenfc script; Write the right data based on soundcloud api? (and vfs dirs?)
+TODO: Move wav duplicate to separate dir after mp3 download
 
 TODO: Change to USB soundcard (alsa settings, ask David)
+TODO: Check Mic settings for recording as good as possible (ask David)
 TODO: Check playback settings
-TODO: Check Mic settings for recording as good as possible
 
-TODO: Make sure the script works without internet connection
 TODO: Save and upload more relevant info to SoundCloud? (Length, image, location, wifi name, ip, ...; Possibly add standard info on a new location through command line tool?)
 
 # TODO / Nice to have
+TODO: Get rid of RECORDING_DIR_NAME
+TODO: Force upload/ download on some button combination
 TODO: Split functions over multiple files and import
 TODO: Check if id's on NFC are valid
 TODO: Make it possible to switch to online mode
