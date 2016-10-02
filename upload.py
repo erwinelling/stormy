@@ -42,7 +42,7 @@ logger.setLevel(logging.DEBUG)
 formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 
 fh = logging.handlers.RotatingFileHandler(
-              LOG_FILE, maxBytes=1000000, backupCount=5)
+              LOG_FILE, maxBytes=5000000, backupCount=5)
 fh.setLevel(logging.DEBUG)
 fh.setFormatter(formatter)
 logger.addHandler(fh)
