@@ -9,6 +9,7 @@ BUT6PIN = 33
 LED1PIN= 35
 HOME_DIR = /home/pi/stormy/
 MUSIC_DIR = /home/pi/Music/
+BACKUP_DIR = /home/pi/Music/_backup/
 RECORDING_DIR_NAME = Sets
 NFC_READER_PRESENT = True
 NFC_STOP_CHARACTER = STOP
@@ -18,6 +19,7 @@ SOUND_CARD = plughw:CARD=Device,DEV=0
 SOUND_CARD_NO = 1
 SOUND_CARD_MIC_NAME = "Mic"
 SOUNDCLOUD_DEFAULT_SET = SoundCloud/Sets/Misc
+SOUNDCLOUD_DEFAULT_SET_DATA = id=262237843&title=Misc&vfs=SoundCloud/Sets/Misc
 SOUNDCLOUD_SET_PATH = SoundCloud/Sets/
 USE_LOCAL_FILE_ONLY = True
 
