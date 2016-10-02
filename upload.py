@@ -23,7 +23,8 @@ import ConfigParser
 
 # read config file
 config = ConfigParser.ConfigParser()
-config.read('/home/pi/stormy/stormy.cfg')
+
+config.read('stormy.cfg')
 
 HOME_DIR = config.get("machine", "HOME_DIR")
 MUSIC_DIR = config.get("machine", "MUSIC_DIR")
@@ -67,6 +68,7 @@ try:
     logger.debug("Checking contents of %s", RECORDING_DIR)
     from os.path import join, getsize
     count = 0
+    uploaded_track = False
     for root, dirs, files in os.walk(RECORDING_DIR):
         for filename in files:
             # check whether it is a music file that can be uploaded to soundcloud
@@ -75,67 +77,60 @@ try:
             # and ignore hidden files
             if filename.lower().endswith(('.aiff', '.wav', '.flac', '.alac', '.ogg', '.mp2', '.mp3', '.aac', '.amr', '.wma')) and not filename.startswith('.'):
                 path_to_file = os.path.join(root, filename)
-                not_uploaded_file = os.path.splitext(path_to_file)[0]+".notuploaded"
+                uploaded_file = os.path.splitext(path_to_file)[0]+".notuploaded"
+                soundcloud_set_file = os.path.splitext(path_to_file)[0]+".setname"
                 if os.path.isfile(not_uploaded_file):
 
                     # upload to soundcloud
                     datetimenow = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M%S')
-                    track = client.post('/tracks', track={
+                    uploaded_track = client.post('/tracks', track={
                         # TODO: Set more track data, get input somewhere
                         'title': unicode(os.path.splitext(filename)[0]),
                         'asset_data': open(path_to_file, 'rb'),
-                        'description': u'Dit is een van de Jimmy\'s Verhalen. Geupload op %s.' % (datetimenow),
+                        'description': u'Dit is een van Jimmy\'s Verhalen. Geupload op %s.' % (datetimenow),
                         'track_type': 'spoken',
                         # 'artwork_data': open('artwork.jpg', 'rb'),
                         'purchase_url': "http://wijzijnjimmys.nl/verhalen/",
                         'license': "cc-by-nc",
-                        # 'tag_list': "tag1 \"hip hop\" geo:lat=32.444 geo:lon=55.33"
+                        'tag_list': "jimmy\'s"
                         # 'genre': 'Electronic',
                     })
                     # TODO: Add Question/ Theme to description
                     # TODO: Add more info?
 
-                    logger.debug("Uploaded %s to Soundcloud: %s.", filename, track.permalink_url)
+                    logger.debug("Uploaded %s to Soundcloud: %s (%s).", filename, uploaded_track.permalink_url, uploaded_track.id)
 
-                    # TODO: Add Track to right Set
+                    # Add Track to right Set
+                    # f = open(soundcloud_set_file)
+                    # set_id = f.readline().strip().split("&", 1)[0].replace("id=", "")
+                    # f.close()
+                    set_id = os.path.dirname(path_to_file)
 
-                    # !!!
+                    playlist = client.get("/playlists/"+set_id)
+                    track_id_list = []
+                    for track in playlist.tracks:
+                        track_id_list.append(track['id'])
 
+                    logger.debug("%s, %s", playlist, track_id_list)
+                    if uploaded_track:
+                        track_id_list.append(uploaded_track.id)
+                        logger.debug("%s, %s", playlist, track_id_list)
+
+                    client.put("/playlists/"+set_id, playlist={
+                        'tracks': map(lambda id: dict(id=id), track_id_list)
+                    })
 
                     # remove .notuploaded file
                     os.remove(not_uploaded_file)
 
-                    # TODO: Make this a sync. Try to download (latest) files that are on soundcloud but not here??
                 count +=1
-                # logger.debug("File %s verplaatst naar: %s.",filename, new_path_to_file)
         logger.debug("Uploaded %s file(s)", count)
-except HTTPError:
-    logger.error("No connection to SoundCloud")
+
+except HTTPError, e:
+    logger.error(e)
     pass
 except Exception, e:
     logging.error(e, exc_info=True)
     pass
 
-# Het is ook mogelijk om een playlist te maken, bijv. met 1 onderwerp
-
-# # try to get a track
-# try:
-#     track = client.get('/tracks/1')
-# except Exception, e:
-#     print 'Error: %s, Status Code: %d' % (e.message, e.response.status_code)
-#
-# print track.title
-# https://soundcloud.com# /erwinelling/patrick-watson-yellow-socks/
-
-# Request bodies for track uploads via the API may not be larger than 500MB.
-
-# # fetch a track by it's ID
-# track = client.get('/tracks/290')
-#
-# # update the track's metadata
-# client.put(track.uri, track={
-#   'description': 'This track was recorded in Berlin',
-#   'genre': 'Electronic',
-#   'artwork_data': open('artwork.jpg', 'rb')
-# })
 logger.debug("Einde")
