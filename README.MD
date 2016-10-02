@@ -2,12 +2,10 @@
 
 # TODO / Debugging
 TODO: Change NFC chips content to id=<soundcloud_id>&vfs=<folder_on_virtual_filesystem>
-TODO: Change writenfc script
-TODO: sync files after upload
-TODO: backup wavs after upload
+TODO: Change writenfc script to wirte the right data based on soundcloud api? (and vfs dirs?)
+TODO: backup wav duplicate after mp3 download
 
-
-TODO: Change to USB soundcard
+TODO: Change to USB soundcard (alsa settings, ask David)
 TODO: Check playback settings
 TODO: Check Mic settings for recording as good as possible
 
@@ -15,12 +13,15 @@ TODO: Make sure the script works without internet connection
 TODO: Save and upload more relevant info to SoundCloud? (Length, image, location, wifi name, ip, ...; Possibly add standard info on a new location through command line tool?)
 
 # TODO / Nice to have
-TODO: Check if id's on NFC are valid
 TODO: Split functions over multiple files and import
+TODO: Check if id's on NFC are valid
+TODO: Make it possible to switch to online mode
+TODO: Make it possible to have some hybrid mode to save disk space (playlists in mopidy?)
 TODO: Maybe switch to https://github.com/Mic92/python-mpd2
 TODO: Replace all other shell commands to pure python too
 TODO: Use sound for button feedback?
 TODO: Add some hook to automatically update scripts from github maybe? from another git branch
+TODO: cycle log files?
 
 # How to make this work
 

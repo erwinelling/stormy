@@ -19,7 +19,8 @@ logger.setLevel(logging.DEBUG)
 
 formatter = logging.Formatter('%(asctime)s - %(levelname)s - %(message)s')
 
-fh = logging.FileHandler(LOG_FILE)
+fh = logging.handlers.RotatingFileHandler(
+              LOG_FILE, maxBytes=1000000, backupCount=5)
 fh.setLevel(logging.DEBUG)
 fh.setFormatter(formatter)
 logger.addHandler(fh)
@@ -63,6 +64,8 @@ def download(client, track, dir, override=False):
     if not override and os.path.exists(file_name):
         logger.debug("File already exists, skipped, %s" % (file_name))
         return False
+
+    #TODO: if os.path exists filename with wav extensions, move to some backup folder?
 
     stream_url = client.get(track.stream_url, allow_redirects=False)
     urllib.urlretrieve(stream_url.location, file_name)
