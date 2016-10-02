@@ -32,6 +32,7 @@ SOUND_CARD = config.get("machine", "SOUND_CARD")
 SOUND_CARD_NO = config.get("machine", "SOUND_CARD_NO")
 SOUND_CARD_MIC_NAME = config.get("machine", "SOUND_CARD_MIC_NAME")
 SOUNDCLOUD_DEFAULT_SET = config.get("machine", "SOUNDCLOUD_DEFAULT_SET")
+SOUNDCLOUD_DEFAULT_SET_DATA = config.get("machine", "SOUNDCLOUD_DEFAULT_SET_DATA")
 SOUNDCLOUD_SET_PATH = config.get("machine", "SOUNDCLOUD_SET_PATH")
 
 RECORDING_DIR_NAME = config.get("machine", "RECORDING_DIR_NAME")
@@ -124,31 +125,39 @@ try:
         else:
             check_file_path_exists(NFC_CHIP_DATA_FILE)
             f = open(filepath, 'w')
-            f.write(SOUNDCLOUD_DEFAULT_SET)
+            f.write(SOUNDCLOUD_DEFAULT_SET_DATA)
             f.close()
 
 
-    def get_soundcloud_set():
+    def get_soundcloud_set_data():
         """
         """
         try:
             f = open(NFC_CHIP_DATA_FILE)
-            current_soundcloud_set = f.readline().strip()
+            current_soundcloud_set_data = f.readline().strip()
             f.close()
         except:
-            current_soundcloud_set = SOUNDCLOUD_DEFAULT_SET
+            current_soundcloud_set_data = SOUNDCLOUD_DEFAULT_SET_DATA
             pass
 
         logger.debug("SoundCloud Set is %s", current_soundcloud_set)
-        return current_soundcloud_set
+        return current_soundcloud_set_data
 
-    def get_soundcloud_set_name(soundcloud_set_path=""):
-        if not soundcloud_set_path:
-            current_soundcloud_set_name = get_soundcloud_set().replace(SOUNDCLOUD_SET_PATH, "")
-        else:
-            current_soundcloud_set_name = soundcloud_set_path.replace(SOUNDCLOUD_SET_PATH, "")
-        logger.debug("SoundCloud Set Name is %s", current_soundcloud_set_name)
-        return current_soundcloud_set_name
+    # def get_soundcloud_set_name(soundcloud_set_path=""):
+    #     if not soundcloud_set_path:
+    #         current_soundcloud_set_name = get_soundcloud_set_data().replace(SOUNDCLOUD_SET_PATH, "")
+    #     else:
+    #         current_soundcloud_set_name = soundcloud_set_path.replace(SOUNDCLOUD_SET_PATH, "")
+    #
+    #     logger.debug("SoundCloud Set Name is %s", current_soundcloud_set_name)
+    #     return current_soundcloud_set_name
+
+    def get_soundcloud_set_id(data=None):
+        if not data:
+            data = get_soundcloud_set_data()
+
+        set_id = data.split("&", 1)[0].replace("id=", "")
+        return set_id
 
     def check_playing():
         """
@@ -243,17 +252,17 @@ try:
         logger.debug("MPC %s", action)
         proc = subprocess.Popen(['mpc', '-h', 'localhost', '-p', '6600', action, '-q'])
 
-    def mpc_update_local_files():
+    def mopidy_update_local_files():
         proc = subprocess.Popen(['sudo', 'mopidyctl', 'local', 'scan'])
 
-    def load_playlist(playlist=SOUNDCLOUD_DEFAULT_SET):
+    def load_playlist(playlist_data=SOUNDCLOUD_DEFAULT_SET_DATA):
         """
         Change playlist in Mopidy
 
         # mpc clear
         # mpc ls SoundCloud/Sets/
         """
-        local_playlist = os.path.join(RECORDING_DIR, get_soundcloud_set_name(playlist))
+        local_playlist = os.path.join(RECORDING_DIR, get_soundcloud_set_id(playlist_data))
         logger.debug("loading SoundCloud playlist %s (Local version:)", playlist, local_playlist)
 
         control_mpc('stop')
@@ -338,10 +347,10 @@ try:
         if nfc_data == "REC":
             button_rec()
             return True
-        if nfc_data[0:16] == SOUNDCLOUD_SET_PATH:
-            load_playlist(nfc_data)
+        # if nfc_data[0:16] == SOUNDCLOUD_SET_PATH:
+        #     load_playlist(nfc_data)
         else:
-            load_playlist()
+            load_playlist(nfc_data)
 
         return True
 
@@ -367,22 +376,22 @@ try:
 
             # Set the filenames
             current_datetime = "%s" % (datetime.datetime.now())
-            soundcloud_set_file_name = "%s.setname" % (current_datetime)
+            # soundcloud_set_file_name = "%s.setname" % (current_datetime)
             picture_file_name = "%s.jpg" % (current_datetime)
             sound_file_name = "%s.wav" % (current_datetime)
             upload_file_name = "%s.notuploaded" % (current_datetime)
 
             # Set the file paths
-            soundcloud_set_name = get_soundcloud_set_name()
+            soundcloud_set_name = get_soundcloud_set_id()
             logger.debug("%s", RECORDING_DIR)
-            soundcloud_set_file = os.path.join(RECORDING_DIR, soundcloud_set_name, soundcloud_set_file_name)
+            # soundcloud_set_file = os.path.join(RECORDING_DIR, soundcloud_set_name, soundcloud_set_file_name)
             picture_file = os.path.join(RECORDING_DIR, soundcloud_set_name, picture_file_name)
             sound_file = os.path.join(RECORDING_DIR, soundcloud_set_name, sound_file_name)
             upload_file = os.path.join(RECORDING_DIR, soundcloud_set_name, upload_file_name)
 
             # Save the files
-            logger.debug("%s", soundcloud_set_file)
-            save_soundcloud_set_datafile(soundcloud_set_file)
+            # logger.debug("%s", soundcloud_set_file)
+            # save_soundcloud_set_datafile(soundcloud_set_file)
 
             logger.debug("%s", picture_file)
             take_picture(picture_file)
@@ -432,7 +441,7 @@ try:
         logger.debug("STOP button")
         if check_recording():
             stop_recording()
-            mpc_update_local_files()
+            mopidy_update_local_files()
             if LED1PIN:
                 GPIO.output(LED1PIN, GPIO.LOW)
 
@@ -463,7 +472,7 @@ try:
     logger.debug("Restarting Mopidy and waiting 3 seconds.")
     proc = subprocess.Popen(['sudo', 'systemctl', 'restart', 'mopidy'])
     time.sleep(3)
-    mpc_update_local_files()
+    mopidy_update_local_files()
     logger.debug("OK, here we go!")
     blink(3)
 

@@ -77,8 +77,10 @@ try:
             # and ignore hidden files
             if filename.lower().endswith(('.aiff', '.wav', '.flac', '.alac', '.ogg', '.mp2', '.mp3', '.aac', '.amr', '.wma')) and not filename.startswith('.'):
                 path_to_file = os.path.join(root, filename)
+
+                # TODO: Change this to a check of the id in the filename
                 uploaded_file = os.path.splitext(path_to_file)[0]+".notuploaded"
-                soundcloud_set_file = os.path.splitext(path_to_file)[0]+".setname"
+                # soundcloud_set_file = os.path.splitext(path_to_file)[0]+".setname"
                 if os.path.isfile(not_uploaded_file):
 
                     # upload to soundcloud
@@ -99,6 +101,10 @@ try:
                     # TODO: Add more info?
 
                     logger.debug("Uploaded %s to Soundcloud: %s (%s).", filename, uploaded_track.permalink_url, uploaded_track.id)
+
+                    # add soundcloud id to filename
+                    filename_with_soundcloud_id = os.path.splitext(path_to_file)[0] + "." + str(track.id) + os.path.splitext(path_to_file)[0]
+                    os.rename(path_to_file, filename_with_soundcloud_id)
 
                     # Add Track to right Set
                     # f = open(soundcloud_set_file)

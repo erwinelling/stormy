@@ -1,24 +1,26 @@
 # Jimmy's Story Engine/ Cassette Recorder and Player (project stormy)
 
 # TODO / Debugging
+TODO: Change NFC chips content to id=<soundcloud_id>&vfs=<folder_on_virtual_filesystem>
+TODO: Change writenfc script
+TODO: sync files after upload
+TODO: backup wavs after upload
+
+
 TODO: Change to USB soundcard
 TODO: Check playback settings
 TODO: Check Mic settings for recording as good as possible
-TODO: Find out why MPD server gives timeouts sometimes when using MPC (different with python?) (is it a sound card thing?)
 
-TODO: Test with local audio
-
-TODO: Upload to right set on SoundCloud?
-TODO: Make sure the script works without internet connection too
+TODO: Make sure the script works without internet connection
 TODO: Save and upload more relevant info to SoundCloud? (Length, image, location, wifi name, ip, ...; Possibly add standard info on a new location through command line tool?)
-TODO: Save wavs as mp3s?
-TODO: Sync with SoundCloud?
 
 # TODO / Nice to have
+TODO: Check if id's on NFC are valid
+TODO: Split functions over multiple files and import
 TODO: Maybe switch to https://github.com/Mic92/python-mpd2
 TODO: Replace all other shell commands to pure python too
 TODO: Use sound for button feedback?
-TODO: Add some hook to automatically update scripts from github
+TODO: Add some hook to automatically update scripts from github maybe? from another git branch
 
 # How to make this work
 
@@ -324,6 +326,15 @@ To check logs:
 ```
 cat /var/log/mopidy/mopidy.log
 ```
+
+## Make downloader WORK
+https://github.com/Suyash458/soundcloud-dl
+
+pip install soundcloud_dl
+
+
+
+
 
 ## Setting up audio
 USB DEVICE DOES NOT WORK PROPERLY YET
