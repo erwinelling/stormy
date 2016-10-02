@@ -1,29 +1,33 @@
 # Jimmy's Story Engine/ Cassette Recorder and Player (project stormy)
 
 # TODO / Debugging
-TODO: Test changes & make sure the scripts work  without internet connection
-TODO: Change NFC chips content to id=<soundcloud_id>&vfs=<folder_on_virtual_filesystem>
 TODO: Test writenfc script; Write the right data based on soundcloud api? (and vfs dirs?)
+TODO: Change all NFC chips
+
+TODO: Test changes & make sure the scripts work without internet connection
 TODO: Move wav duplicate to separate dir after mp3 download
+TODO: Set cronjob for upload and download
 
 TODO: Change to USB soundcard (alsa settings, ask David)
 TODO: Check Mic settings for recording as good as possible (ask David)
-TODO: Check playback settings
+TODO: Check playback settings (alsa settings, ask David)
 
 TODO: Save and upload more relevant info to SoundCloud? (Length, image, location, wifi name, ip, ...; Possibly add standard info on a new location through command line tool?)
+
 
 # TODO / Nice to have
 TODO: Get rid of RECORDING_DIR_NAME
 TODO: Force upload/ download on some button combination
+TODO: Change name to verhalen
 TODO: Split functions over multiple files and import
-TODO: Check if id's on NFC are valid
-TODO: Make it possible to switch to online mode
-TODO: Make it possible to have some hybrid mode to save disk space (playlists in mopidy?)
+TODO: Make it object oriented
+TODO: Make it possible to switch to online mode (only use soundcloud)
+TODO: Make it possible to have some hybrid mode to save disk space (playlists in mopidy of local and soundcloud files?)
+TODO: Make pip requirements file
 TODO: Maybe switch to https://github.com/Mic92/python-mpd2
 TODO: Replace all other shell commands to pure python too
 TODO: Use sound for button feedback?
 TODO: Add some hook to automatically update scripts from github maybe? from another git branch
-TODO: cycle log files?
 
 # How to make this work
 

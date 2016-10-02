@@ -13,6 +13,22 @@ import ConfigParser
 from shutil import copyfile
 import logging
 
+
+"""
+Verhalen:
+
+verhalen.nfc
+verhalen.soundcloud_sync
+verhalen.mopidy
+verhalen.buttons
+verhalen.peripherals
+
+verhalen.run_player
+verhalen.run_sync
+verhalen.run_nfc_writer
+verhalen.run_nfc_reader
+"""
+
 # read config file and set config
 config = ConfigParser.ConfigParser()
 config.read('/home/pi/stormy/stormy.cfg')
@@ -129,7 +145,6 @@ try:
             f.write(SOUNDCLOUD_DEFAULT_SET_DATA)
             f.close()
 
-
     def get_soundcloud_set_data():
         """
         """
@@ -141,7 +156,7 @@ try:
             current_soundcloud_set_data = SOUNDCLOUD_DEFAULT_SET_DATA
             pass
 
-        logger.debug("SoundCloud Set is %s", current_soundcloud_set)
+        logger.debug("SoundCloud Set data is %s", current_soundcloud_set)
         return current_soundcloud_set_data
 
     # def get_soundcloud_set_name(soundcloud_set_path=""):
@@ -158,8 +173,13 @@ try:
             data = get_soundcloud_set_data()
 
         # set_id = data.split("&", 1)[0].replace("id=", "")
-
-        return urlparse.parse_qs(data)['id']
+        try:
+            set_id = urlparse.parse_qs(data)['id']
+        except:
+            logger.error("Could not parse querystring on NFC: %s", data)
+            set_id = urlparse.parse_qs(SOUNDCLOUD_DEFAULT_SET_DATA)['id']
+        logger.debug("SoundCloud set: %s", set_id)
+        return set_id
 
     def check_playing():
         """

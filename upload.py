@@ -24,7 +24,7 @@ import ConfigParser
 # read config file
 config = ConfigParser.ConfigParser()
 
-config.read('stormy.cfg')
+config.read('/home/pi/stormy/stormy.cfg')
 
 HOME_DIR = config.get("machine", "HOME_DIR")
 MUSIC_DIR = config.get("machine", "MUSIC_DIR")
