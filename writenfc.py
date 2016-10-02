@@ -3,6 +3,8 @@ import nxppy
 import subprocess
 import os
 import time
+import soundcloud
+import urllib
 
 # read config file
 config = ConfigParser.ConfigParser()
@@ -28,6 +30,18 @@ def write_nfc_string(str):
         nr += 1
     mifare.write_block(nr, NFC_STOP_CHARACTER)
 
+
+client = soundcloud.Client(client_id=config.get("upload", "client_id"))
+user = client.get('/resolve', url=config.get("upload", "soundcloud_url"))
+playlists = client.get('/users/%d/playlists' % user.id)
+print "Available playlists on soundcloud:"
+i = 0
+for playlist in playlists:
+    print "%s: %s" % (i, playlist.title)
+    i=i+1
+chosen_playlist_no = raw_input('Which playlist? ')
+
+
 args = [
     'mpc',
     '-h', 'localhost',
@@ -38,20 +52,23 @@ args = [
 p1 = subprocess.Popen(args, stdout=subprocess.PIPE)
 output, error = p1.communicate()
 
-print "Available SoundCloud/Sets:"
+print "Available playlists in virtual file system:"
 i = 0
 for line in output.split(os.linesep)[0:-1]:
     print "%s: %s" % (i, line)
     i=i+1
-print "x: Something else"
+chosen_vfs_no = raw_input('What is the corresponding local dir? ')
 
-chosen_set = raw_input('Which set number (or x)? ')
+chosen_playlist_int = int(chosen_playlist_no)
+chosen_vfs_int= int(chosen_vfs_no)
 
-if chosen_set == "x":
-    set_name = raw_input('Something else, but what? ')
-else:
-    chosen_set_int = int(chosen_set)
-    set_name = output.split(os.linesep)[chosen_set_int]
+nfc_data = {
+    'id' : playlists[chosen_playlist_int].id,
+    'title' : playlists[chosen_playlist_int].title,
+    'vfs' : output.split(os.linesep)[chosen_vfs_int]
+}
+
+nfc_string = urllib.urlencode(nfc_data)
 
 previous_uid = None
 while True:
@@ -61,8 +78,8 @@ while True:
         if uid and uid != previous_uid:
             print uid
             previous_uid = uid
-            write_nfc_string(set_name)
-            print "\"%s\" saved on NFC chip" % (set_name)
+            write_nfc_string(nfc_string)
+            print "\"%s\" saved on NFC chip" % (nfc_string)
     except nxppy.SelectError:
         pass
     time.sleep(1)

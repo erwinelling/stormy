@@ -157,8 +157,9 @@ try:
         if not data:
             data = get_soundcloud_set_data()
 
-        set_id = data.split("&", 1)[0].replace("id=", "")
-        return set_id
+        # set_id = data.split("&", 1)[0].replace("id=", "")
+
+        return urlparse.parse_qs(data)['id']
 
     def check_playing():
         """
