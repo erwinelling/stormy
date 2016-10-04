@@ -286,7 +286,7 @@ try:
         # mpc ls SoundCloud/Sets/
         """
         local_playlist = os.path.join(RECORDING_DIR, get_soundcloud_set_id(playlist_data))
-        logger.debug("loading SoundCloud playlist %s (Local version:)", playlist_data, local_playlist)
+        logger.debug("loading SoundCloud playlist %s (Local version: %s)", playlist_data, local_playlist)
 
         control_mpc('stop')
         control_mpc('clear')
@@ -309,11 +309,11 @@ try:
             song = subprocess.Popen(['mpc', 'add', line])
 
         # write playlist info to file
-        logger.debug("writing '%s' to %s", playlist, NFC_CHIP_DATA_FILE)
+        logger.debug("writing '%s' to %s", playlist_data, NFC_CHIP_DATA_FILE)
 
         check_file_path_exists(NFC_CHIP_DATA_FILE)
         f = open(NFC_CHIP_DATA_FILE, 'w')
-        f.write(playlist)
+        f.write(playlist_data)
         f.close()
 
         logger.debug("changed playlist")
