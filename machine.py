@@ -175,10 +175,10 @@ try:
 
         # set_id = data.split("&", 1)[0].replace("id=", "")
         try:
-            set_id = urlparse.parse_qs(data)['id']
+            set_id = urlparse.parse_qs(data)['id'][0]
         except:
             logger.error("Could not parse querystring on NFC: %s", data)
-            set_id = urlparse.parse_qs(SOUNDCLOUD_DEFAULT_SET_DATA)['id']
+            set_id = urlparse.parse_qs(SOUNDCLOUD_DEFAULT_SET_DATA)['id'][0]
         logger.debug("SoundCloud set: %s", set_id)
         return set_id
 
