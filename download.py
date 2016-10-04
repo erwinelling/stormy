@@ -1,6 +1,7 @@
 import requests, os.path, soundcloud, re, urllib, logging
 import logging.handlers
 import ConfigParser
+import subprocess
 
 # TODO: Also add ID3 tags based on track metadata? See e.g. https://github.com/Sliim/soundcloud-syncer/blob/master/scripts/sc-tagger
 
