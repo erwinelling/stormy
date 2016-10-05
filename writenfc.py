@@ -69,6 +69,7 @@ nfc_data = {
 }
 
 nfc_string = urllib.urlencode(nfc_data)
+print "Data: %s" % (nfc_string)
 
 previous_uid = None
 while True:
