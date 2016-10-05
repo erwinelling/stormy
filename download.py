@@ -2,6 +2,7 @@ import requests, os.path, soundcloud, re, urllib, logging
 import logging.handlers
 import ConfigParser
 import subprocess
+from collections import Counter
 
 # TODO: Also add ID3 tags based on track metadata? See e.g. https://github.com/Sliim/soundcloud-syncer/blob/master/scripts/sc-tagger
 
@@ -124,10 +125,10 @@ def playlist_download_from_url(client_id, url, base_dir, override=False):
 
     logger.debug('Playlist downloaded to "%s"' % dir)
     logger.debug('Downloaded: %s, Skipped: %s, Errors: %s' % (downloaded, skipped, errors))
-    # return Counter({
-    #     'downloaded': downloaded, 'skipped': skipped, 'errors': errors
-    # })
-    return True
+    return Counter({
+        'downloaded': downloaded, 'skipped': skipped, 'errors': errors
+    })
+    # return True
 
 def playlist_download_all(client_id, user_url, base_dir, override=False):
     """Download all playlist from the given user URL"""
@@ -135,12 +136,15 @@ def playlist_download_all(client_id, user_url, base_dir, override=False):
     user = client.get('/resolve', url=user_url)
     playlists = client.get('/users/%d/playlists' % user.id)
 
+    counter = Counter()
     for playlist in playlists:
         logger.debug('Playlist: "%s"' % playlist.title)
-        playlist_download_from_url(client_id, playlist.permalink_url, base_dir, override)
-    return True
+        counter = counter + playlist_download_from_url(client_id, playlist.permalink_url, base_dir, override)
+    return counter
 
-playlist_download_all(config.get("upload", "client_id"), config.get("upload", "soundcloud_url"), RECORDING_DIR)
+counter = playlist_download_all(config.get("upload", "client_id"), config.get("upload", "soundcloud_url"), RECORDING_DIR)
+
+logger.debug('Counter: "%s" (%s,%s,%s)' % counter, counter['downloaded'], counter['skipped'], counter['errors'])
 # playlist_download_from_url(config.get("upload", "client_id"), "https://soundcloud.com/user-787148065/sets/wat-is-jouw-favoriete-jimmys", config.get("machine", "MUSIC_DIR"))
 
 # update local files in mopidy and restart mopidy
