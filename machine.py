@@ -307,7 +307,7 @@ try:
             # print quotedline
             # TODO rewrite control_mpc to make it work with more than 1 argument
             song = subprocess.Popen(['mpc', 'add', line])
-
+            logger.debug("adding '%s' to playlist", song)
         # write playlist info to file
         logger.debug("writing '%s' to %s", playlist_data, NFC_CHIP_DATA_FILE)
 
@@ -533,7 +533,7 @@ try:
                 button_pause()
 
         # wait a second before checking again
-        time.sleep(1)
+        time.sleep(0.5)
 
 except KeyboardInterrupt:  # If CTRL+C is pressed, exit cleanly:
     GPIO.cleanup()  # cleanup all GPIO
