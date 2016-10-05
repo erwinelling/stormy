@@ -157,7 +157,7 @@ try:
             current_soundcloud_set_data = SOUNDCLOUD_DEFAULT_SET_DATA
             pass
 
-        logger.debug("SoundCloud Set data is %s", current_soundcloud_set)
+        logger.debug("SoundCloud Set data is %s", current_soundcloud_set_data)
         return current_soundcloud_set_data
 
     # def get_soundcloud_set_name(soundcloud_set_path=""):
