@@ -64,8 +64,8 @@ chosen_vfs_int= int(chosen_vfs_no)
 
 nfc_data = {
     'id' : playlists[chosen_playlist_int].id,
-    'title' : playlists[chosen_playlist_int].title,
-    'vfs' : output.split(os.linesep)[chosen_vfs_int]
+    # 'title' : playlists[chosen_playlist_int].title,
+    # 'vfs' : output.split(os.linesep)[chosen_vfs_int]
 }
 
 nfc_string = urllib.urlencode(nfc_data)
