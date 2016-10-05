@@ -136,8 +136,8 @@ try:
                     # remove .notuploaded file
                     os.remove(not_uploaded_file)
                     count +=1
-                    logger.debug("Uploaded %s file(s)", count)
 
+logger.debug("Uploaded %s file(s)", count)
 except HTTPError, e:
     logger.error(e)
     pass
