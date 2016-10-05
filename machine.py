@@ -302,7 +302,7 @@ try:
         output, error = p1.communicate()
         # TODO: Check for errors here, i.e. "error: Not found" when SoundCloud not loaded
         # lines = subprocess.check_output(args, shell=True)
-        for line in output.split(os.linesep):
+        for line in output.split(os.linesep)[:-1]:
             # quotedline = '"%s"' % line
             # print quotedline
             # TODO rewrite control_mpc to make it work with more than 1 argument
@@ -431,12 +431,12 @@ try:
         """
         """
         logger.debug("PREV button")
-        if check_playing():
-            button_feedback()
-            control_mpc('prev')
-
-        else:
-            pass
+        # if check_playing():
+        button_feedback()
+        control_mpc('prev')
+        #
+        # else:
+        #     pass
 
     def button_play():
         """
@@ -452,11 +452,11 @@ try:
         """
         """
         logger.debug("NEXT button")
-        if check_playing():
-            button_feedback()
-            control_mpc('next')
-        else:
-            pass
+        # if check_playing():
+        button_feedback()
+        control_mpc('next')
+        # else:
+        #     pass
 
     def button_stop():
         """
