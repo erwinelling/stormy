@@ -122,7 +122,7 @@ try:
                     playlist = client.get("/playlists/"+set_id)
                     track_id_list = []
                     for track in playlist.tracks:
-                        track_id_list.append(uploaded_track['id'])
+                        track_id_list.append(track['id'])
 
                     logger.debug("%s, %s", playlist, track_id_list)
                     if uploaded_track:
