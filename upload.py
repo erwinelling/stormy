@@ -110,14 +110,14 @@ try:
                         filename_with_soundcloud_id = os.path.splitext(path_to_file)[0] + "." + str(uploaded_track.id) + os.path.splitext(path_to_file)[0]
                         os.rename(path_to_file, filename_with_soundcloud_id)
                     except:
-                        # probably already changed?
+                        # probably already added?
                         pass
 
                     # Add Track to right Set
                     # f = open(soundcloud_set_file)
                     # set_id = f.readline().strip().split("&", 1)[0].replace("id=", "")
                     # f.close()
-                    set_id = os.path.dirname(path_to_file)
+                    set_id = os.path.basename(os.path.normpath(path_to_file))
 
                     playlist = client.get("/playlists/"+set_id)
                     track_id_list = []
