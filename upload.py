@@ -106,7 +106,7 @@ try:
                     logger.debug("Uploaded %s to Soundcloud: %s (%s).", filename, uploaded_track.permalink_url, uploaded_track.id)
 
                     # add soundcloud id to filename
-                    filename_with_soundcloud_id = os.path.splitext(path_to_file)[0] + "." + str(track.id) + os.path.splitext(path_to_file)[0]
+                    filename_with_soundcloud_id = os.path.splitext(path_to_file)[0] + "." + str(uploaded_track.id) + os.path.splitext(path_to_file)[0]
                     os.rename(path_to_file, filename_with_soundcloud_id)
 
                     # Add Track to right Set
@@ -118,7 +118,7 @@ try:
                     playlist = client.get("/playlists/"+set_id)
                     track_id_list = []
                     for track in playlist.tracks:
-                        track_id_list.append(track['id'])
+                        track_id_list.append(uploaded_track['id'])
 
                     logger.debug("%s, %s", playlist, track_id_list)
                     if uploaded_track:
