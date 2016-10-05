@@ -296,7 +296,7 @@ try:
             'mpc',
             '-h', 'localhost',
             '-p', '6600',
-            'ls', playlist,
+            'ls', local_playlist,
         ]
         p1 = subprocess.Popen(args, stdout=subprocess.PIPE)
         output, error = p1.communicate()
@@ -490,13 +490,13 @@ try:
     # Startup
     # Restart Mopidy because somehow Soundcloud is mostly not working when the service has started on bot
     logger.debug("Starting. Press CTRL+C to exit")
-    logger.debug("Waiting 30 seconds to restart Mopidy.")
+    # logger.debug("Waiting 30 seconds to restart Mopidy.")
     # time.sleep(30)
-    logger.debug("Restarting Mopidy and waiting 3 seconds.")
-    proc = subprocess.Popen(['sudo', 'systemctl', 'restart', 'mopidy'])
-    time.sleep(3)
-    mopidy_update_local_files()
-    logger.debug("OK, here we go!")
+    # logger.debug("Restarting Mopidy and waiting 3 seconds.")
+    # proc = subprocess.Popen(['sudo', 'systemctl', 'restart', 'mopidy'])
+    # time.sleep(3)
+    # mopidy_update_local_files()
+    # logger.debug("OK, here we go!")
     blink(3)
 
     # Load initial playlist
