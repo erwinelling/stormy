@@ -144,10 +144,12 @@ def playlist_download_all(client_id, user_url, base_dir, override=False):
 
 counter = playlist_download_all(config.get("upload", "client_id"), config.get("upload", "soundcloud_url"), RECORDING_DIR)
 
-logger.debug('Counter: "%s" (%s,%s,%s)' % (counter, counter['downloaded'], counter['skipped'], counter['errors']))
+logger.debug('Counter: "%s"' % (counter))
 # playlist_download_from_url(config.get("upload", "client_id"), "https://soundcloud.com/user-787148065/sets/wat-is-jouw-favoriete-jimmys", config.get("machine", "MUSIC_DIR"))
 
 # update local files in mopidy and restart mopidy
 # TODO: import these functions and don't repeat it here
-proc = subprocess.Popen(['sudo', 'mopidyctl', 'local', 'scan'])
-proc = subprocess.Popen(['sudo', 'systemctl', 'restart', 'mopidy'])
+if counter['downloaded']:
+    logger.debug('Files were downloaded. Scanning & restarting mopidy.')
+    proc = subprocess.Popen(['sudo', 'mopidyctl', 'local', 'scan'])
+    proc = subprocess.Popen(['sudo', 'systemctl', 'restart', 'mopidy'])
