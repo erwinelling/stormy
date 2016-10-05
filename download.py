@@ -143,6 +143,7 @@ def playlist_download_all(client_id, user_url, base_dir, override=False):
 playlist_download_all(config.get("upload", "client_id"), config.get("upload", "soundcloud_url"), RECORDING_DIR)
 # playlist_download_from_url(config.get("upload", "client_id"), "https://soundcloud.com/user-787148065/sets/wat-is-jouw-favoriete-jimmys", config.get("machine", "MUSIC_DIR"))
 
-# update local files in mopidy
-# TODO: import this function and not repeat it here
+# update local files in mopidy and restart mopidy
+# TODO: import these functions and don't repeat it here
 proc = subprocess.Popen(['sudo', 'mopidyctl', 'local', 'scan'])
+proc = subprocess.Popen(['sudo', 'systemctl', 'restart', 'mopidy'])
