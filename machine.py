@@ -467,6 +467,8 @@ try:
             mopidy_update_local_files()
             if LED1PIN:
                 GPIO.output(LED1PIN, GPIO.LOW)
+                button_feedback()
+            subprocess.Popen(['sudo', 'systemctl', 'restart', 'mopidy'])
 
         if check_playing():
             button_feedback()
@@ -478,12 +480,12 @@ try:
         """
         """
         logger.debug("PAUSE button")
-        if check_playing():
+        if check_paused():
             button_feedback()
-            if check_paused():
-                control_mpc("play")
-            else:
-                control_mpc('pause')
+            control_mpc("play")
+        elif check_playing():
+            button_feedback()
+            control_mpc('pause')
         else:
             pass
 
