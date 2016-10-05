@@ -70,6 +70,7 @@ try:
     logger.debug("Checking contents of %s", RECORDING_DIR)
     from os.path import join, getsize
     count = 0
+    # TODO: Replace with counter object
     uploaded_track = False
     for root, dirs, files in os.walk(RECORDING_DIR):
         for filename in files:
@@ -130,8 +131,7 @@ try:
 
                     # remove .notuploaded file
                     os.remove(not_uploaded_file)
-
-                count +=1
+                    count +=1
         logger.debug("Uploaded %s file(s)", count)
 
 except HTTPError, e:
