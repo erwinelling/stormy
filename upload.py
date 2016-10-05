@@ -81,7 +81,7 @@ try:
                 path_to_file = os.path.join(root, filename)
 
                 # TODO: Change this to a check of the id in the filename
-                uploaded_file = os.path.splitext(path_to_file)[0]+".notuploaded"
+                not_uploaded_file = os.path.splitext(path_to_file)[0]+".notuploaded"
                 # soundcloud_set_file = os.path.splitext(path_to_file)[0]+".setname"
                 if os.path.isfile(not_uploaded_file):
 
