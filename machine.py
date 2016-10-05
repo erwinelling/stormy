@@ -285,7 +285,7 @@ try:
         # mpc clear
         # mpc ls SoundCloud/Sets/
         """
-        local_playlist = os.path.join(RECORDING_DIR, get_soundcloud_set_id(playlist_data))
+        local_playlist = "Local\ media/Sets/%s/" % get_soundcloud_set_id(playlist_data)
         logger.debug("loading SoundCloud playlist %s (Local version: %s)", playlist_data, local_playlist)
 
         control_mpc('stop')
