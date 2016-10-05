@@ -117,7 +117,7 @@ try:
                     # f = open(soundcloud_set_file)
                     # set_id = f.readline().strip().split("&", 1)[0].replace("id=", "")
                     # f.close()
-                    set_id = os.path.basename(os.path.normpath(path_to_file))
+                    set_id = os.path.basename(os.path.normpath(os.path.dirname(path_to_file)))
 
                     playlist = client.get("/playlists/"+set_id)
                     track_id_list = []
