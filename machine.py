@@ -466,8 +466,8 @@ try:
             stop_recording()
             set_data = get_soundcloud_set_data()
             mopidy_update_local_files()
-            subprocess.Popen(['sudo', 'systemctl', 'restart', 'mopidy'])
-            time.sleep(3)
+            # subprocess.Popen(['sudo', 'systemctl', 'restart', 'mopidy'])
+            # time.sleep(3)
             load_playlist(set_data)
             if LED1PIN:
                 GPIO.output(LED1PIN, GPIO.LOW)
