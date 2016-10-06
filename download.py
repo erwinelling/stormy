@@ -149,7 +149,7 @@ logger.debug('Counter: "%s"' % (counter))
 
 # update local files in mopidy and restart mopidy
 # TODO: import these functions and don't repeat it here
-if counter['downloaded']:
-    logger.debug('Files were downloaded. Scanning & restarting mopidy.')
-    proc = subprocess.Popen(['sudo', 'mopidyctl', 'local', 'scan'])
-    proc = subprocess.Popen(['sudo', 'systemctl', 'restart', 'mopidy'])
+# if counter['downloaded']:
+#     logger.debug('Files were downloaded. Scanning & restarting mopidy.')
+#     proc = subprocess.Popen(['sudo', 'mopidyctl', 'local', 'scan'])
+#     proc = subprocess.Popen(['sudo', 'systemctl', 'restart', 'mopidy'])
