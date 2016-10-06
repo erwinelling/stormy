@@ -285,7 +285,7 @@ try:
         # mpc clear
         # mpc ls SoundCloud/Sets/
         """
-        local_playlist = "Local media/Sets/%s/" % get_soundcloud_set_id(playlist_data)
+        local_playlist = "Files/Sets/%s/" % get_soundcloud_set_id(playlist_data)
         logger.debug("loading SoundCloud playlist %s (Local version: %s)", playlist_data, local_playlist)
 
         control_mpc('stop')
@@ -465,7 +465,7 @@ try:
         if check_recording():
             stop_recording()
             set_data = get_soundcloud_set_data()
-            mopidy_update_local_files()
+            # mopidy_update_local_files()
             # subprocess.Popen(['sudo', 'systemctl', 'restart', 'mopidy'])
             # time.sleep(3)
             load_playlist(set_data)
