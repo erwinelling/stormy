@@ -66,13 +66,13 @@ def download(client, track, dir, override=False):
 
     if not override and os.path.exists(file_name):
         logger.debug("File already exists, skipped, %s" % (file_name))
-        return False
+        return ""
 
     #TODO: if os.path exists filename with wav extensions, move to some backup folder?
 
     stream_url = client.get(track.stream_url, allow_redirects=False)
     urllib.urlretrieve(stream_url.location, file_name)
-    return True
+    return file_name
 
 def fix_title(track):
     """Fix title (missing space, illegal chars, missing author)"""
@@ -113,9 +113,14 @@ def playlist_download_from_url(client_id, url, base_dir, override=False):
     for track in playlist.tracks:
         try:
             #done = song.down(client, track, dir, override)
-            done = track_download_from_id(config.get("upload", "client_id"), track['id'], dir, override)
-            if done: downloaded = downloaded + 1
-            else: skipped = skipped + 1
+            downloaded_file = track_download_from_id(config.get("upload", "client_id"), track['id'], dir, override)
+            if done:
+                downloaded = downloaded + 1
+                # "backup" files after downloading same mp3
+                if os.path.exists(os.path.splitext(downloaded_file)[1]+".wav"):
+                    os.rename(os.path.splitext(downloaded_file)[1]+".wav", os.path.splitext(downloaded_file)[1]+".wav.bak")
+            else:
+                skipped = skipped + 1
         except requests.exceptions.HTTPError, err:
             if err.response.status_code == 404:
                 logger.debug('Error: could not download')
