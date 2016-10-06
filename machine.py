@@ -306,8 +306,9 @@ try:
             # quotedline = '"%s"' % line
             # print quotedline
             # TODO rewrite control_mpc to make it work with more than 1 argument
-            subprocess.Popen(['mpc', 'add', line])
-            logger.debug("adding '%s' to playlist", line)
+            if os.path.splitext(line)[1] in [".wav", ".mp3"]:
+                subprocess.Popen(['mpc', 'add', line])
+                logger.debug("adding '%s' to playlist", line)
         # write playlist info to file
         logger.debug("writing '%s' to %s", playlist_data, NFC_CHIP_DATA_FILE)
 
