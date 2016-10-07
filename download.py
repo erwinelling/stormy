@@ -118,8 +118,8 @@ def playlist_download_from_url(client_id, url, base_dir, override=False):
             if downloaded_file:
                 downloaded = downloaded + 1
                 # "backup" files after downloading same mp3
-                if os.path.exists(os.path.splitext(downloaded_file)[1]+".wav"):
-                    os.rename(os.path.splitext(downloaded_file)[1]+".wav", os.path.splitext(downloaded_file)[1]+".wav.bak")
+                if os.path.exists(os.path.splitext(downloaded_file)[0]+".wav"):
+                    os.rename(os.path.splitext(downloaded_file)[0]+".wav", os.path.splitext(downloaded_file)[1]+".wav.bak")
             else:
                 skipped = skipped + 1
         except requests.exceptions.HTTPError, err:
