@@ -136,7 +136,7 @@ try:
                         updated_playlist = client.put("/playlists/"+set_id, playlist={
                             'tracks': map(lambda id: dict(id=id), track_id_list)
                         })
-                        logger.debug("%s, %s", updated_playlist.title, tracks_id_list)
+                        logger.debug("%s, %s", updated_playlist.title, track_id_list)
                     # remove .notuploaded file
                     os.remove(not_uploaded_file)
                     count +=1
