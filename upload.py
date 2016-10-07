@@ -125,13 +125,11 @@ try:
                     if uploaded_track:
 
                         # generate tracklist of current playlist
-                        logger.debug("%s, %s", playlist.title, track_id_list)
                         track_id_list = []
                         for track in playlist.tracks:
                             track_id_list.append(track['id'])
-
-
-
+                        logger.debug("%s, %s", playlist.title, track_id_list)
+                        
                         # add uploaded track to list
                         track_id_list.append(uploaded_track.id)
 
