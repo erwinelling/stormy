@@ -1,24 +1,27 @@
 # Jimmy's Story Engine/ Cassette Recorder and Player (project stormy)
 
-# TODO / Debugging
-TODO: Test writenfc script; Write the right data based on soundcloud api? (and vfs dirs?)
-TODO: Change all NFC chips
 
-TODO: Test changes & make sure the scripts work without internet connection
-TODO: Move wav duplicate to separate dir after mp3 download
-TODO: Set cronjob for upload and download
-
+# TODO Sound
 TODO: Change to USB soundcard (alsa settings, ask David)
 TODO: Check Mic settings for recording as good as possible (ask David)
 TODO: Check playback settings (alsa settings, ask David)
 
+# TODO Soundcloud Account Change
+TODO: Change to use new SoundCloud Account
+TODO: Get SoundCloud Pro Unlimited https://soundcloud.com/pro?ref=t209
+TODO: Add all sets on SoundCloud Account
+TODO: Change all NFC chips to new id's
+
+# TODO Upload and Download
+TODO: Test: Move wav duplicate to separate dir after mp3 download
+TODO: Move everything to a large memory card
+TODO: Set cronjob for upload and download
+
+# TODO Nice to have
 TODO: Save and upload more relevant info to SoundCloud? (Length, image, location, wifi name, ip, ...; Possibly add standard info on a new location through command line tool?)
-
-
-# TODO / Nice to have
+TODO: Change name to verhalen
 TODO: Get rid of RECORDING_DIR_NAME
 TODO: Force upload/ download on some button combination
-TODO: Change name to verhalen
 TODO: Split functions over multiple files and import
 TODO: Make it object oriented
 TODO: Make it possible to switch to online mode (only use soundcloud)
@@ -148,6 +151,7 @@ config_file = /etc/mopidy/mopidy.conf
 
 [soundcloud]
 auth_token = 1-35204-229958105-3a372e24e3e04a
+# auth_token =1-35204-254727818-4e1bde9f2db976
 explore_songs = 25
 enabled = true
 
@@ -382,6 +386,7 @@ sudo systemctl restart machine
 sudo systemctl stop machine
 sudo systemctl status machine
 sudo nano /etc/mopidy/mopidy.conf
+sudo mopidyctl local scan
 tail -f /var/log/mopidy/mopidy.log
 
 output = alsasink device=hw:1,0
