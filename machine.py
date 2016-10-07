@@ -222,7 +222,7 @@ try:
         Do some audio recording
         e.g. arecord -D plughw:CARD=Device,DEV=0 -f S16_LE -c1 -r44100 -V mono test.wav
         """
-        logger.debug("Recording %s started.", filepath)
+        logger.debug("Recording %s started.", filepath+".temp")
         # Turn on Mic
         args = [
             'amixer',
@@ -242,7 +242,7 @@ try:
             '-r44100',
             '-V', 'mono',
             '--process-id-file', RECORDING_PROCESS_ID_FILE,
-            filepath
+            filepath+".temp"
         ]
         proc = subprocess.Popen(args)
 
@@ -267,6 +267,13 @@ try:
         f.close()
         logger.debug("Stopping recording process by killing PID %s", str(pid))
         os.kill(pid, signal.SIGINT)
+
+        #remove .temp extension files
+        for root, dirs, files in os.walk(RECORDING_DIR):
+            for filename in files:
+                if os.path.splitext(filename)[1] is ".temp":
+                    os.rename(filename, os.path.splitext(filename)[0])
+                    logger.debug("Renamed temp file to %s", os.path.splitext(filename)[0])
 
     def control_mpc(action):
         """
@@ -466,9 +473,6 @@ try:
         if check_recording():
             stop_recording()
             set_data = get_soundcloud_set_data()
-            # mopidy_update_local_files()
-            # subprocess.Popen(['sudo', 'systemctl', 'restart', 'mopidy'])
-            # time.sleep(3)
             load_playlist(set_data)
             if LED1PIN:
                 GPIO.output(LED1PIN, GPIO.LOW)
