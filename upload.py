@@ -112,7 +112,7 @@ try:
 
                     # add soundcloud id to filename
                     try:
-                        filename_with_soundcloud_id = os.path.splitext(path_to_file)[0] + "." + str(uploaded_track.id) + os.path.splitext(path_to_file)[0]
+                        filename_with_soundcloud_id = "%s.%s%s" % (os.path.splitext(path_to_file)[0], uploaded_track.id, os.path.splitext(path_to_file)[0])
                         os.rename(path_to_file, filename_with_soundcloud_id)
                     except:
                         # probably already added?

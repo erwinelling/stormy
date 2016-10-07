@@ -77,20 +77,21 @@ def download(client, track, dir, override=False):
 def fix_title(track):
     """Fix title (missing space, illegal chars, missing author)"""
     title = track.title
-    user_name = track.user['username']
-
-    # Add missing dash
-    title = re.sub(r"^(.*\S)- (.*)$", r"\1 - \2", title)
-
-    # Remove adds
-    title = title.split('//', 1)[0]
-
-    # Prepend username if author seems to be missing
-    if ' - ' not in title:
-        title = '%s - %s' % (user_name, title)
-
-    # append soundcloud track ID
-    title = title + ".%s" % (track.id)
+    logger.debug("Title to fix, %s" % (title))
+    # user_name = track.user['username']
+    #
+    # # Add missing dash
+    # title = re.sub(r"^(.*\S)- (.*)$", r"\1 - \2", title)
+    #
+    # # Remove adds
+    # title = title.split('//', 1)[0]
+    #
+    # # Prepend username if author seems to be missing
+    # if ' - ' not in title:
+    #     title = '%s - %s' % (user_name, title)
+    #
+    # # append soundcloud track ID
+    # title = title + ".%s" % (track.id)
 
     return title.strip()
 
