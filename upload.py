@@ -92,12 +92,12 @@ try:
                     playlist = client.get("/playlists/"+set_id)
 
                     # upload to soundcloud
-                    datetimenow = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M%S')
+                    datetimenow = datetime.datetime.now()
                     track_dict = {
                         # TODO: Set more track data, get input somewhere
                         'title': unicode(os.path.splitext(filename)[0]),
                         'asset_data': open(path_to_file, 'rb'),
-                        'description': u'Dit is een van Jimmy\'s Verhalen. Opgenomen op %s om %s in de categorie "%s".' % (datetimenow.strftime("%A %e %B %Y"), datetimenow.strftime("%T"), playlist.title),
+                        'description': u'Dit is een van Jimmy\'s Verhalen. Opgenomen op %s om %s in de categorie "%s".' % (datetimenow.__format__("%A %e %B %Y"), datetimenow.__format__("%T"), playlist.title),
                         'track_type': 'spoken',
                         'purchase_url': "http://wijzijnjimmys.nl/verhalen/",
                         'license': "cc-by-nc",
