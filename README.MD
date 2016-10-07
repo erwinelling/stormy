@@ -13,11 +13,12 @@ TODO: Add all sets on SoundCloud Account
 TODO: Change all NFC chips to new id's
 
 # TODO Upload and Download
-TODO: Test: Move wav duplicate to separate dir after mp3 download
+TODO: Save wave file as temp file first and then rename (in order not to upload while recording)
 TODO: Move everything to a large memory card
-TODO: Set cronjob for upload and download
+TODO: Set cronjob for upload and download (on startup?)
 
 # TODO Nice to have
+TODO: Test: Move wav duplicate to separate dir after mp3 download
 TODO: Save and upload more relevant info to SoundCloud? (Length, image, location, wifi name, ip, ...; Possibly add standard info on a new location through command line tool?)
 TODO: Change name to verhalen
 TODO: Get rid of RECORDING_DIR_NAME
