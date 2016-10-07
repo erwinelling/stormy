@@ -399,7 +399,7 @@ try:
                 GPIO.output(LED1PIN, GPIO.HIGH)
 
             # Set the filenames
-            current_datetime = "%s" % (datetime.datetime.now())
+            current_datetime = "%s" % (datetime.datetime.now().__format__("%Y-%m-%d %T"))
             # soundcloud_set_file_name = "%s.setname" % (current_datetime)
             picture_file_name = "%s.jpg" % (current_datetime)
             sound_file_name = "%s.wav" % (current_datetime)

@@ -111,12 +111,8 @@ try:
                     logger.debug("Uploaded %s to Soundcloud: %s (%s).", filename, uploaded_track.permalink_url, uploaded_track.id)
 
                     # add soundcloud id to filename
-                    try:
-                        filename_with_soundcloud_id = "%s.%s%s" % (os.path.splitext(path_to_file)[0], uploaded_track.id, os.path.splitext(path_to_file)[0])
-                        os.rename(path_to_file, filename_with_soundcloud_id)
-                    except:
-                        # probably already added?
-                        pass
+                    filename_with_soundcloud_id = "%s.%s%s" % (os.path.splitext(path_to_file)[0], uploaded_track.id, os.path.splitext(path_to_file)[1])
+                    os.rename(path_to_file, filename_with_soundcloud_id)
 
                     # Add Track to right Set
                     # f = open(soundcloud_set_file)
