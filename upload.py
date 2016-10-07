@@ -83,26 +83,31 @@ try:
 
                 # TODO: Change this to a check of the id in the filename
                 not_uploaded_file = os.path.splitext(path_to_file)[0]+".notuploaded"
+                img_file = os.path.splitext(path_to_file)[0]+".jpg"
                 # soundcloud_set_file = os.path.splitext(path_to_file)[0]+".setname"
                 if os.path.isfile(not_uploaded_file):
 
+                    # get playlist
+                    set_id = os.path.basename(os.path.normpath(os.path.dirname(path_to_file)))
+                    playlist = client.get("/playlists/"+set_id)
+
                     # upload to soundcloud
                     datetimenow = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M%S')
-                    uploaded_track = client.post('/tracks', track={
+                    track_dict = {
                         # TODO: Set more track data, get input somewhere
                         'title': unicode(os.path.splitext(filename)[0]),
                         'asset_data': open(path_to_file, 'rb'),
-                        'description': u'Dit is een van Jimmy\'s Verhalen. Geupload op %s.' % (datetimenow),
+                        'description': u'Dit is een van Jimmy\'s Verhalen. Opgenomen op %s om %s in de categorie "%s".' % (datetimenow.strftime("%A %e %B %Y"), datetimenow.strftime("%T"), playlist.title),
                         'track_type': 'spoken',
-                        # 'artwork_data': open('artwork.jpg', 'rb'),
                         'purchase_url': "http://wijzijnjimmys.nl/verhalen/",
                         'license': "cc-by-nc",
                         'tag_list': "jimmy\'s"
                         # 'genre': 'Electronic',
-                    })
-                    # TODO: Add Question/ Theme to description
-                    # TODO: Add more info?
+                    }
+                    if os.path.isfile(img_file):
+                        track_dict['artwork_data'] = open(img_file, 'rb')
 
+                    uploaded_track = client.post('/tracks', track=track_dict)
                     logger.debug("Uploaded %s to Soundcloud: %s (%s).", filename, uploaded_track.permalink_url, uploaded_track.id)
 
                     # add soundcloud id to filename
@@ -117,9 +122,6 @@ try:
                     # f = open(soundcloud_set_file)
                     # set_id = f.readline().strip().split("&", 1)[0].replace("id=", "")
                     # f.close()
-                    set_id = os.path.basename(os.path.normpath(os.path.dirname(path_to_file)))
-
-                    playlist = client.get("/playlists/"+set_id)
                     track_id_list = []
                     for track in playlist.tracks:
                         track_id_list.append(track['id'])
