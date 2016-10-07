@@ -90,8 +90,8 @@ def fix_title(track):
     # if ' - ' not in title:
     #     title = '%s - %s' % (user_name, title)
     #
-    # # append soundcloud track ID
-    # title = title + ".%s" % (track.id)
+    # append soundcloud track ID
+    title = title + ".%s" % (track.id)
 
     return title.strip()
 
