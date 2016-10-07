@@ -122,19 +122,23 @@ try:
                     # f = open(soundcloud_set_file)
                     # set_id = f.readline().strip().split("&", 1)[0].replace("id=", "")
                     # f.close()
-                    track_id_list = []
-                    for track in playlist.tracks:
-                        track_id_list.append(track['id'])
-
-                    logger.debug("%s, %s", playlist, track_id_list)
                     if uploaded_track:
+
+                        # generate tracklist of current playlist
+                        logger.debug("%s, %s", playlist.title, track_id_list)
+                        track_id_list = []
+                        for track in playlist.tracks:
+                            track_id_list.append(track['id'])
+
+
+
+                        # add uploaded track to list
                         track_id_list.append(uploaded_track.id)
-                        logger.debug("%s, %s", playlist, track_id_list)
 
-                    client.put("/playlists/"+set_id, playlist={
-                        'tracks': map(lambda id: dict(id=id), track_id_list)
-                    })
-
+                        updated_playlist = client.put("/playlists/"+set_id, playlist={
+                            'tracks': map(lambda id: dict(id=id), track_id_list)
+                        })
+                        logger.debug("%s, %s", updated_playlist.title, updated_playlist.tracks)
                     # remove .notuploaded file
                     os.remove(not_uploaded_file)
                     count +=1
