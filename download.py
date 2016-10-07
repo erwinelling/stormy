@@ -112,9 +112,9 @@ def playlist_download_from_url(client_id, url, base_dir, override=False):
     # Download tracks
     for track in playlist.tracks:
         try:
-            #done = song.down(client, track, dir, override)
+            # done = song.down(client, track, dir, override)
             downloaded_file = track_download_from_id(config.get("upload", "client_id"), track['id'], dir, override)
-            if done:
+            if downloaded_file:
                 downloaded = downloaded + 1
                 # "backup" files after downloading same mp3
                 if os.path.exists(os.path.splitext(downloaded_file)[1]+".wav"):
