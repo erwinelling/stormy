@@ -224,15 +224,15 @@ try:
         """
         logger.debug("Recording %s started.", filepath+".temp")
         # Turn on Mic
-        args = [
-            'amixer',
-            '-c', SOUND_CARD_NO,
-            'set',
-            SOUND_CARD_MIC_NAME,
-            'cap',
-            '13'
-        ]
-        subprocess.Popen(args)
+        # args = [
+        #     'amixer',
+        #     '-c', SOUND_CARD_NO,
+        #     'set',
+        #     SOUND_CARD_MIC_NAME,
+        #     'cap',
+        #     '13'
+        # ]
+        # subprocess.Popen(args)
 
         args = [
             'arecord',

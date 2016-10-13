@@ -1,22 +1,5 @@
 # Jimmy's Story Engine/ Cassette Recorder and Player (project stormy)
 
-
-# TODO Sound
-TODO: Change to USB soundcard (alsa settings, ask David)
-TODO: Check Mic settings for recording as good as possible (ask David)
-TODO: Check playback settings (alsa settings, ask David)
-
-# TODO Soundcloud Account Change
-TODO: Change to use new SoundCloud Account
-TODO: Get SoundCloud Pro Unlimited https://soundcloud.com/pro?ref=t209
-TODO: Add all sets on SoundCloud Account
-TODO: Change all NFC chips to new id's
-
-# TODO Upload and Download
-TODO: Save wave file as temp file first and then rename (in order not to upload while recording)
-TODO: Move everything to a large memory card
-TODO: Set cronjob for upload and download (on startup?)
-
 # TODO Nice to have
 TODO: Test: Move wav duplicate to separate dir after mp3 download
 TODO: Save and upload more relevant info to SoundCloud? (Length, image, location, wifi name, ip, ...; Possibly add standard info on a new location through command line tool?)
