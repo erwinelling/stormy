@@ -314,7 +314,7 @@ try:
             # quotedline = '"%s"' % line
             # print quotedline
             # TODO rewrite control_mpc to make it work with more than 1 argument
-            if os.path.splitext(line)[a1] in [".wav", ".mp3"]:
+            if os.path.splitext(line)[1] in [".wav", ".mp3"]:
                 if (len(dirs)>1 and any(word in line for word in ["287122241", "287129718"])):
                     # Add file unless it's a placeholder and there are more files in playlists
                     # TODO: Add placeholders to config settings
