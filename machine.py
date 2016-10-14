@@ -239,7 +239,7 @@ try:
             '-D', SOUND_CARD,
             '-f', 'S16_LE',
             '-c1',
-            '-r44100',
+            '-r22050',
             '-V', 'mono',
             '--process-id-file', RECORDING_PROCESS_ID_FILE,
             filepath+".temp"
