@@ -309,11 +309,15 @@ try:
         output, error = p1.communicate()
         # TODO: Check for errors here, i.e. "error: Not found" when SoundCloud not loaded
         # lines = subprocess.check_output(args, shell=True)
-        for line in output.split(os.linesep)[:-1]:
+        dirs = output.split(os.linesep)[:-1]
+        for line in dirs:
             # quotedline = '"%s"' % line
             # print quotedline
             # TODO rewrite control_mpc to make it work with more than 1 argument
-            if os.path.splitext(line)[1] in [".wav", ".mp3"]:
+            if os.path.splitext(line)[a1] in [".wav", ".mp3"]:
+                if not (len(dirs)>1 and any(word in line for word in ["287122241", "287129718"]):
+                    # Add file unless it's a placeholder and there are more files in playlists
+                    # TODO: Add placeholders to config settings
                 subprocess.Popen(['mpc', 'add', line])
                 logger.debug("adding '%s' to playlist", line)
         # write playlist info to file
