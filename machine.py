@@ -318,8 +318,8 @@ try:
                 if (len(dirs)>1 and any(word in line for word in ["287122241", "287129718"])):
                     # Add file unless it's a placeholder and there are more files in playlists
                     # TODO: Add placeholders to config settings
-                subprocess.Popen(['mpc', 'add', line])
-                logger.debug("adding '%s' to playlist", line)
+                    subprocess.Popen(['mpc', 'add', line])
+                    logger.debug("adding '%s' to playlist", line)
         # write playlist info to file
         logger.debug("writing '%s' to %s", playlist_data, NFC_CHIP_DATA_FILE)
 
