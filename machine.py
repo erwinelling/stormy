@@ -272,7 +272,7 @@ try:
         #remove .temp extension files
         for root, dirs, files in os.walk(RECORDING_DIR):
             for filename in files:
-                if os.path.splitext(filename)[1] is ".temp":
+                if os.path.splitext(filename)[1] == ".temp":
                     os.rename(filename, os.path.splitext(filename)[0])
                     logger.debug("Renamed temp file to %s", os.path.splitext(filename)[0])
 
