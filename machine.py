@@ -510,7 +510,7 @@ try:
     blink(3)
 
     # Load initial playlist
-    load_playlist()
+    # load_playlist()
 
     # Check for input from buttons and NFC reader
     previous_uid = None
