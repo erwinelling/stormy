@@ -244,6 +244,7 @@ try:
             '--process-id-file', RECORDING_PROCESS_ID_FILE,
             filepath+".temp"
         ]
+        logger.debug(args)
         proc = subprocess.Popen(args)
 
     def check_recording():
@@ -315,7 +316,7 @@ try:
             # print quotedline
             # TODO rewrite control_mpc to make it work with more than 1 argument
             if os.path.splitext(line)[1] in [".wav", ".mp3"]:
-                if not (len(dirs)>1 and any(word in line for word in ["287122241", "287129718"])):
+                if not  (len(dirs)>1 and any(word in line for word in ["287122241", "287129718"])):
                     # Add file unless it's a placeholder and there are more files in playlists
                     # TODO: Add placeholders to config settings
                     subprocess.Popen(['mpc', 'add', line])
@@ -410,7 +411,7 @@ try:
                 GPIO.output(LED1PIN, GPIO.HIGH)
 
             # Set the filenames
-            current_datetime = "%s" % (datetime.datetime.now().__format__("%Y-%m-%d %T"))
+            current_datetime = "%s" % (datetime.datetime.now().__format__("%Y-%m-%d_%T"))
             # soundcloud_set_file_name = "%s.setname" % (current_datetime)
             picture_file_name = "%s.jpg" % (current_datetime)
             sound_file_name = "%s.wav" % (current_datetime)
