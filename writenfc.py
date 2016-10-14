@@ -52,15 +52,15 @@ args = [
 p1 = subprocess.Popen(args, stdout=subprocess.PIPE)
 output, error = p1.communicate()
 
-print "Available playlists in virtual file system:"
-i = 0
-for line in output.split(os.linesep)[0:-1]:
-    print "%s: %s" % (i, line)
-    i=i+1
-chosen_vfs_no = raw_input('What is the corresponding local dir? ')
+# print "Available playlists in virtual file system:"
+# i = 0
+# for line in output.split(os.linesep)[0:-1]:
+#     print "%s: %s" % (i, line)
+#     i=i+1
+# chosen_vfs_no = raw_input('What is the corresponding local dir? ')
 
 chosen_playlist_int = int(chosen_playlist_no)
-chosen_vfs_int= int(chosen_vfs_no)
+# chosen_vfs_int= int(chosen_vfs_no)
 
 nfc_data = {
     'id' : playlists[chosen_playlist_int].id,
