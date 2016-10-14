@@ -273,9 +273,10 @@ try:
         for root, dirs, files in os.walk(RECORDING_DIR):
             for filename in files:
                 if os.path.splitext(filename)[1] == ".temp":
-                    logger.debut("Renaming %s", filename)
-                    os.rename(filename, os.path.splitext(filename)[0])
-                    logger.debug("Renamed temp file to %s", os.path.splitext(filename)[0])
+                    path_to_file = os.path.join(root, filename)
+                    logger.debut("Renaming %s", path_to_file)
+                    os.rename(path_to_file, os.path.splitext(path_to_file)[0])
+                    logger.debug("Renamed temp file to %s", os.path.splitext(path_to_file)[0])
 
     def control_mpc(action):
         """
