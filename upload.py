@@ -89,7 +89,9 @@ try:
 
                     # get playlist
                     set_id = os.path.basename(os.path.normpath(os.path.dirname(path_to_file)))
+                    logger.debug("Set id: %s", set_id)
                     playlist = client.get("/playlists/"+set_id)
+                    logger.debug("Playlist: %s", playlist)
 
                     # upload to soundcloud
                     datetimenow = datetime.datetime.now()
@@ -97,11 +99,11 @@ try:
                         # TODO: Set more track data, get input somewhere
                         'title': unicode(os.path.splitext(filename)[0]),
                         'asset_data': open(path_to_file, 'rb'),
-                        'description': u'Dit is een van Jimmy\'s Verhalen. Opgenomen op %s om %s in de categorie "%s".' % (datetimenow.__format__("%A %e %B %Y"), datetimenow.__format__("%T"), playlist.title),
+                        'description': u'Dit is een van Jimmy\'s Verhalen. Opgenomen op %s om %s in de categorie "%s".' % (datetimenow.__format__("%e-%m-%Y"), datetimenow.__format__("%T"), playlist.title),
                         'track_type': 'spoken',
                         'purchase_url': "http://wijzijnjimmys.nl/verhalen/",
                         'license': "cc-by-nc",
-                        'tag_list': "jimmy\'s"
+                        'tag_list': "jimmys, verhalen"
                         # 'genre': 'Electronic',
                     }
                     if os.path.isfile(img_file):
