@@ -312,7 +312,7 @@ try:
         # TODO: Check for errors here, i.e. "error: Not found" when SoundCloud not loaded
         # lines = subprocess.check_output(args, shell=True)
         dirs = output.split(os.linesep)[:-1]
-        for line in dirs:
+        for line in reversed(dirs):
             # quotedline = '"%s"' % line
             # print quotedline
             # TODO rewrite control_mpc to make it work with more than 1 argument
