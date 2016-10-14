@@ -42,15 +42,15 @@ for playlist in playlists:
 chosen_playlist_no = raw_input('Which playlist? ')
 
 
-args = [
-    'mpc',
-    '-h', 'localhost',
-    '-p', '6600',
-    'ls', 'SoundCloud/Sets/',
-]
-
-p1 = subprocess.Popen(args, stdout=subprocess.PIPE)
-output, error = p1.communicate()
+# args = [
+#     'mpc',
+#     '-h', 'localhost',
+#     '-p', '6600',
+#     'ls', 'SoundCloud/Sets/',
+# ]
+#
+# p1 = subprocess.Popen(args, stdout=subprocess.PIPE)
+# output, error = p1.communicate()
 
 # print "Available playlists in virtual file system:"
 # i = 0
