@@ -274,7 +274,6 @@ try:
             for filename in files:
                 if os.path.splitext(filename)[1] == ".temp":
                     path_to_file = os.path.join(root, filename)
-                    logger.debut("Renaming %s", path_to_file)
                     os.rename(path_to_file, os.path.splitext(path_to_file)[0])
                     logger.debug("Renamed temp file to %s", os.path.splitext(path_to_file)[0])
 
