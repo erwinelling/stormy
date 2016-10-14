@@ -154,7 +154,7 @@ try:
             current_soundcloud_set_data = f.readline().strip()
             f.close()
         except:
-            current_soundcloud_set_data = SOUNDCLOUD_DEFAULT_SET_DATA
+            current_soundcloud_set_data = False
             pass
 
         logger.debug("SoundCloud Set data is %s", current_soundcloud_set_data)
@@ -172,6 +172,9 @@ try:
     def get_soundcloud_set_id(data=None):
         if not data:
             data = get_soundcloud_set_data()
+            if not data:
+                # TODO: Ugly solution, refactor
+                return False
 
         # set_id = data.split("&", 1)[0].replace("id=", "")
         try:
@@ -313,8 +316,7 @@ try:
         # lines = subprocess.check_output(args, shell=True)
         dirs = output.split(os.linesep)[:-1]
         for line in reversed(dirs):
-            # quotedline = '"%s"' % line
-            # print quotedline
+            # Loading last sound first
             # TODO rewrite control_mpc to make it work with more than 1 argument
             if os.path.splitext(line)[1] in [".wav", ".mp3"]:
                 if not  (len(dirs)>1 and any(word in line for word in ["287122241", "287129718"])):
@@ -405,7 +407,7 @@ try:
         """
         logger.debug("REC button")
 
-        if not check_recording():
+        if not check_recording() and get_soundcloud_set_id():
             if check_playing():
                 control_mpc('stop')
             if LED1PIN:
@@ -456,7 +458,7 @@ try:
         """
         """
         logger.debug("PLAY button")
-        if not check_playing():
+        if not check_playing() and get_soundcloud_set_id():
             button_feedback()
             control_mpc('play')
         else:
