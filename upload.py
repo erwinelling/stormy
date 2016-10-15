@@ -103,7 +103,7 @@ try:
                         'track_type': 'spoken',
                         'purchase_url': "http://wijzijnjimmys.nl/verhalen/",
                         'license': "cc-by-nc",
-                        'tag_list': "jimmys, verhalen"
+                        'tag_list': "jimmys verhalen"
                         # 'genre': 'Electronic',
                     }
                     if os.path.isfile(img_file):
