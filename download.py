@@ -119,6 +119,7 @@ def playlist_download_from_url(client_id, url, base_dir, override=False):
                 downloaded = downloaded + 1
                 # "backup" files after downloading same mp3
                 if os.path.exists(os.path.splitext(downloaded_file)[0]+".wav"):
+                    # TODO: remove files instead of renaming them
                     os.rename(os.path.splitext(downloaded_file)[0]+".wav", os.path.splitext(downloaded_file)[0]+".wav.bak")
             else:
                 skipped = skipped + 1
@@ -128,6 +129,9 @@ def playlist_download_from_url(client_id, url, base_dir, override=False):
                 errors = errors + 1
             else:
                 raise
+
+    # Remove tracks that have been removed from SoundCloud
+    # TODO: Build 2 lists with ID's, rename files with ID's that are on Soundcloud but not on player
 
     logger.debug('Playlist downloaded to "%s"' % dir)
     logger.debug('Downloaded: %s, Skipped: %s, Errors: %s' % (downloaded, skipped, errors))
