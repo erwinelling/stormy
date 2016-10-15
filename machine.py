@@ -517,6 +517,12 @@ try:
     # logger.debug("OK, here we go!")
     blink(3)
 
+    try:
+        os.remove(NFC_CHIP_DATA_FILE)
+        logger.debug("Removing old playlist data.")
+    except:
+        pass
+
     # Load initial playlist
     # load_playlist()
 
