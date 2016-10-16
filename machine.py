@@ -520,7 +520,7 @@ try:
     try:
         # os.remove(NFC_CHIP_DATA_FILE)
         # logger.debug("Removing old playlist data.")
-    control_mpc('play')
+        control_mpc('play')
     except:
         pass
 
