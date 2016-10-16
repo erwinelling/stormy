@@ -518,14 +518,15 @@ try:
     blink(3)
 
     try:
-        os.remove(NFC_CHIP_DATA_FILE)
-        logger.debug("Removing old playlist data.")
+        # os.remove(NFC_CHIP_DATA_FILE)
+        # logger.debug("Removing old playlist data.")
+    control_mpc('play')
     except:
         pass
 
     # Load initial playlist
     # load_playlist()
-
+    control_mpc('play')
     # Check for input from buttons and NFC reader
     previous_uid = None
     while True:
