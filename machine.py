@@ -519,6 +519,7 @@ try:
 
     try:
         # os.remove(NFC_CHIP_DATA_FILE)
+        os.remove(RECORDING_PROCESS_ID_FILE)
         # logger.debug("Removing old playlist data.")
         subprocess.Popen(['mpc', 'clear'])
         subprocess.Popen(['mpc', 'add', "file:///home/pi/Music/Sets/246778316/Edward%20Nygma%20-%20These%20Days%20%28Full%20EP%29.121026027.mp3"])
