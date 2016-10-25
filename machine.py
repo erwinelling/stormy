@@ -319,7 +319,7 @@ try:
             # Loading last sound first
             # TODO rewrite control_mpc to make it work with more than 1 argument
             if os.path.splitext(line)[1] in [".wav", ".mp3"]:
-                if not  (len(dirs)>1 and any(word in line for word in ["287122241", "287129718"])):
+                if not  (len(dirs)>1 and any(word in line for word in ["287122241", "287129718", "289878637"])):
                     # Add file unless it's a placeholder and there are more files in playlists
                     # TODO: Add placeholders to config settings
                     subprocess.Popen(['mpc', 'add', line])
