@@ -16,6 +16,7 @@ NFC_STOP_CHARACTER = STOP
 RECORDING_PROCESS_ID_FILE_NAME = recprocess.pid
 NFC_CHIP_DATA_FILE_NAME = nfcchip.dat
 SOUND_CARD = plughw:CARD=Device,DEV=0
+SOUND_CARD_MIC = plughw:CARD=Device,DEV=0
 SOUND_CARD_NO = 1
 SOUND_CARD_MIC_NAME = "Mic"
 SOUNDCLOUD_DEFAULT_SET = SoundCloud/Sets/Misc
@@ -24,7 +25,7 @@ SOUNDCLOUD_SET_PATH = SoundCloud/Sets/
 USE_LOCAL_FILE_ONLY = True
 
 [upload]
-soundcloud_url= https://soundcloud.com/user-787148065/
+soundcloud_url= https://soundcloud.com/jimmysverhalen/
 client_id=
 client_secret=
 username=

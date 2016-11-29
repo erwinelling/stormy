@@ -46,8 +46,9 @@ MUSIC_DIR = config.get("machine", "MUSIC_DIR")
 NFC_READER_PRESENT = bool(config.get("machine", "NFC_READER_PRESENT"))
 NFC_STOP_CHARACTER = config.get("machine", "NFC_STOP_CHARACTER")
 SOUND_CARD = config.get("machine", "SOUND_CARD")
-SOUND_CARD_NO = config.get("machine", "SOUND_CARD_NO")
-SOUND_CARD_MIC_NAME = config.get("machine", "SOUND_CARD_MIC_NAME")
+# SOUND_CARD_NO = config.get("machine", "SOUND_CARD_NO")
+# SOUND_CARD_MIC_NAME = config.get("machine", "SOUND_CARD_MIC_NAME")
+SOUND_CARD_MIC = config.get("machine", "SOUND_CARD_MIC")
 SOUNDCLOUD_DEFAULT_SET = config.get("machine", "SOUNDCLOUD_DEFAULT_SET")
 SOUNDCLOUD_DEFAULT_SET_DATA = config.get("machine", "SOUNDCLOUD_DEFAULT_SET_DATA")
 SOUNDCLOUD_SET_PATH = config.get("machine", "SOUNDCLOUD_SET_PATH")
@@ -239,7 +240,7 @@ try:
 
         args = [
             'arecord',
-            '-D', SOUND_CARD,
+            '-D', SOUND_CARD_MIC,
             '-f', 'S16_LE',
             '-c1',
             '-r22050',
